@@ -7,6 +7,16 @@
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-23
+
+### Added
+
+- SQLite в WAL-режиме: таблицы `words`, `phrases`, `saved_ideas`, `likes`; идемпотентная
+  загрузка словаря по хэшу файла при старте и скриптом `init_words.py`.
+- API: `POST /api/generate`, `GET /api/phrase/{slug}`, `POST /api/save`,
+  `POST /api/like/{slug}`, `GET /api/feed`, `GET /healthz`.
+- Лимиты: 10 генераций в секунду и 30 лайков в минуту на клиента.
+
 ## [0.2.0] - 2026-10-23
 
 ### Added
@@ -37,6 +47,7 @@
 - Офлайн-сборщик `tools/build_lexicon.py` и собранный `data/lexicon.jsonl`
   с ярусами core / extended / wild (~24 700 лемм).
 
-[Unreleased]: https://github.com/al-writer/Storyteller/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/al-writer/Storyteller/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/al-writer/Storyteller/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/al-writer/Storyteller/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/al-writer/Storyteller/releases/tag/v0.1.0
