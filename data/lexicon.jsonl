@@ -20866,7 +20866,6 @@
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 2105631082, "lemma": "заваривать", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 2.6}
 {"aspect": "impf", "category": "verb_impf", "governs": "datv", "id": 1072732338, "lemma": "завидовать", "tier": "core", "tones": ["dark"], "zipf": 3.26}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 1636133455, "lemma": "заводить", "tier": "core", "tones": ["cyber"], "transitive": true, "zipf": 3.69}
-{"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 1945143725, "lemma": "загадывать", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 3.11}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 417560106, "lemma": "закапывать", "tier": "core", "tones": ["dark"], "transitive": true, "zipf": 2.75}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 1446382866, "lemma": "заклинать", "tier": "core", "tones": ["myth"], "transitive": true, "zipf": 1.82}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 2088426722, "lemma": "заколдовывать", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 1.17}
@@ -20913,9 +20912,7 @@
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 1337458599, "lemma": "мыть", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 3.73}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 1320988878, "lemma": "надевать", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 3.6}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "governs_prep": "на", "id": 231319642, "lemma": "надеяться", "tier": "core", "tones": ["fairy"], "zipf": 4.34}
-{"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 1440660915, "lemma": "напевать", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 2.7}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 857202534, "lemma": "наряжать", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 2.54}
-{"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 1513105264, "lemma": "насвистывать", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 2.12}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 1212518131, "lemma": "настраивать", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 3.17}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 963678686, "lemma": "находить", "tier": "core", "tones": ["myth"], "transitive": true, "zipf": 3.99}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 1082183328, "lemma": "ненавидеть", "tier": "core", "tones": ["dark"], "transitive": true, "zipf": 3.91}
@@ -20955,7 +20952,6 @@
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 399267432, "lemma": "плавить", "tier": "core", "tones": ["cyber"], "transitive": true, "zipf": 2.38}
 {"aspect": "impf", "category": "verb_impf", "governs": "loct", "governs_prep": "о", "id": 245574363, "lemma": "плакать", "tier": "core", "tones": ["dark"], "zipf": 4.22}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 586109972, "lemma": "плести", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 2.93}
-{"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 1050084125, "lemma": "повторять", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 4.04}
 {"aspect": "impf", "category": "verb_impf", "governs": "datv", "id": 337219424, "lemma": "подмигивать", "tier": "core", "tones": ["fairy"], "zipf": 2.19}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 1682205838, "lemma": "подписывать", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 3.52}
 {"aspect": "impf", "category": "verb_impf", "governs": "datv", "id": 375867289, "lemma": "подражать", "tier": "core", "tones": ["city"], "zipf": 3.19}
@@ -20967,7 +20963,6 @@
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 985977945, "lemma": "полоть", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 2.19}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 230227807, "lemma": "похищать", "tier": "core", "tones": ["dark"], "transitive": true, "zipf": 2.72}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "governs_prep": "в", "id": 621571018, "lemma": "превращаться", "tier": "core", "tones": ["fairy"], "zipf": 3.39}
-{"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 2141392278, "lemma": "предсказывать", "tier": "core", "tones": ["myth"], "transitive": true, "zipf": 3.18}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 843675658, "lemma": "презирать", "tier": "core", "tones": ["dark"], "transitive": true, "zipf": 3.1}
 {"aspect": "impf", "category": "verb_impf", "governs": "ablt", "id": 1036770562, "lemma": "пренебрегать", "tier": "core", "tones": ["dark"], "zipf": 3.03}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 709091423, "lemma": "преследовать", "tier": "core", "tones": ["dark"], "transitive": true, "zipf": 3.76}
@@ -20992,7 +20987,6 @@
 {"aspect": "impf", "category": "verb_impf", "governs": "ablt", "id": 1883159695, "lemma": "размахивать", "tier": "core", "tones": ["fairy"], "zipf": 2.85}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 425693493, "lemma": "расколдовывать", "tier": "core", "tones": ["fairy"], "transitive": true}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 54361002, "lemma": "распечатывать", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 2.46}
-{"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 777090481, "lemma": "рассказывать", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 4.38}
 {"aspect": "impf", "category": "verb_impf", "governs": "loct", "governs_prep": "о", "id": 343559099, "lemma": "рассказывать", "tier": "core", "transitive": true, "zipf": 4.38}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 954093024, "lemma": "растить", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 3.39}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 770761979, "lemma": "расчёсывать", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 1.92}
@@ -21016,7 +21010,6 @@
 {"aspect": "impf", "category": "verb_impf", "governs": "loct", "governs_prep": "о", "id": 2134401722, "lemma": "сожалеть", "tier": "core", "tones": ["dark"], "zipf": 3.26}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 1993545171, "lemma": "солить", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 2.49}
 {"aspect": "impf", "category": "verb_impf", "governs": "datv", "id": 418046669, "lemma": "сопротивляться", "tier": "core", "tones": ["myth"], "zipf": 3.63}
-{"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 335404665, "lemma": "сочинять", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 3.4}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 801008701, "lemma": "спасать", "tier": "core", "tones": ["myth"], "transitive": true, "zipf": 3.96}
 {"aspect": "impf", "category": "verb_impf", "governs": "loct", "governs_prep": "о", "id": 103690195, "lemma": "спорить", "tier": "core", "tones": ["city"], "zipf": 4.14}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 253269776, "lemma": "стеречь", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 2.45}
@@ -21035,7 +21028,6 @@
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 610423636, "lemma": "тестировать", "tier": "core", "tones": ["cyber"], "transitive": true, "zipf": 3.05}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 2080292751, "lemma": "ткать", "tier": "core", "tones": ["myth"], "transitive": true, "zipf": 2.24}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 547637520, "lemma": "толкать", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 3.23}
-{"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 895097235, "lemma": "толковать", "tier": "core", "tones": ["myth"], "transitive": true, "zipf": 2.75}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 460947899, "lemma": "топить", "tier": "core", "tones": ["dark"], "transitive": true, "zipf": 3.19}
 {"aspect": "impf", "category": "verb_impf", "governs": "ablt", "id": 73737576, "lemma": "торговать", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 3.73}
 {"aspect": "impf", "category": "verb_impf", "governs": "loct", "governs_prep": "о", "id": 15545866, "lemma": "тосковать", "tier": "core", "tones": ["dark"], "zipf": 2.77}
@@ -21750,6 +21742,7 @@
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 809777881, "lemma": "нарекать", "tier": "wild", "transitive": true, "zipf": 1.48}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 552482465, "lemma": "насаждать", "tier": "wild", "transitive": true, "zipf": 2.49}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 1847403573, "lemma": "насаживать", "tier": "wild", "transitive": true, "zipf": 1.95}
+{"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 1513105264, "lemma": "насвистывать", "tier": "wild", "transitive": true, "zipf": 2.12}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 1869978730, "lemma": "населять", "tier": "wild", "transitive": true, "zipf": 2.0}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 394757832, "lemma": "настигать", "tier": "wild", "transitive": true, "zipf": 1.58}
 {"aspect": "impf", "category": "verb_impf", "governs": "accs", "id": 648724658, "lemma": "настораживать", "tier": "wild", "transitive": true, "zipf": 1.97}
@@ -22648,7 +22641,6 @@
 {"aspect": "perf", "category": "verb_perf", "governs": "loct", "governs_prep": "о", "id": 875035631, "lemma": "забыть", "tier": "core", "transitive": true, "zipf": 4.62}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 604848749, "lemma": "завести", "tier": "core", "tones": ["cyber"], "transitive": true, "zipf": 4.12}
 {"aspect": "perf", "category": "verb_perf", "governs": "ablt", "id": 1575782551, "lemma": "завладеть", "tier": "core", "tones": ["dark"], "zipf": 3.47}
-{"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 1670035996, "lemma": "загадать", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 2.96}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "governs_prep": "в", "id": 1652880974, "lemma": "заглянуть", "tier": "core", "tones": ["dark"], "zipf": 3.85}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 1948906764, "lemma": "загрузить", "tier": "core", "tones": ["cyber"], "transitive": true, "zipf": 3.53}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 1666096966, "lemma": "задуть", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 2.4}
@@ -22751,7 +22743,6 @@
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 88258305, "lemma": "поцеловать", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 3.71}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 408706908, "lemma": "починить", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 3.55}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "governs_prep": "в", "id": 557812222, "lemma": "превратиться", "tier": "core", "tones": ["fairy"], "zipf": 3.69}
-{"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 267660927, "lemma": "предсказать", "tier": "core", "tones": ["myth"], "transitive": true, "zipf": 3.57}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 959339218, "lemma": "привезти", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 3.78}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 270391897, "lemma": "призвать", "tier": "core", "tones": ["myth"], "transitive": true, "zipf": 3.62}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 1391312727, "lemma": "примерить", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 3.1}
@@ -22777,7 +22768,6 @@
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 497678151, "lemma": "распечатать", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 3.38}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 919470645, "lemma": "распилить", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 2.58}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 90546990, "lemma": "расплавить", "tier": "core", "tones": ["cyber"], "transitive": true, "zipf": 2.35}
-{"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 1400547839, "lemma": "рассказать", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 4.59}
 {"aspect": "perf", "category": "verb_perf", "governs": "loct", "governs_prep": "о", "id": 2118651917, "lemma": "рассказать", "tier": "core", "transitive": true, "zipf": 4.59}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 644229251, "lemma": "расчесать", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 2.23}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 2072955280, "lemma": "расшифровать", "tier": "core", "tones": ["cyber", "myth"], "transitive": true, "zipf": 3.28}
@@ -22793,7 +22783,6 @@
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 920346983, "lemma": "согреть", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 3.06}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 970349441, "lemma": "соткать", "tier": "core", "tones": ["myth"], "transitive": true, "zipf": 1.86}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 385759017, "lemma": "сохранить", "tier": "core", "tones": ["myth"], "transitive": true, "zipf": 4.66}
-{"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 1512605030, "lemma": "сочинить", "tier": "core", "tones": ["city"], "transitive": true, "zipf": 3.05}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 745143601, "lemma": "спасти", "tier": "core", "tones": ["myth"], "transitive": true, "zipf": 4.57}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 2117051490, "lemma": "спеть", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 3.66}
 {"aspect": "perf", "category": "verb_perf", "governs": "accs", "id": 1919533154, "lemma": "сплести", "tier": "core", "tones": ["fairy"], "transitive": true, "zipf": 2.39}
