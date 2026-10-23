@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-23
+
 ### Added
 
 - Каркас репозитория: `pyproject.toml`, линтер ruff, pytest, pre-commit, CI.
@@ -16,3 +18,6 @@
   и управлением глаголов; стоп-лист.
 - Офлайн-сборщик `tools/build_lexicon.py` и собранный `data/lexicon.jsonl`
   с ярусами core / extended / wild (~24 700 лемм).
+
+[Unreleased]: https://github.com/al-writer/Storyteller/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/al-writer/Storyteller/releases/tag/v0.1.0
