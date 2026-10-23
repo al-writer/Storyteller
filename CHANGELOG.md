@@ -7,6 +7,15 @@
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-23
+
+### Added
+
+- Открытки на Pillow: 1200×630 для `og:image` и 1080×1080 для скачивания, подбор кегля
+  под 60–75% высоты поля, тёмный фон с шумом и виньеткой, акцент по тону.
+- `GET /api/og-image/{slug}.png?format=wide|square` с вечным файловым кэшем.
+- Шрифты PT Serif и PT Sans (OFL) в репозитории.
+
 ## [0.3.0] - 2026-10-23
 
 ### Added
@@ -47,7 +56,8 @@
 - Офлайн-сборщик `tools/build_lexicon.py` и собранный `data/lexicon.jsonl`
   с ярусами core / extended / wild (~24 700 лемм).
 
-[Unreleased]: https://github.com/al-writer/Storyteller/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/al-writer/Storyteller/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/al-writer/Storyteller/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/al-writer/Storyteller/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/al-writer/Storyteller/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/al-writer/Storyteller/releases/tag/v0.1.0
