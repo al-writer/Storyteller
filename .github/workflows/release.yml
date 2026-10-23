@@ -1,0 +1,61 @@
+name: Release
+
+# Ставит аннотированный тег vX.Y.Z и GitHub Release на каждый коммит
+# «chore(release): X.Y.Z» в main, у которого ещё нет тега. Запускается только
+# после зелёного CI, поэтому тегируются лишь проверенные коммиты.
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 0
+      - name: Tag release commits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          while read -r sha subject; do
+            [[ "$subject" =~ ^chore\(release\):\ ([0-9]+\.[0-9]+\.[0-9]+)$ ]] || continue
+            version="${BASH_REMATCH[1]}"
+            tag="v$version"
+            if git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+              continue
+            fi
+            declared=$(git show "$sha:app/__init__.py" | sed -n 's/^__version__ = "\(.*\)"$/\1/p')
+            if [[ "$declared" != "$version" ]]; then
+              echo "::error::$sha: в app/__init__.py версия '$declared', а не $version"
+              exit 1
+            fi
+            notes=$(git show "$sha:CHANGELOG.md" | awk -v v="$version" '
+              index($0, "## [" v "]") == 1 { on = 1; next }
+              on && /^(## )?\[[^]]+\]/ { exit }
+              on')
+            if [[ -z "${notes//[[:space:]]/}" ]]; then
+              echo "::error::$sha: в CHANGELOG.md нет секции [$version]"
+              exit 1
+            fi
+            git tag -a "$tag" "$sha" -F - <<< "$tag"$'\n'"$notes"
+            git push origin "refs/tags/$tag"
+            gh release create "$tag" --verify-tag --title "$tag" --notes "$notes"
+            echo "::notice::$tag → $sha"
+          done < <(git log --reverse --first-parent --format='%H %s' HEAD)

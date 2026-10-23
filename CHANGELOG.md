@@ -7,6 +7,11 @@
 
 ## [Unreleased]
 
+### Added
+
+- Workflow `Release`: после зелёного CI ставит тег `vX.Y.Z` и GitHub Release на
+  каждый коммит `chore(release): X.Y.Z` без тега.
+
 ## [0.6.0] - 2026-10-23
 
 ### Added
