@@ -32,8 +32,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           while read -r sha subject; do
             [[ "$subject" =~ ^chore\(release\):\ ([0-9]+\.[0-9]+\.[0-9]+)$ ]] || continue
             version="${BASH_REMATCH[1]}"
@@ -54,8 +52,14 @@ jobs:
               echo "::error::$sha: в CHANGELOG.md нет секции [$version]"
               exit 1
             fi
-            git tag -a "$tag" "$sha" -F - <<< "$tag"$'\n'"$notes"
-            git push origin "refs/tags/$tag"
+            # Тег создаётся через API: git push тега от GITHUB_TOKEN GitHub отклоняет,
+            # если в истории коммита менялись файлы .github/workflows.
+            tag_sha=$(gh api "repos/$GITHUB_REPOSITORY/git/tags" \
+              -f tag="$tag" -f message="$tag"$'\n'"$notes" -f object="$sha" -f type=commit \
+              -f 'tagger[name]=github-actions[bot]' \
+              -f 'tagger[email]=41898282+github-actions[bot]@users.noreply.github.com' \
+              --jq .sha)
+            gh api "repos/$GITHUB_REPOSITORY/git/refs" -f ref="refs/tags/$tag" -f sha="$tag_sha" >/dev/null
             gh release create "$tag" --verify-tag --title "$tag" --notes "$notes"
             echo "::notice::$tag → $sha"
           done < <(git log --reverse --first-parent --format='%H %s' HEAD)
