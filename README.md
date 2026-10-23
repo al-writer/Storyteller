@@ -10,8 +10,31 @@
 python -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt -r requirements-dev.txt
 pre-commit install
-pytest
+pytest                    # всё, включая приёмочные тесты (~1 мин)
+pytest -m "not slow"      # без фазз-теста и прогона словаря
+python -m app.engine --sample 100 --seed 1   # фразы для вычитки
 ```
+
+## Запуск
+
+```bash
+docker compose up --build            # сервис на http://localhost:8000
+docker compose run --rm --build tests  # все тесты внутри контейнера
+```
+
+Переменные окружения:
+
+| Переменная | Назначение | По умолчанию |
+| --- | --- | --- |
+| `BASE_URL` | абсолютные ссылки в `og:`-тегах и шаринге | `http://localhost:8000` |
+| `SECRET_SALT` | соль для хэша голосующих | `change-me` — замените в проде |
+| `DATA_DIR` | SQLite и кэш открыток | `/data` (именованный том) |
+
+Один контейнер, один воркер uvicorn: SQLite в WAL-режиме и лимиты запросов живут в
+памяти одного процесса. Словарь загружается в базу при старте и перезагружается,
+только если изменился `data/lexicon.jsonl`; фразы и лайки при этом сохраняются.
+
+Чтобы превью открытки появилось в Telegram, `BASE_URL` должен быть публичным HTTPS-адресом.
 
 ## Словарь
 
