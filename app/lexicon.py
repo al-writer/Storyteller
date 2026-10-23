@@ -9,6 +9,7 @@ import time
 from collections import defaultdict, deque
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
+from itertools import accumulate
 from pathlib import Path
 
 TONES = ("dark", "fairy", "cyber", "city", "myth")
@@ -16,6 +17,7 @@ TIER_WEIGHTS = {"core": 1.0, "extended": 0.3, "wild": 0.3}
 # Если в пуле тона после исключений осталось меньше слов, тон для этого слота снимается.
 MIN_TONE_POOL = 8
 RECENT_LIMIT = 40
+REJECTION_TRIES = 64
 
 
 @dataclass(frozen=True, slots=True)
@@ -141,6 +143,7 @@ class Lexicon:
             self._pools[word.category].append(word)
             if word.tier != "wild":
                 self._tame[word.category].append(word)
+        self._weighted_cache: dict[tuple[str, bool, str | None], _Weighted] = {}
 
     @classmethod
     def from_jsonl(cls, path: Path) -> Lexicon:
@@ -156,6 +159,15 @@ class Lexicon:
     def pool(self, category: str, wild: bool = True) -> list[Word]:
         return (self._pools if wild else self._tame).get(category, [])
 
+    def _weighted(self, category: str, wild: bool, tone: str | None) -> _Weighted:
+        key = (category, wild, tone)
+        cached = self._weighted_cache.get(key)
+        if cached is None:
+            words = [w for w in self.pool(category, wild) if tone is None or tone in w.tones]
+            cum = list(accumulate(TIER_WEIGHTS[w.tier] * frequency_factor(w.zipf) for w in words))
+            cached = self._weighted_cache[key] = _Weighted(words, cum)
+        return cached
+
     def sample(
         self,
         category: str,
@@ -168,27 +180,46 @@ class Lexicon:
         predicate: Callable[[Word], bool] | None = None,
         tracker: UsageTracker | None = None,
     ) -> Word | None:
-        """Взвешенная выборка слова категории с учётом тона, исключений и штрафов."""
+        """Взвешенная выборка слова категории с учётом тона, исключений и штрафов.
+
+        Веса пулов посчитаны заранее; исключения и штраф трекера применяются отбраковкой
+        (штраф — как вероятность принять слово), поэтому распределение то же, что при
+        пересчёте весов, а выборка не перебирает тысячи слов дикого яруса.
+        """
 
         def eligible(word: Word) -> bool:
             if word.id in exclude_ids or word.lemma in exclude_lemmas:
                 return False
             return predicate is None or predicate(word)
 
-        candidates = [w for w in self.pool(category, wild) if eligible(w)]
-        if tone:
-            toned = [w for w in candidates if tone in w.tones]
-            if len(toned) >= MIN_TONE_POOL:
-                candidates = toned
-        if not candidates:
-            return None
-        weights = [
-            TIER_WEIGHTS[w.tier]
-            * frequency_factor(w.zipf)
-            * (tracker.penalty(w.id) if tracker else 1.0)
-            for w in candidates
-        ]
-        return rng.choices(candidates, weights=weights, k=1)[0]
+        pools = [self._weighted(category, wild, tone)] if tone else []
+        pools.append(self._weighted(category, wild, None))
+        for pool in pools:
+            if len(pool.words) < MIN_TONE_POOL and pool is not pools[-1]:
+                continue
+            for _ in range(REJECTION_TRIES):
+                if not pool.words:
+                    break
+                word = rng.choices(pool.words, cum_weights=pool.cum, k=1)[0]
+                if eligible(word) and (tracker is None or rng.random() < tracker.penalty(word.id)):
+                    return word
+            # Отбраковка не справилась (почти всё исключено) — честный перебор.
+            candidates = [w for w in pool.words if eligible(w)]
+            if len(candidates) >= MIN_TONE_POOL or (pool is pools[-1] and candidates):
+                weights = [
+                    TIER_WEIGHTS[w.tier]
+                    * frequency_factor(w.zipf)
+                    * (tracker.penalty(w.id) if tracker else 1.0)
+                    for w in candidates
+                ]
+                return rng.choices(candidates, weights=weights, k=1)[0]
+        return None
+
+
+@dataclass(frozen=True, slots=True)
+class _Weighted:
+    words: list[Word]
+    cum: list[float]
 
 
 def dominant_tone(words: Iterable[Word]) -> str | None:
