@@ -29,9 +29,23 @@ jobs:
           fetch-depth: 0
       - name: Tag release commits
         env:
-          GH_TOKEN: ${{ github.token }}
+          # GITHUB_TOKEN не может поставить тег на коммит, где файлы .github/workflows
+          # отличаются от текущих. Для таких (старых) релизов нужен секрет RELEASE_TOKEN:
+          # fine-grained PAT с правами Contents и Workflows на запись.
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN || github.token }}
         run: |
           set -euo pipefail
+          release() {
+            local sha=$1 tag=$2 notes=$3 tag_sha
+            tag_sha=$(gh api "repos/$GITHUB_REPOSITORY/git/tags" \
+              -f tag="$tag" -f message="$tag"$'\n'"$notes" -f object="$sha" -f type=commit \
+              -f 'tagger[name]=github-actions[bot]' \
+              -f 'tagger[email]=41898282+github-actions[bot]@users.noreply.github.com' \
+              --jq .sha) &&
+            gh api "repos/$GITHUB_REPOSITORY/git/refs" -f ref="refs/tags/$tag" -f sha="$tag_sha" >/dev/null &&
+            gh release create "$tag" --verify-tag --title "$tag" --notes "$notes"
+          }
+          failed=()
           while read -r sha subject; do
             [[ "$subject" =~ ^chore\(release\):\ ([0-9]+\.[0-9]+\.[0-9]+)$ ]] || continue
             version="${BASH_REMATCH[1]}"
@@ -52,14 +66,13 @@ jobs:
               echo "::error::$sha: в CHANGELOG.md нет секции [$version]"
               exit 1
             fi
-            # Тег создаётся через API: git push тега от GITHUB_TOKEN GitHub отклоняет,
-            # если в истории коммита менялись файлы .github/workflows.
-            tag_sha=$(gh api "repos/$GITHUB_REPOSITORY/git/tags" \
-              -f tag="$tag" -f message="$tag"$'\n'"$notes" -f object="$sha" -f type=commit \
-              -f 'tagger[name]=github-actions[bot]' \
-              -f 'tagger[email]=41898282+github-actions[bot]@users.noreply.github.com' \
-              --jq .sha)
-            gh api "repos/$GITHUB_REPOSITORY/git/refs" -f ref="refs/tags/$tag" -f sha="$tag_sha" >/dev/null
-            gh release create "$tag" --verify-tag --title "$tag" --notes "$notes"
-            echo "::notice::$tag → $sha"
+            if release "$sha" "$tag" "$notes"; then
+              echo "::notice::$tag → $sha"
+            else
+              failed+=("$tag")
+            fi
           done < <(git log --reverse --first-parent --format='%H %s' HEAD)
+          if (( ${#failed[@]} )); then
+            echo "::error::Не удалось поставить: ${failed[*]}. Для старых релизов задайте секрет RELEASE_TOKEN и перезапустите workflow."
+            exit 1
+          fi
