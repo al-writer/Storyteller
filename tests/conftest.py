@@ -53,3 +53,11 @@ def generate(client, **payload):
     response = client.post("/api/generate", json=payload)
     assert response.status_code == 200, response.text
     return response.json()
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--update-golden",
+        action="store_true",
+        help="перезаписать tests/golden.json текущим выводом движка",
+    )
