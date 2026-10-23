@@ -65,3 +65,6 @@ python tools/build_lexicon.py --dump-candidates var/cand  # кандидаты �
 - Релиз — коммит `chore(release): X.Y.Z` с новой версией и секцией в `CHANGELOG.md`.
   После зелёного CI workflow `Release` сам ставит аннотированный тег `vX.Y.Z` и
   создаёт GitHub Release с заметками из CHANGELOG; вручную теги не ставятся.
+  Если в коммите релиза файлы `.github/workflows` отличаются от текущих, `GITHUB_TOKEN`
+  тег поставить не может — нужен секрет `RELEASE_TOKEN` (fine-grained PAT с правами
+  Contents и Workflows на запись), затем перезапуск `Release` вручную.
