@@ -336,7 +336,7 @@
 дорожный -actor @city
 почтовый -actor @city
 семейный @fairy
-бабушкин +feel @fairy
+бабушкин @fairy
 отцовский @myth
 королевский @fairy
 царский @fairy

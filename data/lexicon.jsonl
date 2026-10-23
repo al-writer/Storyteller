@@ -4637,7 +4637,7 @@
 {"animacy": "anim", "category": "actor", "gender": "femn", "id": 1428370001, "lemma": "ящерка", "tier": "wild", "zipf": 2.27}
 {"category": "adj", "id": 828412362, "lemma": "алый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.13}
 {"category": "adj", "id": 1337069939, "lemma": "аптечный", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.62}
-{"category": "adj", "feel": true, "id": 334048774, "lemma": "бабушкин", "tier": "core", "tones": ["fairy"], "zipf": 3.23}
+{"category": "adj", "id": 334048774, "lemma": "бабушкин", "tier": "core", "tones": ["fairy"], "zipf": 3.23}
 {"category": "adj", "feel": true, "id": 297158268, "lemma": "багровый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.81}
 {"category": "adj", "feel": true, "id": 1946380345, "lemma": "бархатный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.94}
 {"category": "adj", "id": 1386732393, "lemma": "беглый", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.26}
