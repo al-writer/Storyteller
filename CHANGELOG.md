@@ -7,6 +7,22 @@
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-23
+
+### Added
+
+- Приёмочные тесты: прогон всего словаря по нужным формам, фазз-тест 10 000 фраз на
+  пресет, 30 золотых фраз со снапшотом (`--update-golden`).
+- Docker: образ на `python:3.12-slim` с непривилегированным пользователем и
+  `HEALTHCHECK`, стадия `test` для прогона тестов в контейнере, `docker-compose.yml`
+  с именованным томом `/data`.
+- CI собирает образ и прогоняет тесты внутри контейнера.
+
+### Changed
+
+- Выборка слов идёт по заранее посчитанным весам с отбраковкой: ~1 мс на фразу
+  вместо 7–42 мс.
+
 ## [0.5.0] - 2026-10-23
 
 ### Added
@@ -71,7 +87,8 @@
 - Офлайн-сборщик `tools/build_lexicon.py` и собранный `data/lexicon.jsonl`
   с ярусами core / extended / wild (~24 700 лемм).
 
-[Unreleased]: https://github.com/al-writer/Storyteller/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/al-writer/Storyteller/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/al-writer/Storyteller/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/al-writer/Storyteller/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/al-writer/Storyteller/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/al-writer/Storyteller/compare/v0.2.0...v0.3.0
