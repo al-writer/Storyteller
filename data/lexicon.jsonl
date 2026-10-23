@@ -4636,122 +4636,122 @@
 {"animacy": "anim", "category": "actor", "gender": "femn", "id": 800641450, "lemma": "яхтсменка", "tier": "wild", "zipf": 1.87}
 {"animacy": "anim", "category": "actor", "gender": "femn", "id": 1428370001, "lemma": "ящерка", "tier": "wild", "zipf": 2.27}
 {"category": "adj", "id": 828412362, "lemma": "алый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.13}
-{"category": "adj", "id": 1337069939, "lemma": "аптечный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.62}
-{"category": "adj", "id": 334048774, "lemma": "бабушкин", "tier": "core", "tones": ["fairy"], "zipf": 3.23}
-{"category": "adj", "id": 297158268, "lemma": "багровый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.81}
-{"category": "adj", "id": 1946380345, "lemma": "бархатный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.94}
-{"category": "adj", "id": 1386732393, "lemma": "беглый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.26}
+{"category": "adj", "id": 1337069939, "lemma": "аптечный", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.62}
+{"category": "adj", "feel": true, "id": 334048774, "lemma": "бабушкин", "tier": "core", "tones": ["fairy"], "zipf": 3.23}
+{"category": "adj", "feel": true, "id": 297158268, "lemma": "багровый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.81}
+{"category": "adj", "feel": true, "id": 1946380345, "lemma": "бархатный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.94}
+{"category": "adj", "id": 1386732393, "lemma": "беглый", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.26}
 {"category": "adj", "id": 713048629, "lemma": "бедный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.11}
-{"category": "adj", "id": 1101581437, "lemma": "безвестный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.01}
-{"category": "adj", "id": 148150157, "lemma": "бездомный", "qual": true, "tier": "core", "tones": ["city", "dark"], "zipf": 2.94}
-{"category": "adj", "id": 2088492739, "lemma": "безмятежный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.17}
-{"category": "adj", "id": 515345320, "lemma": "безобидный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.93}
-{"category": "adj", "id": 1247859594, "lemma": "безумный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.72}
-{"category": "adj", "id": 972172703, "lemma": "белый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.74}
-{"category": "adj", "id": 399893142, "lemma": "бесконечный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.36}
+{"category": "adj", "id": 1101581437, "lemma": "безвестный", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.01}
+{"category": "adj", "id": 148150157, "lemma": "бездомный", "noobject": true, "qual": true, "tier": "core", "tones": ["city", "dark"], "zipf": 2.94}
+{"category": "adj", "feel": true, "id": 2088492739, "lemma": "безмятежный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.17}
+{"category": "adj", "feel": true, "id": 515345320, "lemma": "безобидный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.93}
+{"category": "adj", "feel": true, "id": 1247859594, "lemma": "безумный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.72}
+{"category": "adj", "feel": true, "id": 972172703, "lemma": "белый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.74}
+{"category": "adj", "feel": true, "id": 399893142, "lemma": "бесконечный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.36}
 {"category": "adj", "id": 942686121, "lemma": "бескрылый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 1.91}
-{"category": "adj", "id": 821366517, "lemma": "беспокойный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.99}
-{"category": "adj", "id": 234876481, "lemma": "бессердечный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.54}
-{"category": "adj", "id": 1001574229, "lemma": "бессмертный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.42}
-{"category": "adj", "id": 487073265, "lemma": "бессонный", "qual": true, "tier": "core", "tones": ["city", "dark"], "zipf": 2.05}
-{"category": "adj", "id": 1718325422, "lemma": "бесценный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.21}
-{"category": "adj", "id": 1584963495, "lemma": "благословенный", "tier": "core", "tones": ["myth"], "zipf": 2.76}
-{"category": "adj", "id": 1075144638, "lemma": "бледный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.31}
+{"category": "adj", "feel": true, "id": 821366517, "lemma": "беспокойный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.99}
+{"category": "adj", "id": 234876481, "lemma": "бессердечный", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.54}
+{"category": "adj", "feel": true, "id": 1001574229, "lemma": "бессмертный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.42}
+{"category": "adj", "feel": true, "id": 487073265, "lemma": "бессонный", "qual": true, "tier": "core", "tones": ["city", "dark"], "zipf": 2.05}
+{"category": "adj", "feel": true, "id": 1718325422, "lemma": "бесценный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.21}
+{"category": "adj", "feel": true, "id": 1584963495, "lemma": "благословенный", "tier": "core", "tones": ["myth"], "zipf": 2.76}
+{"category": "adj", "feel": true, "id": 1075144638, "lemma": "бледный", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.31}
 {"category": "adj", "id": 1285054488, "lemma": "блестящий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.64}
 {"category": "adj", "id": 804037576, "lemma": "богатый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.1}
-{"category": "adj", "id": 877780553, "lemma": "болтливый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.54}
-{"category": "adj", "id": 826845229, "lemma": "больной", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 4.26}
-{"category": "adj", "id": 1809978571, "lemma": "бородатый", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.23}
+{"category": "adj", "id": 877780553, "lemma": "болтливый", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.54}
+{"category": "adj", "feel": true, "id": 826845229, "lemma": "больной", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 4.26}
+{"category": "adj", "id": 1809978571, "lemma": "бородатый", "noobject": true, "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.23}
 {"category": "adj", "id": 931099687, "lemma": "бродячий", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.71}
 {"category": "adj", "id": 651033182, "lemma": "бронзовый", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.72}
 {"category": "adj", "id": 744737429, "lemma": "бумажный", "qual": true, "tier": "core", "tones": ["city", "fairy"], "zipf": 3.41}
 {"category": "adj", "id": 970271735, "lemma": "бурый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.35}
 {"category": "adj", "id": 1675535198, "lemma": "быстрый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.19}
 {"category": "adj", "id": 229877746, "lemma": "важный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.44}
-{"category": "adj", "id": 1729546591, "lemma": "вежливый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.27}
+{"category": "adj", "feel": true, "id": 1729546591, "lemma": "вежливый", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.27}
 {"category": "adj", "id": 223712930, "lemma": "верный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 4.08}
-{"category": "adj", "id": 475947205, "lemma": "вероломный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.26}
-{"category": "adj", "id": 942195578, "lemma": "весёлый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.47}
-{"category": "adj", "id": 1575262021, "lemma": "весенний", "tier": "core", "tones": ["fairy"], "zipf": 3.73}
-{"category": "adj", "id": 259952974, "lemma": "веснушчатый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 1.61}
+{"category": "adj", "id": 475947205, "lemma": "вероломный", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.26}
+{"category": "adj", "feel": true, "id": 942195578, "lemma": "весёлый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.47}
+{"category": "adj", "feel": true, "id": 1575262021, "lemma": "весенний", "tier": "core", "tones": ["fairy"], "zipf": 3.73}
+{"category": "adj", "id": 259952974, "lemma": "веснушчатый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 1.61}
 {"category": "adj", "id": 681790037, "lemma": "ветхий", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.02}
-{"category": "adj", "id": 812035532, "lemma": "вечерний", "tier": "core", "tones": ["city"], "zipf": 3.96}
-{"category": "adj", "id": 852678104, "lemma": "вечный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.87}
-{"category": "adj", "id": 612599121, "lemma": "виртуальный", "qual": true, "tier": "core", "tones": ["cyber"], "zipf": 3.51}
-{"category": "adj", "id": 1859599200, "lemma": "влюблённый", "tier": "core", "tones": ["fairy"], "zipf": 2.84}
-{"category": "adj", "id": 103721359, "lemma": "вокзальный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.15}
-{"category": "adj", "id": 269375123, "lemma": "волшебный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.77}
-{"category": "adj", "id": 1164989322, "lemma": "ворчливый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.21}
+{"category": "adj", "feel": true, "id": 812035532, "lemma": "вечерний", "tier": "core", "tones": ["city"], "zipf": 3.96}
+{"category": "adj", "feel": true, "id": 852678104, "lemma": "вечный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.87}
+{"category": "adj", "feel": true, "id": 612599121, "lemma": "виртуальный", "qual": true, "tier": "core", "tones": ["cyber"], "zipf": 3.51}
+{"category": "adj", "id": 1859599200, "lemma": "влюблённый", "noobject": true, "tier": "core", "tones": ["fairy"], "zipf": 2.84}
+{"category": "adj", "id": 103721359, "lemma": "вокзальный", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.15}
+{"category": "adj", "feel": true, "id": 269375123, "lemma": "волшебный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.77}
+{"category": "adj", "id": 1164989322, "lemma": "ворчливый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.21}
 {"category": "adj", "id": 58004806, "lemma": "высокий", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 4.59}
-{"category": "adj", "id": 1274198099, "lemma": "вязаный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.28}
-{"category": "adj", "id": 1569474533, "lemma": "глупый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.8}
-{"category": "adj", "id": 532619834, "lemma": "глухой", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.74}
+{"category": "adj", "id": 1274198099, "lemma": "вязаный", "noactor": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.28}
+{"category": "adj", "id": 1569474533, "lemma": "глупый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.8}
+{"category": "adj", "feel": true, "id": 532619834, "lemma": "глухой", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.74}
 {"category": "adj", "id": 826638556, "lemma": "говорящий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.5}
 {"category": "adj", "id": 17283717, "lemma": "голографический", "tier": "core", "tones": ["cyber"], "zipf": 2.3}
-{"category": "adj", "id": 1654545774, "lemma": "голодный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.68}
+{"category": "adj", "feel": true, "id": 1654545774, "lemma": "голодный", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.68}
 {"category": "adj", "id": 1655355639, "lemma": "голубой", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.22}
 {"category": "adj", "id": 522621290, "lemma": "горбатый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.82}
-{"category": "adj", "id": 662118695, "lemma": "гордый", "tier": "core", "tones": ["myth"], "zipf": 3.44}
+{"category": "adj", "feel": true, "id": 662118695, "lemma": "гордый", "noobject": true, "tier": "core", "tones": ["myth"], "zipf": 3.44}
 {"category": "adj", "id": 1015913786, "lemma": "горный", "tier": "core", "tones": ["myth"], "zipf": 3.87}
 {"category": "adj", "id": 127606588, "lemma": "городской", "tier": "core", "tones": ["city"], "zipf": 4.81}
-{"category": "adj", "id": 1952038330, "lemma": "горький", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.95}
-{"category": "adj", "id": 246557820, "lemma": "горячий", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.07}
-{"category": "adj", "id": 986294148, "lemma": "громадный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.13}
+{"category": "adj", "feel": true, "id": 1952038330, "lemma": "горький", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.95}
+{"category": "adj", "feel": true, "id": 246557820, "lemma": "горячий", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.07}
+{"category": "adj", "feel": true, "id": 986294148, "lemma": "громадный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.13}
 {"category": "adj", "id": 1581349429, "lemma": "громкий", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.74}
-{"category": "adj", "id": 678766507, "lemma": "грустный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.54}
+{"category": "adj", "feel": true, "id": 678766507, "lemma": "грустный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.54}
 {"category": "adj", "id": 65498126, "lemma": "грязный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.62}
 {"category": "adj", "id": 1648635838, "lemma": "дальний", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 4.15}
 {"category": "adj", "id": 153666238, "lemma": "деревенский", "tier": "core", "tones": ["fairy"], "zipf": 3.39}
 {"category": "adj", "id": 1260126086, "lemma": "деревянный", "tier": "core", "tones": ["fairy"], "zipf": 3.89}
-{"category": "adj", "id": 805412211, "lemma": "дешёвый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.05}
-{"category": "adj", "id": 1626494815, "lemma": "дивный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.12}
-{"category": "adj", "id": 1000673504, "lemma": "дикий", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.87}
-{"category": "adj", "id": 1099037070, "lemma": "добрый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.67}
-{"category": "adj", "id": 287908269, "lemma": "дорогой", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.73}
-{"category": "adj", "id": 391717723, "lemma": "дорожный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.56}
-{"category": "adj", "id": 1973211039, "lemma": "древний", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 4.02}
+{"category": "adj", "id": 805412211, "lemma": "дешёвый", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.05}
+{"category": "adj", "feel": true, "id": 1626494815, "lemma": "дивный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.12}
+{"category": "adj", "feel": true, "id": 1000673504, "lemma": "дикий", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.87}
+{"category": "adj", "id": 1099037070, "lemma": "добрый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.67}
+{"category": "adj", "id": 287908269, "lemma": "дорогой", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.73}
+{"category": "adj", "id": 391717723, "lemma": "дорожный", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.56}
+{"category": "adj", "feel": true, "id": 1973211039, "lemma": "древний", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 4.02}
 {"category": "adj", "id": 503839416, "lemma": "дрожащий", "tier": "core", "tones": ["dark"], "zipf": 2.58}
 {"category": "adj", "id": 271581526, "lemma": "дряхлый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.55}
-{"category": "adj", "id": 1195148737, "lemma": "душистый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.85}
-{"category": "adj", "id": 201278622, "lemma": "единственный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 4.9}
-{"category": "adj", "id": 1754777399, "lemma": "жадный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.21}
-{"category": "adj", "id": 214881131, "lemma": "железный", "qual": true, "tier": "core", "tones": ["cyber", "myth"], "zipf": 4.02}
+{"category": "adj", "id": 1195148737, "lemma": "душистый", "noactor": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.85}
+{"category": "adj", "feel": true, "id": 201278622, "lemma": "единственный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 4.9}
+{"category": "adj", "feel": true, "id": 1754777399, "lemma": "жадный", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.21}
+{"category": "adj", "feel": true, "id": 214881131, "lemma": "железный", "qual": true, "tier": "core", "tones": ["cyber", "myth"], "zipf": 4.02}
 {"category": "adj", "id": 906975190, "lemma": "жёлтый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.49}
-{"category": "adj", "id": 1538918109, "lemma": "жестокий", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.75}
-{"category": "adj", "id": 896214396, "lemma": "живой", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.53}
-{"category": "adj", "id": 469119582, "lemma": "забавный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.59}
+{"category": "adj", "feel": true, "id": 1538918109, "lemma": "жестокий", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.75}
+{"category": "adj", "feel": true, "id": 896214396, "lemma": "живой", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.53}
+{"category": "adj", "feel": true, "id": 469119582, "lemma": "забавный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.59}
 {"category": "adj", "id": 2135805856, "lemma": "заблудившийся", "tier": "core", "zipf": 2.39}
 {"category": "adj", "id": 1811995129, "lemma": "заброшенный", "tier": "core", "tones": ["dark"], "zipf": 3.29}
-{"category": "adj", "id": 488328130, "lemma": "забытый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.28}
-{"category": "adj", "id": 423959226, "lemma": "заводной", "qual": true, "tier": "core", "tones": ["cyber", "fairy"], "zipf": 2.81}
-{"category": "adj", "id": 26334992, "lemma": "загадочный", "qual": true, "tier": "core", "tones": ["dark", "myth"], "zipf": 3.42}
-{"category": "adj", "id": 116029161, "lemma": "задумчивый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.82}
+{"category": "adj", "feel": true, "id": 488328130, "lemma": "забытый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.28}
+{"category": "adj", "feel": true, "id": 423959226, "lemma": "заводной", "qual": true, "tier": "core", "tones": ["cyber", "fairy"], "zipf": 2.81}
+{"category": "adj", "feel": true, "id": 26334992, "lemma": "загадочный", "qual": true, "tier": "core", "tones": ["dark", "myth"], "zipf": 3.42}
+{"category": "adj", "id": 116029161, "lemma": "задумчивый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.82}
 {"category": "adj", "id": 1454717154, "lemma": "заколдованный", "tier": "core", "tones": ["fairy"], "zipf": 2.74}
-{"category": "adj", "id": 1269493168, "lemma": "запретный", "qual": true, "tier": "core", "tones": ["dark", "myth"], "zipf": 3.03}
+{"category": "adj", "feel": true, "id": 1269493168, "lemma": "запретный", "qual": true, "tier": "core", "tones": ["dark", "myth"], "zipf": 3.03}
 {"category": "adj", "id": 959799700, "lemma": "запрограммированный", "tier": "core", "zipf": 2.09}
-{"category": "adj", "id": 668006220, "lemma": "застенчивый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.79}
+{"category": "adj", "id": 668006220, "lemma": "застенчивый", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.79}
 {"category": "adj", "id": 616950692, "lemma": "затерянный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 2.92}
 {"category": "adj", "id": 806591076, "lemma": "звёздный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.3}
-{"category": "adj", "id": 234844561, "lemma": "здоровый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.97}
+{"category": "adj", "id": 234844561, "lemma": "здоровый", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.97}
 {"category": "adj", "id": 1535060250, "lemma": "зелёный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.11}
-{"category": "adj", "id": 803578927, "lemma": "зимний", "tier": "core", "tones": ["fairy"], "zipf": 4.11}
-{"category": "adj", "id": 434180717, "lemma": "злой", "qual": true, "tier": "core", "tones": ["dark", "fairy"], "zipf": 4.14}
+{"category": "adj", "feel": true, "id": 803578927, "lemma": "зимний", "tier": "core", "tones": ["fairy"], "zipf": 4.11}
+{"category": "adj", "feel": true, "id": 434180717, "lemma": "злой", "noobject": true, "qual": true, "tier": "core", "tones": ["dark", "fairy"], "zipf": 4.14}
 {"category": "adj", "id": 1085452382, "lemma": "знаменитый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.22}
 {"category": "adj", "id": 121457678, "lemma": "золотой", "qual": true, "tier": "core", "tones": ["fairy", "myth"], "zipf": 4.65}
-{"category": "adj", "id": 409268170, "lemma": "игрушечный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.98}
+{"category": "adj", "id": 409268170, "lemma": "игрушечный", "noactor": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.98}
 {"category": "adj", "id": 526929948, "lemma": "изумрудный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.93}
-{"category": "adj", "id": 431421163, "lemma": "искусственный", "qual": true, "tier": "core", "tones": ["cyber"], "zipf": 3.77}
-{"category": "adj", "id": 1284583561, "lemma": "испуганный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.99}
-{"category": "adj", "id": 1088376284, "lemma": "каменный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.84}
-{"category": "adj", "id": 309746419, "lemma": "капризный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.8}
-{"category": "adj", "id": 509038430, "lemma": "карманный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.98}
-{"category": "adj", "id": 1260760052, "lemma": "картонный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.69}
+{"category": "adj", "feel": true, "id": 431421163, "lemma": "искусственный", "qual": true, "tier": "core", "tones": ["cyber"], "zipf": 3.77}
+{"category": "adj", "id": 1284583561, "lemma": "испуганный", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.99}
+{"category": "adj", "feel": true, "id": 1088376284, "lemma": "каменный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.84}
+{"category": "adj", "id": 309746419, "lemma": "капризный", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.8}
+{"category": "adj", "id": 509038430, "lemma": "карманный", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.98}
+{"category": "adj", "id": 1260760052, "lemma": "картонный", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.69}
 {"category": "adj", "id": 773796003, "lemma": "кибернетический", "tier": "core", "tones": ["cyber"], "zipf": 2.31}
-{"category": "adj", "id": 705513134, "lemma": "кислый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.06}
-{"category": "adj", "id": 1545916860, "lemma": "клетчатый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.37}
-{"category": "adj", "id": 1695402124, "lemma": "коварный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.24}
-{"category": "adj", "id": 357883274, "lemma": "кожаный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.33}
-{"category": "adj", "id": 780275791, "lemma": "колдовской", "tier": "core", "tones": ["dark", "fairy"], "zipf": 2.48}
+{"category": "adj", "id": 705513134, "lemma": "кислый", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.06}
+{"category": "adj", "id": 1545916860, "lemma": "клетчатый", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.37}
+{"category": "adj", "feel": true, "id": 1695402124, "lemma": "коварный", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.24}
+{"category": "adj", "id": 357883274, "lemma": "кожаный", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.33}
+{"category": "adj", "feel": true, "id": 780275791, "lemma": "колдовской", "tier": "core", "tones": ["dark", "fairy"], "zipf": 2.48}
 {"category": "adj", "id": 1302680509, "lemma": "колючий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.02}
 {"category": "adj", "id": 1184366565, "lemma": "коричневый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.67}
 {"category": "adj", "id": 1816598450, "lemma": "королевский", "tier": "core", "tones": ["fairy"], "zipf": 3.84}
@@ -4760,226 +4760,226 @@
 {"category": "adj", "id": 500662498, "lemma": "красивый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.35}
 {"category": "adj", "id": 1846965367, "lemma": "красный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.69}
 {"category": "adj", "id": 263704992, "lemma": "кривой", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.92}
-{"category": "adj", "id": 319866572, "lemma": "крохотный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.02}
-{"category": "adj", "id": 186466856, "lemma": "крошечный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.23}
+{"category": "adj", "feel": true, "id": 319866572, "lemma": "крохотный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.02}
+{"category": "adj", "feel": true, "id": 186466856, "lemma": "крошечный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.23}
 {"category": "adj", "id": 915836745, "lemma": "крылатый", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 2.85}
-{"category": "adj", "id": 1765659486, "lemma": "кудрявый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.93}
+{"category": "adj", "id": 1765659486, "lemma": "кудрявый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.93}
 {"category": "adj", "id": 1464914349, "lemma": "кукольный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.26}
 {"category": "adj", "id": 353984397, "lemma": "лазурный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.0}
-{"category": "adj", "id": 365946767, "lemma": "лакированный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 1.89}
-{"category": "adj", "id": 1133721957, "lemma": "ласковый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.23}
-{"category": "adj", "id": 482788314, "lemma": "лёгкий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.64}
-{"category": "adj", "id": 244248530, "lemma": "ледяной", "qual": true, "tier": "core", "tones": ["dark", "fairy"], "zipf": 3.87}
-{"category": "adj", "id": 1373981603, "lemma": "ленивый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.39}
+{"category": "adj", "id": 365946767, "lemma": "лакированный", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 1.89}
+{"category": "adj", "feel": true, "id": 1133721957, "lemma": "ласковый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.23}
+{"category": "adj", "feel": true, "id": 482788314, "lemma": "лёгкий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.64}
+{"category": "adj", "feel": true, "id": 244248530, "lemma": "ледяной", "qual": true, "tier": "core", "tones": ["dark", "fairy"], "zipf": 3.87}
+{"category": "adj", "feel": true, "id": 1373981603, "lemma": "ленивый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.39}
 {"category": "adj", "id": 1267931834, "lemma": "лесной", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.2}
-{"category": "adj", "id": 1821086299, "lemma": "летний", "tier": "core", "tones": ["fairy"], "zipf": 4.71}
-{"category": "adj", "id": 618764160, "lemma": "лживый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.79}
+{"category": "adj", "feel": true, "id": 1821086299, "lemma": "летний", "tier": "core", "tones": ["fairy"], "zipf": 4.71}
+{"category": "adj", "feel": true, "id": 618764160, "lemma": "лживый", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.79}
 {"category": "adj", "id": 1930366085, "lemma": "лиловый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.88}
-{"category": "adj", "id": 901851521, "lemma": "лишний", "tier": "core", "tones": ["city"], "zipf": 4.06}
+{"category": "adj", "feel": true, "id": 901851521, "lemma": "лишний", "tier": "core", "tones": ["city"], "zipf": 4.06}
 {"category": "adj", "id": 545472329, "lemma": "ловкий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.18}
 {"category": "adj", "id": 682664115, "lemma": "лохматый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.84}
-{"category": "adj", "id": 28268991, "lemma": "лукавый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.61}
+{"category": "adj", "feel": true, "id": 28268991, "lemma": "лукавый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.61}
 {"category": "adj", "id": 1150044800, "lemma": "лунный", "qual": true, "tier": "core", "tones": ["fairy", "myth"], "zipf": 3.82}
-{"category": "adj", "id": 1714135055, "lemma": "лысый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.57}
-{"category": "adj", "id": 2070073562, "lemma": "маленький", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.7}
-{"category": "adj", "id": 2093469739, "lemma": "медлительный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.54}
+{"category": "adj", "id": 1714135055, "lemma": "лысый", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.57}
+{"category": "adj", "feel": true, "id": 2070073562, "lemma": "маленький", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.7}
+{"category": "adj", "id": 2093469739, "lemma": "медлительный", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.54}
 {"category": "adj", "id": 965940422, "lemma": "медный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.33}
 {"category": "adj", "id": 2022160843, "lemma": "мёртвый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.25}
 {"category": "adj", "id": 842247086, "lemma": "мерцающий", "tier": "core", "tones": ["fairy"], "zipf": 2.43}
-{"category": "adj", "id": 1200066601, "lemma": "механический", "tier": "core", "tones": ["cyber"], "zipf": 3.67}
-{"category": "adj", "id": 1906769095, "lemma": "милосердный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 2.69}
-{"category": "adj", "id": 163733369, "lemma": "мимолётный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 1.29}
-{"category": "adj", "id": 1586978326, "lemma": "мокрый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.65}
-{"category": "adj", "id": 2118398510, "lemma": "молодой", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.83}
-{"category": "adj", "id": 141321042, "lemma": "молчаливый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.07}
+{"category": "adj", "feel": true, "id": 1200066601, "lemma": "механический", "tier": "core", "tones": ["cyber"], "zipf": 3.67}
+{"category": "adj", "id": 1906769095, "lemma": "милосердный", "noobject": true, "qual": true, "tier": "core", "tones": ["myth"], "zipf": 2.69}
+{"category": "adj", "feel": true, "id": 163733369, "lemma": "мимолётный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 1.29}
+{"category": "adj", "id": 1586978326, "lemma": "мокрый", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.65}
+{"category": "adj", "id": 2118398510, "lemma": "молодой", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.83}
+{"category": "adj", "id": 141321042, "lemma": "молчаливый", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.07}
 {"category": "adj", "id": 497789924, "lemma": "морской", "tier": "core", "tones": ["myth"], "zipf": 4.59}
 {"category": "adj", "id": 2071342466, "lemma": "мохнатый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.77}
-{"category": "adj", "id": 883355381, "lemma": "мрачный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.37}
-{"category": "adj", "id": 1068593993, "lemma": "мудрый", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.71}
-{"category": "adj", "id": 221411941, "lemma": "музейный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.1}
-{"category": "adj", "id": 801484577, "lemma": "мутный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.85}
-{"category": "adj", "id": 1021618660, "lemma": "наглый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.16}
-{"category": "adj", "id": 1243503121, "lemma": "надменный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.75}
-{"category": "adj", "id": 1448101229, "lemma": "наивный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.35}
+{"category": "adj", "feel": true, "id": 883355381, "lemma": "мрачный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.37}
+{"category": "adj", "id": 1068593993, "lemma": "мудрый", "noobject": true, "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.71}
+{"category": "adj", "id": 221411941, "lemma": "музейный", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.1}
+{"category": "adj", "feel": true, "id": 801484577, "lemma": "мутный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.85}
+{"category": "adj", "id": 1021618660, "lemma": "наглый", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.16}
+{"category": "adj", "id": 1243503121, "lemma": "надменный", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.75}
+{"category": "adj", "feel": true, "id": 1448101229, "lemma": "наивный", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.35}
 {"category": "adj", "id": 895377076, "lemma": "напуганный", "tier": "core", "zipf": 2.65}
 {"category": "adj", "id": 223027027, "lemma": "напыщенный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.33}
-{"category": "adj", "id": 1972115856, "lemma": "настоящий", "tier": "core", "tones": ["fairy"], "zipf": 4.85}
+{"category": "adj", "feel": true, "id": 1972115856, "lemma": "настоящий", "tier": "core", "tones": ["fairy"], "zipf": 4.85}
 {"category": "adj", "id": 149731788, "lemma": "небесный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.66}
-{"category": "adj", "id": 729117440, "lemma": "невидимый", "qual": true, "tier": "core", "tones": ["fairy", "myth"], "zipf": 3.4}
-{"category": "adj", "id": 789483548, "lemma": "нежный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.6}
-{"category": "adj", "id": 1188310937, "lemma": "нелепый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.08}
-{"category": "adj", "id": 1358151140, "lemma": "ненужный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.99}
+{"category": "adj", "feel": true, "id": 729117440, "lemma": "невидимый", "qual": true, "tier": "core", "tones": ["fairy", "myth"], "zipf": 3.4}
+{"category": "adj", "feel": true, "id": 789483548, "lemma": "нежный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.6}
+{"category": "adj", "feel": true, "id": 1188310937, "lemma": "нелепый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.08}
+{"category": "adj", "feel": true, "id": 1358151140, "lemma": "ненужный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.99}
 {"category": "adj", "id": 2110121832, "lemma": "неоновый", "qual": true, "tier": "core", "tones": ["cyber"], "zipf": 2.3}
-{"category": "adj", "id": 557621303, "lemma": "нервный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.56}
-{"category": "adj", "id": 1878679254, "lemma": "несчастный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.86}
-{"category": "adj", "id": 352298508, "lemma": "неторопливый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.35}
-{"category": "adj", "id": 1205956211, "lemma": "неуклюжий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.91}
+{"category": "adj", "feel": true, "id": 557621303, "lemma": "нервный", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.56}
+{"category": "adj", "id": 1878679254, "lemma": "несчастный", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.86}
+{"category": "adj", "id": 352298508, "lemma": "неторопливый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.35}
+{"category": "adj", "id": 1205956211, "lemma": "неуклюжий", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.91}
 {"category": "adj", "id": 1747236806, "lemma": "низкий", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.14}
 {"category": "adj", "id": 1000612583, "lemma": "нищий", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.4}
-{"category": "adj", "id": 1314863681, "lemma": "новенький", "tier": "core", "tones": ["city"], "zipf": 3.36}
+{"category": "adj", "id": 1314863681, "lemma": "новенький", "noactor": true, "tier": "core", "tones": ["city"], "zipf": 3.36}
 {"category": "adj", "id": 986497590, "lemma": "новый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 5.57}
-{"category": "adj", "id": 1641345706, "lemma": "ночной", "qual": true, "tier": "core", "tones": ["city", "dark"], "zipf": 4.26}
-{"category": "adj", "id": 825157432, "lemma": "обиженный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.95}
-{"category": "adj", "id": 791945958, "lemma": "огненный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.6}
-{"category": "adj", "id": 709335068, "lemma": "огромный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 4.56}
-{"category": "adj", "id": 286680023, "lemma": "одинокий", "qual": true, "tier": "core", "tones": ["city", "dark"], "zipf": 3.8}
-{"category": "adj", "id": 2021847585, "lemma": "одноглазый", "tier": "core", "tones": ["dark", "myth"], "zipf": 2.95}
-{"category": "adj", "id": 1591036197, "lemma": "однорукий", "tier": "core", "tones": ["dark"], "zipf": 2.74}
-{"category": "adj", "id": 524640555, "lemma": "опальный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 2.58}
-{"category": "adj", "id": 75047466, "lemma": "опасный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 4.03}
+{"category": "adj", "feel": true, "id": 1641345706, "lemma": "ночной", "qual": true, "tier": "core", "tones": ["city", "dark"], "zipf": 4.26}
+{"category": "adj", "id": 825157432, "lemma": "обиженный", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.95}
+{"category": "adj", "feel": true, "id": 791945958, "lemma": "огненный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.6}
+{"category": "adj", "feel": true, "id": 709335068, "lemma": "огромный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 4.56}
+{"category": "adj", "feel": true, "id": 286680023, "lemma": "одинокий", "qual": true, "tier": "core", "tones": ["city", "dark"], "zipf": 3.8}
+{"category": "adj", "id": 2021847585, "lemma": "одноглазый", "noobject": true, "tier": "core", "tones": ["dark", "myth"], "zipf": 2.95}
+{"category": "adj", "id": 1591036197, "lemma": "однорукий", "noobject": true, "tier": "core", "tones": ["dark"], "zipf": 2.74}
+{"category": "adj", "id": 524640555, "lemma": "опальный", "noobject": true, "qual": true, "tier": "core", "tones": ["myth"], "zipf": 2.58}
+{"category": "adj", "feel": true, "id": 75047466, "lemma": "опасный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 4.03}
 {"category": "adj", "id": 1821511468, "lemma": "опустевший", "tier": "core", "tones": ["dark"], "zipf": 2.52}
 {"category": "adj", "id": 32834595, "lemma": "оранжевый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.69}
-{"category": "adj", "id": 1797322655, "lemma": "осенний", "tier": "core", "tones": ["dark"], "zipf": 3.67}
+{"category": "adj", "feel": true, "id": 1797322655, "lemma": "осенний", "tier": "core", "tones": ["dark"], "zipf": 3.67}
 {"category": "adj", "id": 1760106472, "lemma": "отцовский", "tier": "core", "tones": ["myth"], "zipf": 2.96}
-{"category": "adj", "id": 2000493325, "lemma": "отчаянный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.19}
-{"category": "adj", "id": 674274602, "lemma": "пахучий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.26}
-{"category": "adj", "id": 272922207, "lemma": "первый", "tier": "core", "tones": ["myth"], "zipf": 5.63}
+{"category": "adj", "feel": true, "id": 2000493325, "lemma": "отчаянный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.19}
+{"category": "adj", "id": 674274602, "lemma": "пахучий", "noactor": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.26}
+{"category": "adj", "feel": true, "id": 272922207, "lemma": "первый", "tier": "core", "tones": ["myth"], "zipf": 5.63}
 {"category": "adj", "id": 800137464, "lemma": "пёстрый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 1.78}
-{"category": "adj", "id": 1428652391, "lemma": "печальный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.59}
+{"category": "adj", "feel": true, "id": 1428652391, "lemma": "печальный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.59}
 {"category": "adj", "id": 1261703218, "lemma": "пиратский", "tier": "core", "tones": ["myth"], "zipf": 3.07}
-{"category": "adj", "id": 1864944487, "lemma": "пластиковый", "qual": true, "tier": "core", "tones": ["cyber"], "zipf": 3.24}
+{"category": "adj", "id": 1864944487, "lemma": "пластиковый", "noactor": true, "qual": true, "tier": "core", "tones": ["cyber"], "zipf": 3.24}
 {"category": "adj", "id": 791456839, "lemma": "плачущий", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.62}
-{"category": "adj", "id": 1952449183, "lemma": "поддельный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.91}
+{"category": "adj", "feel": true, "id": 1952449183, "lemma": "поддельный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.91}
 {"category": "adj", "id": 44564111, "lemma": "подземный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.58}
 {"category": "adj", "id": 1537584295, "lemma": "подозрительный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.24}
-{"category": "adj", "id": 1743761622, "lemma": "полный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.78}
+{"category": "adj", "id": 1743761622, "lemma": "полный", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.78}
 {"category": "adj", "id": 667718623, "lemma": "полосатый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.07}
-{"category": "adj", "id": 1920291345, "lemma": "полоумный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.41}
-{"category": "adj", "id": 477802474, "lemma": "полуночный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.72}
-{"category": "adj", "id": 99155493, "lemma": "поношенный", "tier": "core", "tones": ["city"], "zipf": 1.49}
-{"category": "adj", "id": 115949773, "lemma": "последний", "tier": "core", "tones": ["dark", "myth"], "zipf": 5.23}
+{"category": "adj", "id": 1920291345, "lemma": "полоумный", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.41}
+{"category": "adj", "feel": true, "id": 477802474, "lemma": "полуночный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.72}
+{"category": "adj", "id": 99155493, "lemma": "поношенный", "noactor": true, "tier": "core", "tones": ["city"], "zipf": 1.49}
+{"category": "adj", "feel": true, "id": 115949773, "lemma": "последний", "tier": "core", "tones": ["dark", "myth"], "zipf": 5.23}
 {"category": "adj", "id": 1865584453, "lemma": "потайной", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.77}
-{"category": "adj", "id": 1684565457, "lemma": "потёртый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 1.12}
+{"category": "adj", "id": 1684565457, "lemma": "потёртый", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 1.12}
 {"category": "adj", "id": 1074713298, "lemma": "потерянный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.41}
-{"category": "adj", "id": 224731999, "lemma": "походный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 2.81}
+{"category": "adj", "id": 224731999, "lemma": "походный", "noactor": true, "qual": true, "tier": "core", "tones": ["myth"], "zipf": 2.81}
 {"category": "adj", "id": 267058771, "lemma": "починенный", "tier": "core", "tones": ["city"]}
-{"category": "adj", "id": 2136109043, "lemma": "почтовый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.8}
+{"category": "adj", "id": 2136109043, "lemma": "почтовый", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.8}
 {"category": "adj", "id": 1577376629, "lemma": "поющий", "tier": "core", "tones": ["fairy"], "zipf": 2.85}
 {"category": "adj", "id": 8535898, "lemma": "преданный", "tier": "core", "tones": ["myth"], "zipf": 3.45}
-{"category": "adj", "id": 337511707, "lemma": "прекрасный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.52}
-{"category": "adj", "id": 66861175, "lemma": "призрачный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.08}
-{"category": "adj", "id": 2083661801, "lemma": "прозрачный", "qual": true, "tier": "core", "tones": ["cyber", "fairy"], "zipf": 3.45}
-{"category": "adj", "id": 1194445399, "lemma": "проклятый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.63}
+{"category": "adj", "feel": true, "id": 337511707, "lemma": "прекрасный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.52}
+{"category": "adj", "feel": true, "id": 66861175, "lemma": "призрачный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.08}
+{"category": "adj", "feel": true, "id": 2083661801, "lemma": "прозрачный", "qual": true, "tier": "core", "tones": ["cyber", "fairy"], "zipf": 3.45}
+{"category": "adj", "feel": true, "id": 1194445399, "lemma": "проклятый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.63}
 {"category": "adj", "id": 1045644790, "lemma": "пропавший", "tier": "core", "tones": ["dark"], "zipf": 3.58}
-{"category": "adj", "id": 283891580, "lemma": "просторный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.14}
-{"category": "adj", "id": 967387724, "lemma": "прохладный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.19}
-{"category": "adj", "id": 2095327330, "lemma": "пустой", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 4.19}
+{"category": "adj", "id": 283891580, "lemma": "просторный", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.14}
+{"category": "adj", "feel": true, "id": 967387724, "lemma": "прохладный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.19}
+{"category": "adj", "feel": true, "id": 2095327330, "lemma": "пустой", "noactor": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 4.19}
 {"category": "adj", "id": 1953166231, "lemma": "пушистый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.15}
-{"category": "adj", "id": 13462920, "lemma": "пыльный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.62}
-{"category": "adj", "id": 768607822, "lemma": "пьяный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.01}
+{"category": "adj", "id": 13462920, "lemma": "пыльный", "noactor": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.62}
+{"category": "adj", "feel": true, "id": 768607822, "lemma": "пьяный", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.01}
 {"category": "adj", "id": 503160885, "lemma": "пятнистый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.72}
 {"category": "adj", "id": 1815918996, "lemma": "радиоактивный", "qual": true, "tier": "core", "tones": ["cyber"], "zipf": 3.06}
-{"category": "adj", "id": 1012097795, "lemma": "разбитый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.2}
+{"category": "adj", "id": 1012097795, "lemma": "разбитый", "noactor": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.2}
 {"category": "adj", "id": 1492226656, "lemma": "разбойничий", "tier": "core", "tones": ["fairy"], "zipf": 1.77}
-{"category": "adj", "id": 763304282, "lemma": "разорившийся", "tier": "core", "zipf": 2.04}
-{"category": "adj", "id": 1783631963, "lemma": "раненый", "tier": "core", "tones": ["dark"], "zipf": 3.55}
-{"category": "adj", "id": 415242955, "lemma": "расписной", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.8}
-{"category": "adj", "id": 1455953798, "lemma": "рассеянный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.18}
-{"category": "adj", "id": 1754095241, "lemma": "ревнивый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.99}
-{"category": "adj", "id": 280679059, "lemma": "резной", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.01}
+{"category": "adj", "id": 763304282, "lemma": "разорившийся", "noobject": true, "tier": "core", "zipf": 2.04}
+{"category": "adj", "id": 1783631963, "lemma": "раненый", "noobject": true, "tier": "core", "tones": ["dark"], "zipf": 3.55}
+{"category": "adj", "id": 415242955, "lemma": "расписной", "noactor": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.8}
+{"category": "adj", "id": 1455953798, "lemma": "рассеянный", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.18}
+{"category": "adj", "id": 1754095241, "lemma": "ревнивый", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.99}
+{"category": "adj", "id": 280679059, "lemma": "резной", "noactor": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.01}
 {"category": "adj", "id": 1597845126, "lemma": "речной", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.7}
-{"category": "adj", "id": 1817972821, "lemma": "ржавый", "qual": true, "tier": "core", "tones": ["cyber", "dark"], "zipf": 2.99}
-{"category": "adj", "id": 1867115008, "lemma": "робкий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.88}
+{"category": "adj", "id": 1817972821, "lemma": "ржавый", "noactor": true, "qual": true, "tier": "core", "tones": ["cyber", "dark"], "zipf": 2.99}
+{"category": "adj", "feel": true, "id": 1867115008, "lemma": "робкий", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.88}
 {"category": "adj", "id": 317482191, "lemma": "рогатый", "qual": true, "tier": "core", "tones": ["dark", "fairy"], "zipf": 3.21}
-{"category": "adj", "id": 2078724575, "lemma": "родной", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.53}
+{"category": "adj", "feel": true, "id": 2078724575, "lemma": "родной", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.53}
 {"category": "adj", "id": 1160028390, "lemma": "розовый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.85}
-{"category": "adj", "id": 793614333, "lemma": "румяный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.38}
+{"category": "adj", "id": 793614333, "lemma": "румяный", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.38}
 {"category": "adj", "id": 1388386, "lemma": "ручной", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.96}
-{"category": "adj", "id": 673878366, "lemma": "рыжий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.77}
+{"category": "adj", "id": 673878366, "lemma": "рыжий", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.77}
 {"category": "adj", "id": 1236258755, "lemma": "рыцарский", "tier": "core", "tones": ["myth"], "zipf": 2.82}
-{"category": "adj", "id": 377938456, "lemma": "сварливый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.29}
+{"category": "adj", "id": 377938456, "lemma": "сварливый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.29}
 {"category": "adj", "id": 1350971939, "lemma": "сверкающий", "tier": "core", "tones": ["fairy"], "zipf": 2.76}
 {"category": "adj", "id": 2056671713, "lemma": "светящийся", "tier": "core", "tones": ["cyber", "fairy"], "zipf": 2.91}
-{"category": "adj", "id": 630851091, "lemma": "священный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.66}
+{"category": "adj", "feel": true, "id": 630851091, "lemma": "священный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.66}
 {"category": "adj", "id": 819006290, "lemma": "северный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 4.19}
-{"category": "adj", "id": 135217359, "lemma": "седой", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.38}
-{"category": "adj", "id": 2074108953, "lemma": "секретный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.78}
+{"category": "adj", "id": 135217359, "lemma": "седой", "noobject": true, "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.38}
+{"category": "adj", "feel": true, "id": 2074108953, "lemma": "секретный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.78}
 {"category": "adj", "id": 1981924568, "lemma": "семейный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.04}
-{"category": "adj", "id": 43117985, "lemma": "сердитый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.9}
+{"category": "adj", "id": 43117985, "lemma": "сердитый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.9}
 {"category": "adj", "id": 794361815, "lemma": "серебряный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.96}
-{"category": "adj", "id": 617803427, "lemma": "серый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.08}
+{"category": "adj", "feel": true, "id": 617803427, "lemma": "серый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.08}
 {"category": "adj", "id": 797166528, "lemma": "серьёзный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.59}
 {"category": "adj", "id": 658200337, "lemma": "синий", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 4.22}
-{"category": "adj", "id": 1727401917, "lemma": "синтетический", "tier": "core", "tones": ["cyber"], "zipf": 3.04}
+{"category": "adj", "feel": true, "id": 1727401917, "lemma": "синтетический", "tier": "core", "tones": ["cyber"], "zipf": 3.04}
 {"category": "adj", "id": 1495303931, "lemma": "сиреневый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.82}
-{"category": "adj", "id": 471394155, "lemma": "скромный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.78}
-{"category": "adj", "id": 512407630, "lemma": "сладкий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.92}
-{"category": "adj", "id": 286475902, "lemma": "слепой", "qual": true, "tier": "core", "tones": ["dark", "myth"], "zipf": 3.89}
+{"category": "adj", "id": 471394155, "lemma": "скромный", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.78}
+{"category": "adj", "feel": true, "id": 512407630, "lemma": "сладкий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.92}
+{"category": "adj", "feel": true, "id": 286475902, "lemma": "слепой", "qual": true, "tier": "core", "tones": ["dark", "myth"], "zipf": 3.89}
 {"category": "adj", "id": 867346142, "lemma": "сломанный", "tier": "core", "tones": ["city", "cyber"], "zipf": 3.11}
-{"category": "adj", "id": 355768051, "lemma": "смелый", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.7}
-{"category": "adj", "id": 811054616, "lemma": "смешной", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.84}
+{"category": "adj", "id": 355768051, "lemma": "смелый", "noobject": true, "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.7}
+{"category": "adj", "feel": true, "id": 811054616, "lemma": "смешной", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.84}
 {"category": "adj", "id": 316424605, "lemma": "смеющийся", "tier": "core", "tones": ["fairy"], "zipf": 2.56}
-{"category": "adj", "id": 1734546531, "lemma": "смуглый", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 2.52}
+{"category": "adj", "id": 1734546531, "lemma": "смуглый", "noobject": true, "qual": true, "tier": "core", "tones": ["myth"], "zipf": 2.52}
 {"category": "adj", "id": 53072876, "lemma": "снежный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.69}
-{"category": "adj", "id": 1190567872, "lemma": "солёный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 2.74}
+{"category": "adj", "id": 1190567872, "lemma": "солёный", "noactor": true, "qual": true, "tier": "core", "tones": ["myth"], "zipf": 2.74}
 {"category": "adj", "id": 1962401517, "lemma": "солнечный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.98}
-{"category": "adj", "id": 1563892088, "lemma": "сонный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.05}
+{"category": "adj", "feel": true, "id": 1563892088, "lemma": "сонный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.05}
 {"category": "adj", "id": 1375385376, "lemma": "соседский", "tier": "core", "tones": ["city"], "zipf": 2.92}
-{"category": "adj", "id": 1427311382, "lemma": "спокойный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.74}
+{"category": "adj", "feel": true, "id": 1427311382, "lemma": "спокойный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.74}
 {"category": "adj", "id": 1301372089, "lemma": "спящий", "tier": "core", "tones": ["dark", "fairy"], "zipf": 3.16}
-{"category": "adj", "id": 2093900682, "lemma": "стальной", "qual": true, "tier": "core", "tones": ["cyber"], "zipf": 3.71}
-{"category": "adj", "id": 738855644, "lemma": "старинный", "qual": true, "tier": "core", "tones": ["fairy", "myth"], "zipf": 3.59}
-{"category": "adj", "id": 1223525507, "lemma": "старый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.78}
-{"category": "adj", "id": 1828155986, "lemma": "стеклянный", "tier": "core", "tones": ["cyber", "fairy"], "zipf": 3.45}
-{"category": "adj", "id": 1520515449, "lemma": "странный", "qual": true, "tier": "core", "tones": ["city", "dark"], "zipf": 4.27}
+{"category": "adj", "feel": true, "id": 2093900682, "lemma": "стальной", "qual": true, "tier": "core", "tones": ["cyber"], "zipf": 3.71}
+{"category": "adj", "feel": true, "id": 738855644, "lemma": "старинный", "qual": true, "tier": "core", "tones": ["fairy", "myth"], "zipf": 3.59}
+{"category": "adj", "feel": true, "id": 1223525507, "lemma": "старый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.78}
+{"category": "adj", "feel": true, "id": 1828155986, "lemma": "стеклянный", "tier": "core", "tones": ["cyber", "fairy"], "zipf": 3.45}
+{"category": "adj", "feel": true, "id": 1520515449, "lemma": "странный", "qual": true, "tier": "core", "tones": ["city", "dark"], "zipf": 4.27}
 {"category": "adj", "id": 435175770, "lemma": "строгий", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.67}
-{"category": "adj", "id": 394525145, "lemma": "сумасшедший", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.84}
-{"category": "adj", "id": 116337126, "lemma": "суровый", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.61}
-{"category": "adj", "id": 944191237, "lemma": "сухой", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.17}
-{"category": "adj", "id": 688060319, "lemma": "счастливый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.1}
-{"category": "adj", "id": 513038406, "lemma": "сытый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.79}
-{"category": "adj", "id": 1881500569, "lemma": "таинственный", "qual": true, "tier": "core", "tones": ["dark", "myth"], "zipf": 3.64}
-{"category": "adj", "id": 1238264596, "lemma": "тайный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.9}
+{"category": "adj", "feel": true, "id": 394525145, "lemma": "сумасшедший", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.84}
+{"category": "adj", "feel": true, "id": 116337126, "lemma": "суровый", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 3.61}
+{"category": "adj", "id": 944191237, "lemma": "сухой", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.17}
+{"category": "adj", "id": 688060319, "lemma": "счастливый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.1}
+{"category": "adj", "feel": true, "id": 513038406, "lemma": "сытый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.79}
+{"category": "adj", "feel": true, "id": 1881500569, "lemma": "таинственный", "qual": true, "tier": "core", "tones": ["dark", "myth"], "zipf": 3.64}
+{"category": "adj", "feel": true, "id": 1238264596, "lemma": "тайный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.9}
 {"category": "adj", "id": 1944056555, "lemma": "танцующий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.82}
 {"category": "adj", "id": 1054291397, "lemma": "театральный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.8}
-{"category": "adj", "id": 807911644, "lemma": "тёплый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.58}
-{"category": "adj", "id": 2047649751, "lemma": "тесный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.91}
-{"category": "adj", "id": 523532620, "lemma": "тихий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.06}
-{"category": "adj", "id": 1412012818, "lemma": "толстый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.89}
-{"category": "adj", "id": 1686809645, "lemma": "тонкий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.93}
-{"category": "adj", "id": 253540564, "lemma": "трамвайный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.58}
-{"category": "adj", "id": 259666576, "lemma": "трезвый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.34}
-{"category": "adj", "id": 85780403, "lemma": "треснувший", "tier": "core", "tones": ["dark"], "zipf": 1.81}
-{"category": "adj", "id": 1252008839, "lemma": "трудолюбивый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.85}
-{"category": "adj", "id": 1941785375, "lemma": "трусливый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.98}
-{"category": "adj", "id": 718130488, "lemma": "туманный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.81}
-{"category": "adj", "id": 1870794364, "lemma": "тусклый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.96}
-{"category": "adj", "id": 1808817618, "lemma": "тяжёлый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.71}
-{"category": "adj", "id": 765430147, "lemma": "угрюмый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.82}
-{"category": "adj", "id": 1948534325, "lemma": "упрямый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.08}
+{"category": "adj", "feel": true, "id": 807911644, "lemma": "тёплый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.58}
+{"category": "adj", "id": 2047649751, "lemma": "тесный", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.91}
+{"category": "adj", "feel": true, "id": 523532620, "lemma": "тихий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 4.06}
+{"category": "adj", "id": 1412012818, "lemma": "толстый", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.89}
+{"category": "adj", "feel": true, "id": 1686809645, "lemma": "тонкий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.93}
+{"category": "adj", "id": 253540564, "lemma": "трамвайный", "noactor": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.58}
+{"category": "adj", "id": 259666576, "lemma": "трезвый", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.34}
+{"category": "adj", "id": 85780403, "lemma": "треснувший", "noactor": true, "tier": "core", "tones": ["dark"], "zipf": 1.81}
+{"category": "adj", "id": 1252008839, "lemma": "трудолюбивый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.85}
+{"category": "adj", "id": 1941785375, "lemma": "трусливый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.98}
+{"category": "adj", "feel": true, "id": 718130488, "lemma": "туманный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.81}
+{"category": "adj", "feel": true, "id": 1870794364, "lemma": "тусклый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.96}
+{"category": "adj", "feel": true, "id": 1808817618, "lemma": "тяжёлый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.71}
+{"category": "adj", "feel": true, "id": 765430147, "lemma": "угрюмый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.82}
+{"category": "adj", "feel": true, "id": 1948534325, "lemma": "упрямый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.08}
 {"category": "adj", "id": 179932821, "lemma": "уродливый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 2.89}
-{"category": "adj", "id": 779286374, "lemma": "усталый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.13}
-{"category": "adj", "id": 386544796, "lemma": "утренний", "tier": "core", "tones": ["fairy"], "zipf": 3.56}
+{"category": "adj", "feel": true, "id": 779286374, "lemma": "усталый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.13}
+{"category": "adj", "feel": true, "id": 386544796, "lemma": "утренний", "tier": "core", "tones": ["fairy"], "zipf": 3.56}
 {"category": "adj", "id": 2107236332, "lemma": "уютный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.27}
-{"category": "adj", "id": 1356251552, "lemma": "фальшивый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.12}
+{"category": "adj", "feel": true, "id": 1356251552, "lemma": "фальшивый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.12}
 {"category": "adj", "id": 1912891875, "lemma": "фарфоровый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.78}
 {"category": "adj", "id": 1160942749, "lemma": "фиолетовый", "qual": true, "tier": "core", "tones": ["cyber"], "zipf": 3.43}
 {"category": "adj", "id": 348260857, "lemma": "хвостатый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.0}
-{"category": "adj", "id": 1304390741, "lemma": "хитрый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.6}
+{"category": "adj", "id": 1304390741, "lemma": "хитрый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.6}
 {"category": "adj", "id": 1302055778, "lemma": "хмурый", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.06}
-{"category": "adj", "id": 1950668051, "lemma": "холодный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 4.1}
-{"category": "adj", "id": 72009852, "lemma": "храбрый", "qual": true, "tier": "core", "tones": ["fairy", "myth"], "zipf": 3.46}
+{"category": "adj", "feel": true, "id": 1950668051, "lemma": "холодный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 4.1}
+{"category": "adj", "id": 72009852, "lemma": "храбрый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy", "myth"], "zipf": 3.46}
 {"category": "adj", "id": 741240253, "lemma": "хромающий", "tier": "core", "tones": ["dark"], "zipf": 1.64}
-{"category": "adj", "id": 1969150018, "lemma": "хромой", "qual": true, "tier": "core", "tones": ["dark", "fairy"], "zipf": 3.14}
-{"category": "adj", "id": 195655358, "lemma": "хрупкий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.14}
-{"category": "adj", "id": 245547015, "lemma": "хрустальный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.36}
-{"category": "adj", "id": 770529221, "lemma": "худой", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.64}
+{"category": "adj", "id": 1969150018, "lemma": "хромой", "noobject": true, "qual": true, "tier": "core", "tones": ["dark", "fairy"], "zipf": 3.14}
+{"category": "adj", "feel": true, "id": 195655358, "lemma": "хрупкий", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.14}
+{"category": "adj", "feel": true, "id": 245547015, "lemma": "хрустальный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.36}
+{"category": "adj", "id": 770529221, "lemma": "худой", "noobject": true, "qual": true, "tier": "core", "tones": ["dark"], "zipf": 3.64}
 {"category": "adj", "id": 2105537680, "lemma": "царский", "tier": "core", "tones": ["fairy"], "zipf": 3.51}
 {"category": "adj", "id": 282003558, "lemma": "цирковой", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.06}
-{"category": "adj", "id": 245782519, "lemma": "цифровой", "qual": true, "tier": "core", "tones": ["cyber"], "zipf": 3.95}
-{"category": "adj", "id": 114830731, "lemma": "чёрный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 4.23}
-{"category": "adj", "id": 251555691, "lemma": "честный", "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.92}
+{"category": "adj", "feel": true, "id": 245782519, "lemma": "цифровой", "qual": true, "tier": "core", "tones": ["cyber"], "zipf": 3.95}
+{"category": "adj", "feel": true, "id": 114830731, "lemma": "чёрный", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 4.23}
+{"category": "adj", "feel": true, "id": 251555691, "lemma": "честный", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 3.92}
 {"category": "adj", "id": 1372271842, "lemma": "чистый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 4.31}
-{"category": "adj", "id": 530040109, "lemma": "чудаковатый", "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.2}
-{"category": "adj", "id": 539919753, "lemma": "чудесный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.92}
-{"category": "adj", "id": 1576721183, "lemma": "чужой", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 4.29}
-{"category": "adj", "id": 1251188956, "lemma": "шёлковый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.54}
+{"category": "adj", "id": 530040109, "lemma": "чудаковатый", "noobject": true, "qual": true, "tier": "core", "tones": ["city"], "zipf": 2.2}
+{"category": "adj", "feel": true, "id": 539919753, "lemma": "чудесный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.92}
+{"category": "adj", "feel": true, "id": 1576721183, "lemma": "чужой", "qual": true, "tier": "core", "tones": ["dark"], "zipf": 4.29}
+{"category": "adj", "id": 1251188956, "lemma": "шёлковый", "noactor": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.54}
 {"category": "adj", "id": 1601982574, "lemma": "шепчущий", "tier": "core", "tones": ["dark"], "zipf": 1.92}
-{"category": "adj", "id": 1442949263, "lemma": "шерстяной", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.99}
-{"category": "adj", "id": 30399137, "lemma": "щедрый", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.24}
-{"category": "adj", "id": 1149523142, "lemma": "электрический", "tier": "core", "tones": ["cyber"], "zipf": 3.84}
+{"category": "adj", "id": 1442949263, "lemma": "шерстяной", "noactor": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 2.99}
+{"category": "adj", "id": 30399137, "lemma": "щедрый", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.24}
+{"category": "adj", "feel": true, "id": 1149523142, "lemma": "электрический", "tier": "core", "tones": ["cyber"], "zipf": 3.84}
 {"category": "adj", "id": 1729102113, "lemma": "южный", "qual": true, "tier": "core", "tones": ["myth"], "zipf": 4.35}
-{"category": "adj", "id": 783200985, "lemma": "юный", "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.94}
+{"category": "adj", "feel": true, "id": 783200985, "lemma": "юный", "noobject": true, "qual": true, "tier": "core", "tones": ["fairy"], "zipf": 3.94}
 {"category": "adj", "id": 819794199, "lemma": "аварийный", "qual": true, "tier": "extended", "zipf": 3.3}
 {"category": "adj", "id": 1742468015, "lemma": "автоматический", "tier": "extended", "zipf": 3.51}
 {"category": "adj", "id": 1276609923, "lemma": "авторитетный", "qual": true, "tier": "extended", "zipf": 3.07}

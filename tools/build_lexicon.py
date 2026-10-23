@@ -35,6 +35,7 @@ CATEGORIES = tuple(morph.CATEGORY_POS)
 TONES = frozenset({"dark", "fairy", "cyber", "city", "myth"})
 GOVERNS = frozenset({"accs", "gent", "datv", "ablt", "loct"})
 PLACE_PREPS = frozenset({"в", "на"})
+ADJ_USE_MARKS = frozenset({"+feel", "-actor", "-object"})
 ZIPF_MIN, ZIPF_MAX = 2.5, 5.5
 TOP_N = 100_000
 WILD_TOP_N = 400_000
@@ -55,6 +56,7 @@ class Entry:
     prep: str | None = None
     prefer_loct: bool = False
     tones: list[str] = field(default_factory=list)
+    uses: set[str] = field(default_factory=set)  # метки применимости прилагательного
     source: str = ""
 
 
@@ -92,6 +94,8 @@ def parse_line(line: str, category: str, tier: str, source: str) -> Entry:
             entry.governs, entry.governs_prep = case, prep or None
         elif token == "!loct":
             entry.prefer_loct = True
+        elif token in ADJ_USE_MARKS and category == "adj":
+            entry.uses.add(token)
         elif token in PLACE_PREPS and category == "place":
             entry.prep = token
         else:
@@ -168,6 +172,9 @@ def resolve(entry: Entry, zipf_of) -> tuple[dict | None, str | None]:
         "prep": entry.prep,
         "prefer_loct": entry.prefer_loct,
         "qual": morph.is_qualitative(parse) if pos == "ADJF" else None,
+        "feel": "+feel" in entry.uses,
+        "noactor": "-actor" in entry.uses,
+        "noobject": "-object" in entry.uses,
         "tones": sorted(set(entry.tones)),
         "zipf": round(zipf_of(parse.word), 2),
     }

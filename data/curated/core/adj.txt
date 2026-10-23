@@ -1,159 +1,161 @@
 # Прилагательные (полные). Формат: лемма [@тон ...].
 # Превосходная степень «самый …» разрешается только качественным (есть сравнительная форма).
+# Метки применимости: +feel — годится к чувствам; -actor / -object — не ставить к «Кто» / к предметам.
+# Без меток прилагательное идёт к «Кто» и к предметам, но не к чувствам.
 
-усталый @city
-старый @fairy
-старинный @fairy @myth
-древний @myth
+усталый +feel @city
+старый +feel @fairy
+старинный +feel @fairy @myth
+древний +feel @myth
 ветхий @dark
 дряхлый @dark
-юный @fairy
-молодой @city
-маленький @fairy
-крошечный @fairy
-огромный @myth
-громадный @myth
+юный +feel -object @fairy
+молодой -object @city
+маленький +feel @fairy
+крошечный +feel @fairy
+огромный +feel @myth
+громадный +feel @myth
 высокий @myth
 низкий @city
-тонкий @fairy
-толстый @city
-худой @dark
-хрупкий @fairy
-тяжёлый @dark
-лёгкий @fairy
-тихий @fairy
+тонкий +feel @fairy
+толстый -object @city
+худой -object @dark
+хрупкий +feel @fairy
+тяжёлый +feel @dark
+лёгкий +feel @fairy
+тихий +feel @fairy
 громкий @city
-молчаливый @dark
-болтливый @city
-слепой @dark @myth
-глухой @dark
-хромой @dark @fairy
-однорукий @dark
-одноглазый @dark @myth
-рыжий @fairy
-седой @myth
-лысый @city
-бородатый @myth
-кудрявый @fairy
-бледный @dark
-румяный @fairy
-смуглый @myth
-веснушчатый @fairy
-сонный @fairy
-бессонный @dark @city
-задумчивый @fairy
-рассеянный @city
-печальный @dark
-грустный @fairy
-весёлый @fairy
-счастливый @fairy
-несчастный @dark
-одинокий @city @dark
-забытый @dark
+молчаливый -object @dark
+болтливый -object @city
+слепой +feel @dark @myth
+глухой +feel @dark
+хромой -object @dark @fairy
+однорукий -object @dark
+одноглазый -object @dark @myth
+рыжий -object @fairy
+седой -object @myth
+лысый -object @city
+бородатый -object @myth
+кудрявый -object @fairy
+бледный +feel -object @dark
+румяный -object @fairy
+смуглый -object @myth
+веснушчатый -object @fairy
+сонный +feel @fairy
+бессонный +feel @dark @city
+задумчивый -object @fairy
+рассеянный -object @city
+печальный +feel @dark
+грустный +feel @fairy
+весёлый +feel @fairy
+счастливый -object @fairy
+несчастный -object @dark
+одинокий +feel @city @dark
+забытый +feel @dark
 потерянный @dark
 заблудившийся
-испуганный @dark
+испуганный -object @dark
 напуганный
-храбрый @fairy @myth
-трусливый @fairy
-смелый @myth
-гордый @myth
-надменный @dark
-скромный @city
-застенчивый @city
-робкий @fairy
-наглый @city
-хитрый @fairy
-лукавый @fairy
-коварный @dark
-честный @city
-лживый @dark
-добрый @fairy
-злой @dark @fairy
-жестокий @dark
-милосердный @myth
-мудрый @myth
-глупый @fairy
-наивный @fairy
-упрямый @fairy
-ленивый @fairy
-трудолюбивый @fairy
-жадный @dark
-щедрый @fairy
-голодный @dark
-сытый @fairy
-пьяный @city
-трезвый @city
-больной @dark
-здоровый @city
-раненый @dark
+храбрый -object @fairy @myth
+трусливый -object @fairy
+смелый -object @myth
+гордый +feel -object @myth
+надменный -object @dark
+скромный -object @city
+застенчивый -object @city
+робкий +feel -object @fairy
+наглый -object @city
+хитрый -object @fairy
+лукавый +feel -object @fairy
+коварный +feel -object @dark
+честный +feel -object @city
+лживый +feel -object @dark
+добрый -object @fairy
+злой +feel -object @dark @fairy
+жестокий +feel -object @dark
+милосердный -object @myth
+мудрый -object @myth
+глупый -object @fairy
+наивный +feel -object @fairy
+упрямый +feel -object @fairy
+ленивый +feel -object @fairy
+трудолюбивый -object @fairy
+жадный +feel -object @dark
+щедрый -object @fairy
+голодный +feel -object @dark
+сытый +feel -object @fairy
+пьяный +feel -object @city
+трезвый -object @city
+больной +feel -object @dark
+здоровый -object @city
+раненый -object @dark
 мёртвый @dark
-живой @fairy
-бессмертный @myth
-вечный @myth
-мимолётный @fairy
-странный @dark @city
-загадочный @dark @myth
-таинственный @dark @myth
+живой +feel @fairy
+бессмертный +feel @myth
+вечный +feel @myth
+мимолётный +feel @fairy
+странный +feel @dark @city
+загадочный +feel @dark @myth
+таинственный +feel @dark @myth
 подозрительный @city
-опасный @dark
-безобидный @fairy
+опасный +feel @dark
+безобидный +feel @fairy
 ручной @fairy
-дикий @myth
-бездомный @city @dark
-беглый @dark
-опальный @myth
+дикий +feel @myth
+бездомный -object @city @dark
+беглый -object @dark
+опальный -object @myth
 знаменитый @city
-безвестный @dark
+безвестный -object @dark
 бедный @city
 богатый @city
 нищий @dark
-разорившийся
-влюблённый @fairy
-ревнивый @dark
-обиженный @city
-сердитый @fairy
-мрачный @dark
-угрюмый @dark
+разорившийся -object
+влюблённый -object @fairy
+ревнивый -object @dark
+обиженный -object @city
+сердитый -object @fairy
+мрачный +feel @dark
+угрюмый +feel @dark
 хмурый @dark
-суровый @myth
+суровый +feel @myth
 строгий @city
-нежный @fairy
-ласковый @fairy
-вежливый @city
-неуклюжий @fairy
+нежный +feel @fairy
+ласковый +feel @fairy
+вежливый +feel -object @city
+неуклюжий -object @fairy
 ловкий @fairy
 быстрый @city
-медлительный @fairy
-неторопливый @fairy
-беспокойный @city
-нервный @city
-спокойный @fairy
-безмятежный @fairy
-отчаянный @dark
-безумный @dark
-сумасшедший @dark
-полоумный @dark
-чудаковатый @city
-нелепый @city
-смешной @fairy
-забавный @fairy
+медлительный -object @fairy
+неторопливый -object @fairy
+беспокойный +feel @city
+нервный +feel -object @city
+спокойный +feel @fairy
+безмятежный +feel @fairy
+отчаянный +feel @dark
+безумный +feel @dark
+сумасшедший +feel -object @dark
+полоумный -object @dark
+чудаковатый -object @city
+нелепый +feel @city
+смешной +feel @fairy
+забавный +feel @fairy
 серьёзный @city
 важный @city
 напыщенный @city
-сварливый @fairy
-ворчливый @fairy
-капризный @fairy
-бессердечный @dark
-вероломный @dark
+сварливый -object @fairy
+ворчливый -object @fairy
+капризный -object @fairy
+бессердечный -object @dark
+вероломный -object @dark
 верный @myth
 преданный @myth
 пропавший @dark
-последний @myth @dark
-первый @myth
-единственный @myth
-чужой @dark
-родной @fairy
+последний +feel @myth @dark
+первый +feel @myth
+единственный +feel @myth
+чужой +feel @dark
+родной +feel @fairy
 дальний @myth
 соседский @city
 городской @city
@@ -167,60 +169,60 @@
 лунный @fairy @myth
 звёздный @myth
 солнечный @fairy
-ночной @dark @city
-полуночный @dark
-утренний @fairy
-вечерний @city
-осенний @dark
-зимний @fairy
-весенний @fairy
-летний @fairy
+ночной +feel @dark @city
+полуночный +feel @dark
+утренний +feel @fairy
+вечерний +feel @city
+осенний +feel @dark
+зимний +feel @fairy
+весенний +feel @fairy
+летний +feel @fairy
 северный @myth
 южный @myth
 снежный @fairy
-ледяной @dark @fairy
-огненный @myth
-каменный @myth
-железный @cyber @myth
-стальной @cyber
+ледяной +feel @dark @fairy
+огненный +feel @myth
+каменный +feel @myth
+железный +feel @cyber @myth
+стальной +feel @cyber
 медный @myth
 бронзовый @myth
 золотой @fairy @myth
 серебряный @fairy
-хрустальный @fairy
-стеклянный @fairy @cyber
+хрустальный +feel @fairy
+стеклянный +feel @fairy @cyber
 фарфоровый @fairy
 деревянный @fairy
 бумажный @fairy @city
-картонный @city
-пластиковый @cyber
-кожаный @city
-бархатный @fairy
-шёлковый @fairy
-шерстяной @fairy
-вязаный @fairy
-резной @fairy
-расписной @fairy
-лакированный @city
-ржавый @dark @cyber
-пыльный @dark
+картонный -actor @city
+пластиковый -actor @cyber
+кожаный -actor @city
+бархатный +feel @fairy
+шёлковый -actor @fairy
+шерстяной -actor @fairy
+вязаный -actor @fairy
+резной -actor @fairy
+расписной -actor @fairy
+лакированный -actor @city
+ржавый -actor @dark @cyber
+пыльный -actor @dark
 грязный @city
 чистый @city
-мокрый @city
-сухой @city
-горячий @city
-холодный @dark
-тёплый @fairy
-прохладный @city
-душистый @fairy
-пахучий @fairy
-сладкий @fairy
-горький @dark
-кислый @city
-солёный @myth
+мокрый -actor @city
+сухой -actor @city
+горячий +feel @city
+холодный +feel @dark
+тёплый +feel @fairy
+прохладный +feel @city
+душистый -actor @fairy
+пахучий -actor @fairy
+сладкий +feel @fairy
+горький +feel @dark
+кислый -actor @city
+солёный -actor @myth
 красный @fairy
 алый @fairy
-багровый @dark
+багровый +feel @dark
 розовый @fairy
 оранжевый @city
 жёлтый @city
@@ -232,25 +234,25 @@
 фиолетовый @cyber
 лиловый @fairy
 сиреневый @fairy
-чёрный @dark
-белый @fairy
-серый @city
+чёрный +feel @dark
+белый +feel @fairy
+серый +feel @city
 бурый @fairy
 коричневый @city
 пёстрый @fairy
 полосатый @fairy
 пятнистый @fairy
-клетчатый @city
+клетчатый -actor @city
 блестящий @fairy
 сверкающий @fairy
-тусклый @dark
+тусклый +feel @dark
 светящийся @cyber @fairy
 мерцающий @fairy
-прозрачный @fairy @cyber
-мутный @dark
-туманный @dark
-призрачный @dark
-невидимый @fairy @myth
+прозрачный +feel @fairy @cyber
+мутный +feel @dark
+туманный +feel @dark
+призрачный +feel @dark
+невидимый +feel @fairy @myth
 крылатый @myth
 хвостатый @fairy
 рогатый @fairy @dark
@@ -270,71 +272,71 @@
 хромающий @dark
 бродячий @city
 кочевой @myth
-механический @cyber
-заводной @cyber @fairy
-электрический @cyber
-цифровой @cyber
-виртуальный @cyber
+механический +feel @cyber
+заводной +feel @cyber @fairy
+электрический +feel @cyber
+цифровой +feel @cyber
+виртуальный +feel @cyber
 неоновый @cyber
 радиоактивный @cyber
 кибернетический @cyber
-синтетический @cyber
+синтетический +feel @cyber
 голографический @cyber
-искусственный @cyber
+искусственный +feel @cyber
 запрограммированный
 сломанный @cyber @city
-треснувший @dark
-разбитый @dark
+треснувший -actor @dark
+разбитый -actor @dark
 починенный @city
 заколдованный @fairy
-волшебный @fairy
-колдовской @dark @fairy
-проклятый @dark
-благословенный @myth
-священный @myth
-запретный @dark @myth
-тайный @dark
-секретный @city
+волшебный +feel @fairy
+колдовской +feel @dark @fairy
+проклятый +feel @dark
+благословенный +feel @myth
+священный +feel @myth
+запретный +feel @dark @myth
+тайный +feel @dark
+секретный +feel @city
 потайной @fairy
-фальшивый @city
-поддельный @city
-настоящий @fairy
-чудесный @fairy
-дивный @fairy
-прекрасный @fairy
+фальшивый +feel @city
+поддельный +feel @city
+настоящий +feel @fairy
+чудесный +feel @fairy
+дивный +feel @fairy
+прекрасный +feel @fairy
 красивый @city
 уродливый @dark
 кривой @fairy
 горбатый @dark
 косой @fairy
-бесконечный @myth
-крохотный @fairy
-пустой @dark
-полный @city
-тесный @city
-просторный @city
+бесконечный +feel @myth
+крохотный +feel @fairy
+пустой +feel -actor @dark
+полный -actor @city
+тесный -actor @city
+просторный -actor @city
 уютный @fairy
 заброшенный @dark
 опустевший @dark
 затерянный @myth
-потёртый @city
-поношенный @city
+потёртый -actor @city
+поношенный -actor @city
 новый @city
-новенький @city
-дорогой @city
-дешёвый @city
-бесценный @myth
-ненужный @city
-лишний @city
-забавный
-игрушечный @fairy
+новенький -actor @city
+дорогой -actor @city
+дешёвый -actor @city
+бесценный +feel @myth
+ненужный +feel @city
+лишний +feel @city
+забавный +feel
+игрушечный -actor @fairy
 кукольный @fairy
-карманный @city
-походный @myth
-дорожный @city
-почтовый @city
+карманный -actor @city
+походный -actor @myth
+дорожный -actor @city
+почтовый -actor @city
 семейный @fairy
-бабушкин @fairy
+бабушкин +feel @fairy
 отцовский @myth
 королевский @fairy
 царский @fairy
@@ -343,7 +345,7 @@
 разбойничий @fairy
 цирковой @fairy
 театральный @city
-музейный @city
-аптечный @city
-вокзальный @city
-трамвайный @city
+музейный -actor @city
+аптечный -actor @city
+вокзальный -actor @city
+трамвайный -actor @city
