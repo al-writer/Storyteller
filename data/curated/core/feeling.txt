@@ -1,0 +1,157 @@
+# Чувства и состояния: стоят в винительном («испытывая тоску») и в именительном
+# («тревога не отпускает его»). Формат: лемма [@тон ...].
+
+тоска @dark
+грусть @fairy
+печаль @fairy @myth
+скорбь @dark @myth
+горе @dark
+отчаяние @dark
+безысходность @dark
+уныние @dark
+меланхолия @city
+хандра @city
+скука @city @cyber
+апатия @city @cyber
+усталость @city @cyber
+опустошённость @dark
+одиночество @city @dark @cyber
+отчуждение @cyber
+тревога @dark @city @cyber
+беспокойство @city
+волнение @city
+смятение @dark
+растерянность @city @cyber
+замешательство @city
+паника @city @cyber
+страх @dark
+ужас @dark
+жуть @dark
+трепет @myth
+робость @fairy
+застенчивость @city
+стеснение @city
+стыд @dark
+вина @dark
+раскаяние @dark @myth
+сожаление @dark
+досада @city
+обида @city
+горечь @dark
+ревность @dark
+зависть @dark
+злость @dark
+гнев @myth @dark
+ярость @myth
+бешенство @dark
+раздражение @city
+неприязнь @dark
+отвращение @dark
+презрение @dark
+ненависть @dark
+жажда @myth
+голод @dark
+нетерпение @city
+азарт @city
+восторг @fairy
+восхищение @fairy
+изумление @fairy
+удивление @fairy
+любопытство @fairy @cyber
+интерес @city
+радость @fairy
+веселье @fairy
+счастье @fairy
+блаженство @myth
+умиление @fairy
+нежность @fairy
+ласка @fairy
+любовь @fairy @myth
+влюблённость @city
+страсть @myth
+привязанность @city
+симпатия @city
+благодарность @fairy
+признательность @city
+гордость @myth
+тщеславие @city
+надежда @fairy @myth
+вера @myth
+уверенность @city
+решимость @myth
+отвага @myth
+смелость @fairy
+мужество @myth
+спокойствие @fairy
+умиротворение @myth
+безмятежность @fairy
+покой @myth
+облегчение @city
+удовлетворение @city
+тепло @fairy
+уют @fairy
+ностальгия @city
+тоскливость @dark
+грёза @fairy
+мечтательность @fairy
+задумчивость @fairy
+рассеянность @city
+сомнение @dark @cyber
+недоверие @dark @cyber
+подозрение @dark @cyber
+предчувствие @dark @myth
+томление @myth
+жалость @fairy
+сочувствие @city
+сострадание @myth
+вдохновение @myth @city
+озарение @myth
+воодушевление @city
+трепетность
+благоговение @myth
+смирение @myth
+покорность @dark
+упрямство @fairy
+злорадство @dark
+лукавство @fairy
+озорство @fairy
+восторженность @fairy
+восторг
+неловкость @city
+смущение @fairy
+изнеможение @dark
+бессилие @dark
+озноб @dark
+жар @dark
+лихорадка @dark
+головокружение @city @cyber
+дурнота @dark
+оцепенение @dark @cyber
+забвение @dark @myth @cyber
+безразличие @cyber
+равнодушие @city @cyber
+холод @dark @cyber
+пустота @dark @cyber
+тишина @fairy
+нега @fairy
+лень @fairy
+сонливость @fairy
+бодрость @city
+эйфория @cyber @city
+ликование @myth
+торжество @myth
+триумф @myth
+благодать @myth
+грусть
+кручина @fairy
+тяга @myth
+зов @myth
+одержимость @dark
+маета @dark
+досада
+ожесточение @dark
+растроганность @fairy
+благодушие @fairy
+трепет
+обречённость @dark
+непокой @dark

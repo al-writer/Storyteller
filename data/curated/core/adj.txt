@@ -1,0 +1,349 @@
+# Прилагательные (полные). Формат: лемма [@тон ...].
+# Превосходная степень «самый …» разрешается только качественным (есть сравнительная форма).
+
+усталый @city
+старый @fairy
+старинный @fairy @myth
+древний @myth
+ветхий @dark
+дряхлый @dark
+юный @fairy
+молодой @city
+маленький @fairy
+крошечный @fairy
+огромный @myth
+громадный @myth
+высокий @myth
+низкий @city
+тонкий @fairy
+толстый @city
+худой @dark
+хрупкий @fairy
+тяжёлый @dark
+лёгкий @fairy
+тихий @fairy
+громкий @city
+молчаливый @dark
+болтливый @city
+слепой @dark @myth
+глухой @dark
+хромой @dark @fairy
+однорукий @dark
+одноглазый @dark @myth
+рыжий @fairy
+седой @myth
+лысый @city
+бородатый @myth
+кудрявый @fairy
+бледный @dark
+румяный @fairy
+смуглый @myth
+веснушчатый @fairy
+сонный @fairy
+бессонный @dark @city
+задумчивый @fairy
+рассеянный @city
+печальный @dark
+грустный @fairy
+весёлый @fairy
+счастливый @fairy
+несчастный @dark
+одинокий @city @dark
+забытый @dark
+потерянный @dark
+заблудившийся
+испуганный @dark
+напуганный
+храбрый @fairy @myth
+трусливый @fairy
+смелый @myth
+гордый @myth
+надменный @dark
+скромный @city
+застенчивый @city
+робкий @fairy
+наглый @city
+хитрый @fairy
+лукавый @fairy
+коварный @dark
+честный @city
+лживый @dark
+добрый @fairy
+злой @dark @fairy
+жестокий @dark
+милосердный @myth
+мудрый @myth
+глупый @fairy
+наивный @fairy
+упрямый @fairy
+ленивый @fairy
+трудолюбивый @fairy
+жадный @dark
+щедрый @fairy
+голодный @dark
+сытый @fairy
+пьяный @city
+трезвый @city
+больной @dark
+здоровый @city
+раненый @dark
+мёртвый @dark
+живой @fairy
+бессмертный @myth
+вечный @myth
+мимолётный @fairy
+странный @dark @city
+загадочный @dark @myth
+таинственный @dark @myth
+подозрительный @city
+опасный @dark
+безобидный @fairy
+ручной @fairy
+дикий @myth
+бездомный @city @dark
+беглый @dark
+опальный @myth
+знаменитый @city
+безвестный @dark
+бедный @city
+богатый @city
+нищий @dark
+разорившийся
+влюблённый @fairy
+ревнивый @dark
+обиженный @city
+сердитый @fairy
+мрачный @dark
+угрюмый @dark
+хмурый @dark
+суровый @myth
+строгий @city
+нежный @fairy
+ласковый @fairy
+вежливый @city
+неуклюжий @fairy
+ловкий @fairy
+быстрый @city
+медлительный @fairy
+неторопливый @fairy
+беспокойный @city
+нервный @city
+спокойный @fairy
+безмятежный @fairy
+отчаянный @dark
+безумный @dark
+сумасшедший @dark
+полоумный @dark
+чудаковатый @city
+нелепый @city
+смешной @fairy
+забавный @fairy
+серьёзный @city
+важный @city
+напыщенный @city
+сварливый @fairy
+ворчливый @fairy
+капризный @fairy
+бессердечный @dark
+вероломный @dark
+верный @myth
+преданный @myth
+пропавший @dark
+последний @myth @dark
+первый @myth
+единственный @myth
+чужой @dark
+родной @fairy
+дальний @myth
+соседский @city
+городской @city
+деревенский @fairy
+лесной @fairy
+морской @myth
+речной @fairy
+горный @myth
+подземный @dark
+небесный @myth
+лунный @fairy @myth
+звёздный @myth
+солнечный @fairy
+ночной @dark @city
+полуночный @dark
+утренний @fairy
+вечерний @city
+осенний @dark
+зимний @fairy
+весенний @fairy
+летний @fairy
+северный @myth
+южный @myth
+снежный @fairy
+ледяной @dark @fairy
+огненный @myth
+каменный @myth
+железный @cyber @myth
+стальной @cyber
+медный @myth
+бронзовый @myth
+золотой @fairy @myth
+серебряный @fairy
+хрустальный @fairy
+стеклянный @fairy @cyber
+фарфоровый @fairy
+деревянный @fairy
+бумажный @fairy @city
+картонный @city
+пластиковый @cyber
+кожаный @city
+бархатный @fairy
+шёлковый @fairy
+шерстяной @fairy
+вязаный @fairy
+резной @fairy
+расписной @fairy
+лакированный @city
+ржавый @dark @cyber
+пыльный @dark
+грязный @city
+чистый @city
+мокрый @city
+сухой @city
+горячий @city
+холодный @dark
+тёплый @fairy
+прохладный @city
+душистый @fairy
+пахучий @fairy
+сладкий @fairy
+горький @dark
+кислый @city
+солёный @myth
+красный @fairy
+алый @fairy
+багровый @dark
+розовый @fairy
+оранжевый @city
+жёлтый @city
+зелёный @fairy
+изумрудный @fairy
+голубой @fairy
+синий @myth
+лазурный @myth
+фиолетовый @cyber
+лиловый @fairy
+сиреневый @fairy
+чёрный @dark
+белый @fairy
+серый @city
+бурый @fairy
+коричневый @city
+пёстрый @fairy
+полосатый @fairy
+пятнистый @fairy
+клетчатый @city
+блестящий @fairy
+сверкающий @fairy
+тусклый @dark
+светящийся @cyber @fairy
+мерцающий @fairy
+прозрачный @fairy @cyber
+мутный @dark
+туманный @dark
+призрачный @dark
+невидимый @fairy @myth
+крылатый @myth
+хвостатый @fairy
+рогатый @fairy @dark
+мохнатый @fairy
+пушистый @fairy
+колючий @fairy
+лохматый @fairy
+бескрылый @dark
+говорящий @fairy
+поющий @fairy
+танцующий @fairy
+спящий @fairy @dark
+плачущий @dark
+смеющийся @fairy
+шепчущий @dark
+дрожащий @dark
+хромающий @dark
+бродячий @city
+кочевой @myth
+механический @cyber
+заводной @cyber @fairy
+электрический @cyber
+цифровой @cyber
+виртуальный @cyber
+неоновый @cyber
+радиоактивный @cyber
+кибернетический @cyber
+синтетический @cyber
+голографический @cyber
+искусственный @cyber
+запрограммированный
+сломанный @cyber @city
+треснувший @dark
+разбитый @dark
+починенный @city
+заколдованный @fairy
+волшебный @fairy
+колдовской @dark @fairy
+проклятый @dark
+благословенный @myth
+священный @myth
+запретный @dark @myth
+тайный @dark
+секретный @city
+потайной @fairy
+фальшивый @city
+поддельный @city
+настоящий @fairy
+чудесный @fairy
+дивный @fairy
+прекрасный @fairy
+красивый @city
+уродливый @dark
+кривой @fairy
+горбатый @dark
+косой @fairy
+бесконечный @myth
+крохотный @fairy
+пустой @dark
+полный @city
+тесный @city
+просторный @city
+уютный @fairy
+заброшенный @dark
+опустевший @dark
+затерянный @myth
+потёртый @city
+поношенный @city
+новый @city
+новенький @city
+дорогой @city
+дешёвый @city
+бесценный @myth
+ненужный @city
+лишний @city
+забавный
+игрушечный @fairy
+кукольный @fairy
+карманный @city
+походный @myth
+дорожный @city
+почтовый @city
+семейный @fairy
+бабушкин @fairy
+отцовский @myth
+королевский @fairy
+царский @fairy
+рыцарский @myth
+пиратский @myth
+разбойничий @fairy
+цирковой @fairy
+театральный @city
+музейный @city
+аптечный @city
+вокзальный @city
+трамвайный @city

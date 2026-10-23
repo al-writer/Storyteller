@@ -1,0 +1,271 @@
+# Глаголы несовершенного вида для настоящего времени («чинит компас»).
+# Формат: лемма [gov=падеж[:предлог]] [@тон ...]
+# По умолчанию переходные глаголы управляют винительным (gov=accs).
+# Падежи: accs gent datv ablt loct. Предлог пишется после двоеточия: gov=loct:о, gov=accs:на.
+
+чинить @city
+гладить @fairy
+искать @myth
+прятать @dark
+охранять @myth
+сторожить @dark
+стеречь @fairy
+рисовать @city
+разглядывать @city
+изучать @cyber
+исследовать @cyber
+измерять @cyber
+взвешивать @city
+считать @city
+пересчитывать @city
+продавать @city
+покупать @city
+обменивать @city
+выменивать @fairy
+красть @dark
+воровать @dark
+похищать @dark
+закапывать @dark
+откапывать @myth
+выкапывать @dark
+хоронить @dark
+сжигать @dark
+топить @dark
+ломать @city
+разбирать @cyber
+собирать @city
+склеивать @city
+сшивать @fairy
+штопать @fairy
+вязать @fairy
+плести @fairy
+ткать @myth
+вышивать @fairy
+красить @city
+полировать @city
+чистить @city
+мыть @city
+стирать @city
+сушить @city
+полоть @fairy
+поливать @fairy
+сажать @fairy
+выращивать @fairy
+растить @fairy
+кормить @fairy
+баюкать @fairy
+укачивать @fairy
+обнимать @fairy
+целовать @fairy
+нюхать @fairy
+пробовать @city
+грызть @fairy
+жевать @city
+варить @fairy
+печь @fairy
+жарить @city
+солить @fairy
+мариновать @city
+заваривать @city
+пить @city
+носить @city
+таскать @city
+катить @fairy
+тащить @dark
+волочить @dark
+везти @city
+нести @fairy
+держать @myth
+сжимать @dark
+трясти @city
+вертеть @fairy
+крутить @city
+заводить @cyber
+запускать @cyber
+включать @cyber
+выключать @cyber
+перезагружать @cyber
+программировать @cyber
+взламывать @cyber
+сканировать @cyber
+копировать @cyber
+шифровать @cyber
+расшифровывать @cyber @myth
+переводить @city
+читать @city
+перечитывать @city
+переписывать @city
+листать @city
+писать @city
+сочинять @city
+подписывать @city
+печатать @city
+штамповать @city
+распечатывать @city
+запечатывать @dark
+открывать @fairy
+закрывать @city
+отпирать @fairy
+запирать @dark
+ловить @fairy
+выслеживать @dark
+преследовать @dark
+дразнить @fairy
+пугать @dark
+будить @fairy
+усыплять @dark
+лечить @city
+бинтовать @city
+оживлять @myth @cyber
+заколдовывать @fairy
+расколдовывать @fairy
+проклинать @dark
+благословлять @myth
+защищать @myth
+спасать @myth
+отпускать @fairy
+освобождать @myth
+допрашивать @dark
+обыскивать @dark
+описывать @city
+фотографировать @city
+снимать @city
+коллекционировать @city
+хранить @myth
+беречь @fairy
+лелеять @fairy
+ненавидеть @dark
+любить @fairy
+обожать @fairy
+презирать @dark
+жалеть @fairy
+ждать @city
+встречать @city
+провожать @city
+терять @dark
+выбрасывать @city
+забывать @dark
+вспоминать @city
+узнавать @city
+находить @myth
+отдавать @fairy
+дарить @fairy
+одалживать @city
+возвращать @fairy
+приносить @fairy
+уносить @dark
+тянуть @fairy
+толкать @city
+пинать @city
+бросать @city
+швырять @city
+кидать @city
+разбивать @dark
+резать @dark
+пилить @city
+рубить @fairy
+точить @dark
+ковать @myth
+плавить @cyber
+паять @cyber
+сверлить @cyber
+настраивать @city
+смазывать @cyber
+заряжать @cyber
+кодировать @cyber
+тестировать @cyber
+украшать @fairy
+наряжать @fairy
+примерять @city
+пришивать @fairy
+надевать @city
+снимать
+расчёсывать @fairy
+стричь @city
+мерить @city
+дрессировать @city
+приручать @fairy
+выгуливать @city
+пасти @fairy
+доить @fairy
+заклинать @myth
+призывать @myth
+изгонять @dark
+предсказывать @myth
+толковать @myth
+разгадывать @myth
+загадывать @fairy
+рассказывать @fairy
+повторять @city
+напевать @fairy
+насвистывать @city
+играть @city
+слушать @city
+подслушивать @dark
+нести
+бояться gov=gent @dark
+избегать gov=gent @dark
+ждать
+стесняться gov=gent @city
+пугаться gov=gent @dark
+сторониться gov=gent @dark
+добиваться gov=gent @city
+желать gov=gent @fairy
+жаждать gov=gent @myth
+завидовать gov=datv @dark
+улыбаться gov=datv @fairy
+подмигивать gov=datv @fairy
+кланяться gov=datv @myth
+молиться gov=datv @myth
+поклоняться gov=datv @myth
+радоваться gov=datv @fairy
+удивляться gov=datv @fairy
+верить gov=datv @myth
+доверять gov=datv @city
+служить gov=datv @myth
+подражать gov=datv @city
+аплодировать gov=datv @city
+сопротивляться gov=datv @myth
+любоваться gov=ablt @fairy
+восхищаться gov=ablt @fairy
+дорожить gov=ablt @fairy
+гордиться gov=ablt @myth
+жонглировать gov=ablt @fairy
+размахивать gov=ablt @fairy
+управлять gov=ablt @cyber
+владеть gov=ablt @myth
+торговать gov=ablt @city
+командовать gov=ablt @myth
+пренебрегать gov=ablt @dark
+интересоваться gov=ablt @city
+мечтать gov=loct:о @fairy
+думать gov=loct:о @city
+грезить gov=loct:о @fairy
+грустить gov=loct:о @fairy
+тосковать gov=loct:о @dark
+скучать gov=loct:о @city
+заботиться gov=loct:о @fairy
+молчать gov=loct:о @dark
+шептать gov=loct:о @dark
+петь gov=loct:о @fairy
+плакать gov=loct:о @dark
+сожалеть gov=loct:о @dark
+вспоминать gov=loct:о
+рассказывать gov=loct:о
+смотреть gov=accs:на @city
+глядеть gov=accs:на @fairy
+охотиться gov=accs:на @dark
+ворчать gov=accs:на @fairy
+обижаться gov=accs:на @city
+надеяться gov=accs:на @fairy
+молиться gov=accs:на
+верить gov=accs:в @myth
+влюбляться gov=accs:в @fairy
+вглядываться gov=accs:в @dark
+играть gov=accs:в @city
+превращаться gov=accs:в @fairy
+стучать gov=accs:в @dark
+дуть gov=accs:в @fairy
+говорить gov=loct:о
+спорить gov=loct:о @city
+сочинять

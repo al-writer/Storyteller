@@ -1,0 +1,253 @@
+# Места. Формат: лемма предлог [!loct] [@тон ...]
+# предлог — «в» или «на»; «во» подставляется движком автоматически.
+# !loct — не использовать второй предложный (loc2), даже если pymorphy3 его знает.
+
+лес в @fairy @dark
+бор в @fairy
+роща в @fairy
+чаща в @dark @fairy
+луг на @fairy
+поле в @fairy
+опушка на @fairy
+поляна на @fairy
+болото на @dark @fairy
+трясина в @dark
+овраг в @dark
+пещера в @dark @myth
+грот в @myth
+ущелье в @myth @dark
+долина в @myth
+гора на @myth
+холм на !loct @fairy
+утёс на @myth @dark
+скала на @myth
+вершина на @myth
+перевал на @myth
+ледник на @myth
+вулкан на @myth
+пустыня в @myth
+оазис в @myth
+степь в @myth
+тундра в @myth
+тайга в @dark
+остров на @myth
+берег на @myth
+пляж на !loct @city
+дюна на @myth
+пристань на @city @myth
+причал на @city
+пирс на @city
+порт в @city
+гавань в @myth
+бухта в @myth
+залив в @myth
+море в @myth
+океан в @myth
+озеро на @fairy
+пруд на @fairy
+река на @fairy
+ручей на @fairy
+родник на @fairy
+водопад на @myth
+омут в @dark
+колодец в @dark @fairy
+мельница на @fairy
+маяк на @myth @dark
+мост на @city
+плотина на @city
+переправа на @myth
+паром на @city
+корабль на @myth
+палуба на @myth
+трюм в @dark @myth
+шлюпка в @myth
+плот на @myth
+дирижабль на @fairy @cyber
+поезд в @city
+вагон в @city
+трамвай в @city
+автобус в @city
+электричка в @city
+вокзал на @city @cyber
+перрон на @city
+платформа на @city
+станция на @city @cyber
+аэропорт в @city @cyber
+аэродром на @city
+город в @city
+столица в @city
+деревня в @fairy
+село в @fairy
+хутор на @fairy
+посёлок в @city
+предместье в @city
+окраина на @city @dark
+квартал в @city
+переулок в @city @dark
+тупик в @city @dark
+улица на @city
+проспект на @city
+бульвар на @city
+площадь на @city
+набережная на @city
+перекрёсток на @city
+двор в @city
+подворотня в @city @dark
+крыша на @city @cyber
+чердак на @city @dark
+подвал в @dark
+погреб в @dark
+подъезд в @city
+лифт в @city @cyber
+лестница на @city
+балкон на @city
+коридор в @dark @city
+квартира в @city
+коммуналка в @city
+комната в @city
+кухня на @city
+спальня в @city
+гостиная в @city
+кладовка в @city
+прихожая в @city
+ванная в @city
+мансарда в @city
+особняк в @dark
+усадьба в @dark @fairy
+дача на @city
+сад в @fairy
+огород в @fairy
+оранжерея в @fairy
+теплица в @city
+парк в @city
+сквер в @city
+аллея на @city
+кладбище на @dark
+склеп в @dark
+часовня в @dark
+церковь в @dark
+храм в @myth
+монастырь в @dark @myth
+келья в @dark
+собор в @dark @city
+колокольня на @dark
+башня в @dark @fairy
+замок в @fairy @dark
+дворец в @fairy
+темница в @dark
+подземелье в @dark @fairy
+лабиринт в @myth @dark
+крепость в @myth
+бастион на @myth
+трактир в @fairy
+таверна в @fairy @myth
+гостиница в @city
+отель в @city
+кофейня в @city
+ресторан в @city
+бар в @city
+столовая в @city
+булочная в @city
+пекарня в @city @fairy
+аптека в @city @dark
+лавка в @fairy @city
+магазин в @city
+супермаркет в @city @cyber
+рынок на @city
+ярмарка на @fairy
+базар на @city
+универмаг в @city
+ломбард в @city @dark
+мастерская в @city
+кузница в @fairy @myth
+лаборатория в @cyber
+обсерватория в @myth
+планетарий в @city @cyber
+музей в @city @cyber
+галерея в @city
+библиотека в @city @fairy
+архив в @dark @city @cyber
+читальня в @city
+школа в @city
+гимназия в @city
+университет в @city
+аудитория в @city
+больница в @city @dark @cyber
+госпиталь в @dark
+поликлиника в @city
+морг в @dark @cyber
+приют в @dark
+тюрьма в @dark
+участок в @city
+почта на @city
+телеграф на @city
+банк в @city
+офис в @city @cyber
+контора в @city
+завод на @city @cyber
+фабрика на @city @cyber
+склад на !loct @city @cyber
+ангар в @cyber
+бункер в @cyber @dark
+шахта в @dark
+карьер в @dark
+котельная в @city @dark @cyber
+электростанция на @cyber
+космодром на @cyber
+орбита на @cyber
+театр в @city
+сцена на @city
+цирк в @city @fairy
+арена на @city
+кинотеатр в @city
+зоопарк в @city
+аквариум в @city
+стадион на @city
+каток на @city
+карусель на @fairy
+чертог в @myth
+пантеон в @myth
+святилище в @myth
+капище на @myth
+курган на @myth
+пустошь на @dark
+пепелище на @dark
+свалка на @city @dark @cyber
+пустырь на @city @dark
+стройка на @city @cyber
+гараж в @city @cyber
+парковка на @city @cyber
+туннель в @city @dark @cyber
+тоннель в @city @dark @cyber
+подземка в @city @cyber
+канализация в @dark @city
+водокачка на @city
+вышка на @cyber
+мачта на @myth
+сарай в @fairy
+амбар в @fairy
+хлев в @fairy
+конюшня в @fairy
+курятник в @fairy
+избушка в @fairy
+изба в @fairy
+терем в @fairy
+шалаш в @fairy
+палатка в @city
+юрта в @myth
+землянка в @dark
+хижина в @fairy
+лачуга в @dark
+барак в @dark
+общежитие в @city
+вагончик в @city
+фургон в @city
+лодка в @fairy
+гондола в @fairy
+облако на @fairy
+луна на @fairy @myth
+сон в @fairy @dark
+зазеркалье в @fairy @dark
+сугроб в @fairy
+снег на @fairy
+туман в @dark

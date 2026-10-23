@@ -1,0 +1,423 @@
+# Действующие лица («Кто»): одушевлённые существительные.
+# Формат: лемма [@тон ...]. Тоны: dark fairy cyber city myth.
+# Род и одушевлённость берутся из pymorphy3; ms-f («сирота») — род выбирается при генерации.
+
+# ремёсла и профессии
+часовщик @fairy @city
+библиотекарь @city @fairy
+библиотекарша @city @fairy
+почтальон @city
+почтальонша @city
+смотритель @dark
+архивариус @dark @myth
+аптекарь @city @dark
+аптекарша @city
+алхимик @fairy @myth
+астроном @myth
+астрономка
+картограф @myth
+кузнец @fairy @myth
+мельник @fairy
+мельничиха @fairy
+пекарь @city @fairy
+пекарша @city
+булочник @city
+садовник @fairy
+садовница @fairy
+лесник @fairy @dark
+лесничий @fairy
+пастух @fairy @myth
+пастушка @fairy
+рыбак @fairy
+рыбачка @fairy
+охотник @dark @fairy
+охотница @dark @myth
+кочегар @city @dark
+трубочист @city @fairy
+фонарщик @city @fairy
+звонарь @dark @myth
+переплётчик @city
+печатник @city
+наборщик @city
+гравёр @city
+ювелир @city
+стеклодув @city @fairy
+гончар @myth
+плотник @fairy
+столяр @city
+сапожник @city @fairy
+портной @city
+портниха @city
+швея @city
+кружевница @fairy
+вышивальщица @fairy
+ткачиха @fairy @myth
+прачка @city
+кухарка @fairy
+повар @city
+поварёнок @fairy
+официант @city
+официантка @city
+буфетчица @city
+таксист @city @cyber
+водитель @city
+машинист @city
+проводник @city
+проводница @city
+кондуктор @city
+диспетчер @city @cyber
+лётчик @city
+лётчица @city
+штурман @myth
+капитан @myth
+матрос @myth
+юнга @myth
+боцман @myth
+лоцман @myth @dark
+водолаз @dark
+смотрительница @dark
+сторож @dark @city
+сторожиха @dark
+дворник @city
+вахтёр @city
+вахтёрша @city
+консьерж @city
+консьержка @city
+швейцар @city
+лифтёр @city
+электрик @city @cyber
+монтёр @city @cyber
+инженер @cyber @city
+инженерша @cyber
+механик @cyber @city
+программист @cyber @city
+программистка @cyber
+хакер @cyber
+хакерша @cyber
+оператор @cyber
+лаборант @cyber
+лаборантка @cyber
+химик @cyber
+биолог @cyber
+физик @cyber
+математик @cyber
+изобретатель @cyber @fairy
+изобретательница @cyber
+конструктор @cyber
+робототехник @cyber
+архитектор @city
+геолог @myth
+археолог @myth @dark
+палеонтолог @myth
+ботаник @fairy
+энтомолог
+орнитолог @fairy
+метеоролог @city
+картёжник @dark
+фотограф @city
+фотографиня
+художник @city
+художница @city
+скульптор @myth
+композитор @city
+дирижёр @city
+скрипач @city
+скрипачка @city
+пианист @city
+пианистка @city
+трубач @city
+барабанщик @city
+органист @dark
+певец @city
+певица @city
+балерина @city @fairy
+танцовщица @city
+танцор @city
+актёр @city
+актриса @city
+суфлёр @city @dark
+гримёр @city
+клоун @dark @city
+жонглёр @fairy
+акробат @fairy
+акробатка @fairy
+канатоходец @fairy
+фокусник @fairy @dark
+фокусница @fairy
+иллюзионист @dark
+кукольник @dark @fairy
+шарманщик @fairy @city
+поэт @city @myth
+поэтесса @city
+писатель @city
+писательница @city
+сказочник @fairy
+сказочница @fairy
+летописец @myth
+переводчик @city
+переводчица @city
+журналист @city
+журналистка @city
+редактор @city
+корректор @city
+учитель @city
+учительница @city
+гувернантка @dark @fairy
+няня @fairy
+студент @city
+студентка @city
+школьник @city
+школьница @city
+профессор @city
+доктор @city
+врач @city
+медсестра @city
+санитар @dark
+хирург @city @dark
+фельдшер @city
+ветеринар @city
+травница @fairy @myth
+знахарь @fairy @myth
+знахарка @fairy @myth
+лекарь @fairy @myth
+аптекарь
+провизор @city
+нотариус @city
+адвокат @city
+судья @city
+следователь @city @dark
+сыщик @city @dark
+детектив @city @dark
+инспектор @city
+полицейский @city
+шериф
+курьер @city @cyber
+продавец @city
+продавщица @city
+торговка @city @fairy
+торговец @fairy @myth
+лавочник @fairy @city
+антиквар @city @dark
+ростовщик @dark
+банкир @city
+бухгалтер @city
+кассир @city
+кассирша @city
+менеджер @city @cyber
+стажёр @city
+секретарша @city
+архивистка @dark
+коллекционер @city
+нумизмат
+филателист @city
+кладоискатель @myth
+искатель @myth
+путешественник @myth
+путешественница @myth
+странник @myth @dark
+странница @myth
+паломник @myth
+отшельник @myth @dark
+отшельница @myth
+бродяга @city @dark
+скиталец @myth @dark
+беглец @dark
+беглянка @dark
+контрабандист @dark
+пират @myth
+разбойник @fairy @dark
+вор @city @dark
+воровка @city
+карманник @city
+шпион @city @cyber
+шпионка @city
+наёмник @dark @myth
+солдат @dark
+рыцарь @fairy @myth
+оруженосец @fairy @myth
+лучник @myth
+стражник @fairy @myth
+часовой @dark
+гонец @fairy @myth
+король @fairy @myth
+королева @fairy @myth
+принц @fairy
+принцесса @fairy
+царевна @fairy
+царевич @fairy
+княжна @fairy
+герцогиня @fairy
+барон @fairy
+графиня @fairy @dark
+шут @fairy @dark
+придворный @fairy
+фрейлина @fairy
+монах @dark @myth
+монахиня @dark
+настоятельница @dark
+послушник @dark
+жрец @myth @dark
+жрица @myth
+шаман @myth
+оракул @myth
+пророк @myth
+прорицательница @myth
+гадалка @dark @fairy
+ведьма @dark @fairy
+колдун @dark @fairy
+колдунья @dark @fairy
+чародей @fairy
+чародейка @fairy
+волшебник @fairy
+волшебница @fairy
+маг @fairy @myth
+некромант @dark
+ведунья @myth
+медиум @dark
+мечтатель @city @fairy
+мечтательница @fairy
+лунатик @dark @city
+сомнамбула @dark
+отличница @city
+сирота @dark @fairy
+вдова @dark
+вдовец @dark
+невеста @fairy @dark
+жених @fairy
+близнец @dark
+старик @fairy
+старушка @fairy
+бабушка @fairy
+дедушка @fairy
+внучка @fairy
+мальчик @fairy
+девочка @fairy
+подросток @city
+незнакомец @dark @city
+незнакомка @dark @city
+сосед @city
+соседка @city
+постоялец @city @dark
+жилец @city
+квартирантка @city
+гость @dark
+гостья @dark
+наследник @dark
+наследница @dark
+пленник @dark
+пленница @dark
+узник @dark
+изгнанник @myth
+самозванец @dark
+двойник @dark @cyber
+чудак @city
+чудачка @city
+зануда @city
+тихоня @city
+непоседа @fairy
+растяпа @city
+недотёпа @city
+задира @city
+соня @fairy
+умница @city
+обжора @fairy
+плакса @fairy
+# существа
+призрак @dark
+привидение @dark
+вампир @dark
+оборотень @dark @myth
+упырь @dark
+вурдалак @dark
+мертвец @dark
+скелет @dark
+демон @dark @myth
+бес @dark @fairy
+чёрт @dark @fairy
+ангел @myth
+домовой @fairy
+леший @fairy @myth
+водяной @fairy @myth
+русалка @fairy @myth
+кикимора @fairy @dark
+гном @fairy
+эльф @fairy
+фея @fairy
+великан @fairy @myth
+тролль @fairy
+дракон @fairy @myth
+единорог @fairy
+кентавр @myth
+минотавр @myth
+сфинкс @myth
+циклоп @myth
+титан @myth
+нимфа @myth
+сирена @myth @dark
+химера @myth @dark
+андроид @cyber
+робот @cyber
+киборг @cyber
+мутант @cyber @dark
+клон @cyber
+пришелец @cyber
+инопланетянин @cyber
+космонавт @cyber
+астронавт @cyber
+# звери
+кот @fairy @city
+кошка @fairy @city
+котёнок @fairy
+пёс @city
+собака @city
+щенок @city
+лис @fairy
+лиса @fairy
+волк @fairy @dark
+медведь @fairy
+заяц @fairy
+ёж @fairy
+барсук @fairy
+енот @city
+крот @fairy
+мышь @fairy @city
+крыса @city @dark
+ворон @dark @myth
+ворона @city
+сова @fairy @dark
+филин @dark @fairy
+сорока @fairy
+голубь @city
+воробей @city
+ласточка @fairy
+журавль @myth
+цапля @fairy
+лебедь @fairy
+павлин @fairy
+попугай @city
+жаба @dark @fairy
+лягушка @fairy
+черепаха @myth
+улитка @fairy
+паук @dark
+мотылёк @fairy
+светлячок @fairy
+муравей @fairy
+пчела @fairy
+змея @dark @myth
+ящерица @myth
+кит @myth
+дельфин @myth
+осьминог @myth @dark
+медуза @myth
+лось @fairy
+олень @fairy @myth
+конь @myth
+лошадь @fairy
+верблюд @myth
+слон @myth
+жираф
+обезьяна @city
+тигр @myth
+лев @myth
+пантера @dark

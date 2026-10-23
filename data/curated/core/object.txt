@@ -1,0 +1,443 @@
+# Объекты: предметы, которые можно найти, украсть, спрятать, починить.
+# Формат: лемма [@тон ...].
+
+# механизмы и приборы
+компас @myth @fairy
+маятник @dark @city
+будильник @city
+хронометр @myth
+секундомер @city
+метроном @city
+шарманка @fairy @city
+граммофон @city @dark
+патефон @city
+радиоприёмник @city
+телеграф @city
+телефон @city
+диктофон @city @cyber
+фотоаппарат @city
+телескоп @myth
+микроскоп @cyber
+бинокль @myth
+перископ @cyber
+барометр @myth
+термометр @city
+глобус @myth
+астролябия @myth
+секстант @myth
+калейдоскоп @fairy
+маяк @myth
+фонарь @city @dark
+фонарик @city
+светильник @city
+лампа @city
+керосинка @city @dark
+свеча @dark @fairy
+подсвечник @dark
+канделябр @dark
+спичка @city
+зажигалка @city
+механизм @cyber
+шестерёнка @cyber @city
+пружина @cyber
+винт @cyber
+гайка @cyber
+болт @cyber
+провод @cyber
+кабель @cyber
+микросхема @cyber
+процессор @cyber
+чип @cyber
+аккумулятор @cyber
+батарейка @cyber @city
+антенна @cyber
+спутник @cyber
+дрон @cyber
+голограмма @cyber
+монитор @cyber
+экран @cyber
+клавиатура @cyber
+ноутбук @cyber @city
+планшет @cyber
+смартфон @cyber @city
+пейджер @cyber
+флешка @cyber
+дискета @cyber
+перфокарта @cyber
+кассета @city
+пластинка @city
+магнитофон @city
+проигрыватель @city
+# ключи, замки, тайники
+ключ @fairy @dark
+ключик @fairy
+замок @dark
+замочек @fairy
+засов @dark
+сундук @fairy @myth
+шкатулка @fairy
+ларец @fairy
+сейф @city
+чемодан @city
+саквояж @city
+рюкзак @city
+портфель @city
+конверт @city
+письмо @city @dark
+записка @city @dark
+открытка @city
+телеграмма @city
+посылка @city
+бандероль @city
+карта @myth
+свиток @myth
+манускрипт @myth @dark
+рукопись @dark @city
+дневник @dark @city
+блокнот @city
+тетрадь @city
+книга @fairy @city
+словарь @city
+энциклопедия @city
+альбом @city
+фотография @city @dark
+фотокарточка @city
+портрет @dark
+картина @city
+рисунок @city
+чертёж @cyber
+схема @cyber
+паспорт @city
+билет @city
+квитанция @city
+монета @myth @fairy
+жемчужина @myth @fairy
+бриллиант @city
+изумруд @fairy
+рубин @fairy
+сапфир @fairy
+янтарь @myth
+кристалл @myth @cyber
+камень @myth
+камешек @fairy
+ракушка @myth
+перо @fairy
+пёрышко @fairy
+чернильница @city
+карандаш @city
+ручка @city
+кисть @city
+мел @city
+печать @dark
+перстень @myth @dark
+кольцо @fairy @dark
+браслет @fairy
+медальон @dark @fairy
+кулон @fairy
+амулет @myth @dark
+талисман @myth @fairy
+оберег @myth
+брошь @city
+серьга @city
+корона @fairy @myth
+диадема @fairy
+скипетр @fairy @myth
+меч @myth @fairy
+кинжал @dark @myth
+шпага @fairy
+щит @myth
+шлем @myth
+доспех @myth
+лук @myth
+стрела @myth
+копьё @myth
+топор @dark @fairy
+нож @dark
+ножик @city
+бритва @dark
+револьвер @dark @city
+мушкет @myth
+пуля @dark
+# одежда и аксессуары
+шляпа @city
+цилиндр @city
+котелок @city
+шарф @city
+перчатка @city @dark
+варежка @fairy
+сапог @fairy
+башмачок @fairy
+туфелька @fairy
+ботинок @city
+зонт @city
+зонтик @city
+трость @city @dark
+плащ @dark @city
+мантия @myth @fairy
+вуаль @dark
+маска @dark @city
+веер @fairy
+пуговица @city
+запонка @city
+галстук @city
+очки @city
+монокль @city
+# дом и быт
+зеркало @dark @fairy
+зеркальце @fairy
+чайник @city @fairy
+самовар @fairy
+чашка @city
+блюдце @fairy
+ложка @city
+вилка @city
+тарелка @city
+кастрюля @city
+сковорода @city
+сито @fairy
+кувшин @fairy
+графин @city
+бутылка @city
+фляга @myth
+склянка @dark
+пробирка @cyber
+колба @cyber @dark
+флакон @city
+пузырёк @dark
+банка @city
+ведро @city
+корзина @fairy
+корзинка @fairy
+мешок @fairy
+кошелёк @city
+подушка @fairy
+одеяло @fairy
+покрывало @fairy
+ковёр @fairy
+скатерть @fairy
+занавеска @city
+штора @city
+кресло @city
+стул @city
+табурет @city
+шкаф @city @dark
+комод @city
+буфет @city
+тумбочка @city
+кровать @city
+колыбель @fairy @dark
+стол @city
+кукла @dark @fairy
+игрушка @fairy
+юла @fairy
+волчок @fairy
+мяч @city
+мячик @city
+кубик @city
+марионетка @dark
+погремушка @fairy
+калоша @city
+рояль @city
+скрипка @city
+виолончель @city
+контрабас @city
+гитара @city
+флейта @fairy @myth
+дудочка @fairy
+свирель @myth
+арфа @myth
+барабан @city
+бубен @myth
+колокол @dark @myth
+колокольчик @fairy
+гонг @myth
+труба @city
+рог @myth
+# природное
+луна @fairy @myth
+звезда @fairy @myth
+комета @myth
+метеорит @myth @cyber
+облако @fairy
+туча @dark
+радуга @fairy
+снежинка @fairy
+сосулька @fairy
+льдинка @fairy
+жёлудь @fairy
+шишка @fairy
+орех @fairy
+яблоко @fairy
+груша @fairy
+вишня @fairy
+тыква @fairy
+гриб @fairy
+цветок @fairy
+роза @fairy
+лилия @fairy
+ромашка @fairy
+кактус @city
+папоротник @myth @dark
+лист @fairy
+листок @fairy
+ветка @fairy
+корень @dark @myth
+семечко @fairy
+зерно @myth
+кость @dark
+череп @dark
+зуб @dark
+коготь @dark
+клык @dark
+рог
+хвост @fairy
+крыло @myth
+скорлупа @fairy
+яйцо @fairy @myth
+кокон @dark
+паутина @dark
+янтарь
+песчинка @myth
+# транспорт и крупное
+велосипед @city
+самокат @city
+трамвай @city
+троллейбус @city
+автобус @city
+поезд @city
+паровоз @city
+вагон @city
+дирижабль @fairy @cyber
+аэростат @fairy
+лодка @fairy
+плот @myth
+корабль @myth
+парусник @myth
+якорь @myth
+весло @myth
+руль @city
+колесо @city
+карета @fairy
+телега @fairy
+мотоцикл @city
+автомобиль @city
+грузовик @city
+# прочее
+мост
+лестница @city @dark
+дверь @dark
+дверца @fairy
+окно @city
+форточка @city
+калитка @fairy
+решётка @dark
+цепь @dark
+верёвка @dark
+нить @myth
+клубок @fairy @myth
+пряжа @fairy
+иголка @fairy
+игла @fairy @dark
+напёрсток @fairy
+бусина @fairy
+пуговка @fairy
+фигурка @fairy
+пешка @city
+ферзь @city
+кубок @myth
+чаша @myth
+кубышка @fairy
+копилка @city
+мыльница @city
+пирог @fairy
+пряник @fairy
+каравай @fairy
+леденец @fairy
+торт @city
+бублик @city
+сухарь @city
+варенье @fairy
+мёд @fairy
+молоко @fairy
+хлеб @fairy
+чай @city
+вино @dark
+зелье @fairy @dark
+эликсир @fairy @myth
+яд @dark
+порошок @dark
+пилюля @dark @cyber
+таблетка @city @cyber
+шприц @dark @cyber
+градусник @city
+бинт @city
+пластырь @city
+мыло @city
+полотенце @city
+расчёска @city
+гребень @fairy
+шпилька @city
+лента @fairy
+бант @fairy
+кружево @fairy
+флаг @city
+знамя @myth
+афиша @city
+вывеска @city
+табличка @city
+указатель @city
+светофор @city
+фонограф @city
+машинка @city
+печатка @dark
+штамп @city
+марка @city
+жетон @city
+пропуск @city
+удостоверение @city
+карточка @city
+визитка @city
+браслет
+шарик @fairy
+пузырь @fairy
+снежок @fairy
+снеговик @fairy
+пугало @dark @fairy
+чучело @dark
+манекен @dark @city
+статуэтка @city
+статуя @myth
+бюст @city
+ваза @city
+горшок @fairy
+кадка @fairy
+лейка @fairy
+лопата @dark
+метла @fairy @dark
+веник @fairy
+швабра @city
+кочерга @dark
+ухват @fairy
+утюг @city
+наковальня @myth
+молот @myth
+молоток @city
+пила @dark
+гвоздь @city
+отвёртка @cyber
+скрепка @city
+кнопка @city @cyber
+рычаг @cyber
+тумблер @cyber
+вентиль @cyber
+кран @city
+трубка @city
+сигара @city
+папироса @city
+трубочка @fairy
+табакерка @fairy
+портсигар @city
+веретено @fairy @myth
+прялка @fairy
+серп @myth
+коса @dark

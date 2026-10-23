@@ -1,0 +1,213 @@
+# Глаголы совершенного вида: инфинитив («пытается украсть») и прошедшее время («спрятала»).
+# Формат как в verb_impf.txt.
+
+украсть @dark
+похитить @dark
+стащить @city
+спрятать @dark
+закопать @dark
+откопать @myth
+выкопать @dark
+утопить @dark
+сжечь @dark
+разбить @dark
+сломать @city
+починить @city
+собрать @city
+разобрать @cyber
+склеить @city
+зашить @fairy
+связать @fairy
+сплести @fairy
+соткать @myth
+вышить @fairy
+нарисовать @city
+перекрасить @city
+отполировать @city
+отмыть @city
+постирать @city
+посадить @fairy
+вырастить @fairy
+накормить @fairy
+обнять @fairy
+поцеловать @fairy
+понюхать @fairy
+попробовать @city
+съесть @fairy
+проглотить @dark
+сварить @fairy
+испечь @fairy
+выпить @city
+унести @dark
+принести @fairy
+привезти @city
+увезти @dark
+утащить @dark
+перетащить @city
+поднять @myth
+уронить @city
+выронить @city
+бросить @city
+выбросить @city
+потерять @dark
+найти @myth
+отыскать @myth
+вернуть @fairy
+отдать @fairy
+подарить @fairy
+продать @city
+купить @city
+обменять @city
+выменять @fairy
+одолжить @city
+заложить @city
+выкупить @city
+завести @cyber
+запустить @cyber
+включить @cyber
+выключить @cyber
+перезагрузить @cyber
+перепрограммировать @cyber
+взломать @cyber
+отсканировать @cyber
+скопировать @cyber
+зашифровать @cyber
+расшифровать @myth @cyber
+перевести @city
+прочитать @city
+прочесть @myth
+переписать @city
+написать @city
+сочинить @city
+подписать @city
+подделать @dark
+напечатать @city
+запечатать @dark
+распечатать @city
+открыть @fairy
+закрыть @city
+отпереть @fairy
+запереть @dark
+поймать @fairy
+выследить @dark
+напугать @dark
+разбудить @fairy
+усыпить @dark
+вылечить @city
+оживить @myth @cyber
+заколдовать @fairy
+расколдовать @fairy
+проклясть @dark
+благословить @myth
+защитить @myth
+спасти @myth
+отпустить @fairy
+освободить @myth
+обыскать @dark
+сфотографировать @city
+снять @city
+сохранить @myth
+сберечь @fairy
+уберечь @fairy
+забыть @dark
+вспомнить @city
+узнать @city
+встретить @city
+приручить @fairy
+выгулять @city
+заклясть @myth
+призвать @myth
+изгнать @dark
+предсказать @myth
+разгадать @myth
+загадать @fairy
+рассказать @fairy
+спеть @fairy
+сыграть @city
+подслушать @dark
+выковать @myth
+расплавить @cyber
+припаять @cyber
+просверлить @cyber
+настроить @city
+зарядить @cyber
+украсить @fairy
+нарядить @fairy
+примерить @city
+надеть @city
+расчесать @fairy
+подстричь @city
+измерить @city
+взвесить @city
+пересчитать @city
+исследовать @cyber
+изучить @cyber
+обнаружить @cyber
+уничтожить @dark
+стереть @cyber
+удалить @cyber
+загрузить @cyber
+выкрасть @dark
+присвоить @dark
+вытащить @city
+вынести @city
+подменить @dark
+обменять
+разрезать @dark
+распилить @city
+разрубить @fairy
+наточить @dark
+заточить @dark
+замуровать @dark
+закопать
+похоронить @dark
+воскресить @myth
+приютить @fairy
+согреть @fairy
+остановить @myth
+повернуть @myth
+перевернуть @city
+опрокинуть @city
+разбудить
+поджечь @dark
+зажечь @fairy
+погасить @dark
+задуть @fairy
+укротить @myth
+обмануть @dark
+перехитрить @fairy
+испугаться gov=gent @dark
+дождаться gov=gent @city
+добиться gov=gent @city
+лишиться gov=gent @dark
+коснуться gov=gent @fairy
+достичь gov=gent @myth
+улыбнуться gov=datv @fairy
+поклониться gov=datv @myth
+помочь gov=datv @fairy
+помешать gov=datv @dark
+поверить gov=datv @myth
+довериться gov=datv @city
+отомстить gov=datv @dark
+позвонить gov=datv @city
+подмигнуть gov=datv @fairy
+завладеть gov=ablt @dark
+пожертвовать gov=ablt @myth
+воспользоваться gov=ablt @city
+полюбоваться gov=ablt @fairy
+обменяться gov=ablt @city
+рассказать gov=loct:о
+забыть gov=loct:о
+узнать gov=loct:о
+вспомнить gov=loct:о
+позаботиться gov=loct:о @fairy
+промолчать gov=loct:о @dark
+посмотреть gov=accs:на @city
+взглянуть gov=accs:на @fairy
+наступить gov=accs:на @city
+обидеться gov=accs:на @city
+влюбиться gov=accs:в @fairy
+поверить gov=accs:в @myth
+превратиться gov=accs:в @fairy
+заглянуть gov=accs:в @dark
+постучать gov=accs:в @dark
