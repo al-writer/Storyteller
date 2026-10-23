@@ -7,6 +7,21 @@
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-23
+
+### Added
+
+- Главный экран: слот-машина с анимацией прокрутки незакреплённых слов, замки и
+  перегенерация отдельного слова, пресеты, тоны, «Дикий словарь», Пробел.
+- Кнопки «Скопировать как промпт», «Промпт для художника», «В зал славы ❤️»,
+  «Поделиться» (Web Share API на телефоне), «Скачать открытку».
+- Лента «Зал славы» / «Прямой эфир» с подгрузкой по курсору и оптимистичными лайками.
+- Страница `/s/{slug}` с OpenGraph и Twitter Card и кнопкой «Сгенерировать свою».
+
+### Fixed
+
+- «Бабушкин» больше не ставится к чувствам.
+
 ## [0.4.0] - 2026-10-23
 
 ### Added
@@ -56,7 +71,8 @@
 - Офлайн-сборщик `tools/build_lexicon.py` и собранный `data/lexicon.jsonl`
   с ярусами core / extended / wild (~24 700 лемм).
 
-[Unreleased]: https://github.com/al-writer/Storyteller/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/al-writer/Storyteller/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/al-writer/Storyteller/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/al-writer/Storyteller/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/al-writer/Storyteller/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/al-writer/Storyteller/compare/v0.1.0...v0.2.0
