@@ -11,11 +11,13 @@ from typing import Annotated, Literal
 from urllib.parse import urlsplit
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
-from fastapi.responses import FileResponse, PlainTextResponse
+from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from starlette.concurrency import run_in_threadpool
 
 from app import __version__, db, og
-from app.config import PROMPT_TEMPLATES, Settings, get_settings
+from app.config import PROMPT_TEMPLATES, ROOT_DIR, Settings, get_settings
 from app.engine import Engine, GenerationError, Phrase, RenderError, Slot, render, slots_from_key
 from app.lexicon import Lexicon, UsageTracker
 from app.presets import PRESETS
@@ -31,6 +33,7 @@ from app.schemas import (
     SlotOut,
     TokenOut,
 )
+from app.typo import typograph
 
 log = logging.getLogger(__name__)
 
@@ -56,6 +59,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Генератор сюжетов", version=__version__, lifespan=lifespan)
+app.mount("/static", StaticFiles(directory=ROOT_DIR / "app" / "static"), name="static")
+templates = Jinja2Templates(directory=ROOT_DIR / "app" / "templates")
+templates.env.globals["version"] = __version__
 
 
 # --- зависимости ----------------------------------------------------------------------------
@@ -269,3 +275,39 @@ async def og_image(
         media_type="image/png",
         headers={"Cache-Control": "public, max-age=31536000, immutable"},
     )
+
+
+# --- страницы -------------------------------------------------------------------------------
+
+
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request, start: Annotated[str | None, Query(alias="from")] = None):
+    presets = [{"id": p.id, "title": p.title} for p in PRESETS.values()]
+    start_slug = start if start and start.isalnum() and len(start) <= 16 else None
+    return templates.TemplateResponse(
+        request, "index.html", {"presets": presets, "start_slug": start_slug}
+    )
+
+
+@app.get("/feed", response_class=HTMLResponse)
+async def feed_page(request: Request):
+    return templates.TemplateResponse(request, "feed.html", {})
+
+
+@app.get("/s/{slug}", response_class=HTMLResponse)
+async def phrase_page(slug: str, request: Request):
+    if not slug.isalnum() or len(slug) > 16:
+        raise HTTPException(404, "фраза не найдена")
+    row, _ = await stored_phrase(request, slug)
+    preset = PRESETS.get(row["preset_id"])
+    base_url = request.app.state.settings.base_url
+    context = {
+        "slug": slug,
+        "text": row["text"],
+        "typo_text": typograph(row["text"]),
+        "likes": row["likes"],
+        "preset_title": preset.title if preset else "Сюжет",
+        "url": f"{base_url}/s/{slug}",
+        "image_url": f"{base_url}/api/og-image/{slug}.png",
+    }
+    return templates.TemplateResponse(request, "card.html", context)

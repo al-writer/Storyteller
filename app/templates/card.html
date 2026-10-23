@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}{{ text }} — Генератор сюжетов{% endblock %}
+{% block description %}{{ text }}{% endblock %}
+{% block meta %}
+  <link rel="canonical" href="{{ url }}">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Генератор сюжетов">
+  <meta property="og:title" content="{{ preset_title }}">
+  <meta property="og:description" content="{{ text }}">
+  <meta property="og:url" content="{{ url }}">
+  <meta property="og:image" content="{{ image_url }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ text }}">
+  <meta property="og:locale" content="ru_RU">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ preset_title }}">
+  <meta name="twitter:description" content="{{ text }}">
+  <meta name="twitter:image" content="{{ image_url }}">
+{% endblock %}
+{% block content %}
+<article x-data="likeButton('{{ slug }}', {{ likes }})" class="pt-10 sm:pt-16">
+  <div class="text-xs tracking-[0.3em] uppercase text-accent mb-6">{{ preset_title }}</div>
+  <h1 class="phrase font-serif">{{ typo_text }}</h1>
+  <img class="mt-10 w-full rounded-lg border border-line" src="{{ image_url }}" width="1200" height="630" alt="Открытка с фразой">
+  <div class="mt-8 flex flex-wrap gap-3">
+    <button type="button" class="btn" @click="like()" :aria-pressed="liked">
+      <span x-text="liked ? '❤️' : '🤍'"></span> <span x-text="likes"></span>
+    </button>
+    <a class="btn-primary" href="/?from={{ slug }}">Сгенерировать свою</a>
+    <a class="btn" href="/api/og-image/{{ slug }}.png?format=square" download="syuzhet-{{ slug }}.png">Скачать открытку</a>
+  </div>
+</article>
+{% endblock %}

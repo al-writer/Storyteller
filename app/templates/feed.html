@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Лента — Генератор сюжетов{% endblock %}
+{% block content %}
+<section x-data="feed()" x-init="load()" class="pt-10">
+  <div class="flex gap-2 mb-8" role="tablist">
+    <button type="button" role="tab" class="chip" :class="{ 'chip-on': sort === 'top' }" :aria-selected="sort === 'top'"
+            @click="switchTo('top')">Зал славы</button>
+    <button type="button" role="tab" class="chip" :class="{ 'chip-on': sort === 'new' }" :aria-selected="sort === 'new'"
+            @click="switchTo('new')">Прямой эфир</button>
+  </div>
+  <ol class="space-y-4">
+    <template x-for="item in items" :key="item.slug">
+      <li class="feed-item">
+        <a :href="`/s/${item.slug}`" class="block">
+          <div class="text-[11px] tracking-[0.25em] uppercase text-accent mb-2" x-text="item.preset_title"></div>
+          <p class="font-serif text-xl sm:text-2xl leading-snug" x-text="item.text"></p>
+        </a>
+        <button type="button" class="mt-3 text-sm text-muted hover:text-paper transition-colors" @click="like(item)">
+          <span x-text="item.liked ? '❤️' : '🤍'"></span> <span x-text="item.likes"></span>
+        </button>
+      </li>
+    </template>
+  </ol>
+  <p x-show="!loading && !items.length" class="text-muted">Пока пусто. Сохраните первую фразу в зал славы.</p>
+  <div x-ref="sentinel" class="h-10"></div>
+  <p x-show="loading" class="text-muted text-sm">Загружаю…</p>
+</section>
+{% endblock %}

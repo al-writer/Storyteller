@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Генератор сюжетов{% endblock %}</title>
+  <meta name="description" content="{% block description %}Слот-машина смыслов: грамматически безупречные русские фразы-сюжеты.{% endblock %}">
+  {% block meta %}{% endblock %}
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%92%3C/text%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { ink: "#14110f", paper: "#efe8dc", muted: "#968c80", accent: "#d6ac56", line: "#2b2622" },
+          fontFamily: { serif: ['"PT Serif"', "Georgia", "serif"], sans: ['"PT Sans"', "system-ui", "sans-serif"] },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="{{ url_for('static', path='app.css') }}?v={{ version }}">
+  <script defer src="{{ url_for('static', path='app.js') }}?v={{ version }}"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+</head>
+<body class="bg-ink text-paper font-sans antialiased min-h-screen flex flex-col">
+  <header class="max-w-4xl w-full mx-auto px-4 sm:px-6 pt-6 flex items-baseline justify-between gap-4">
+    <a href="/" class="font-serif text-xl tracking-wide hover:text-accent transition-colors">Генератор сюжетов</a>
+    <nav class="text-sm text-muted flex gap-5">
+      <a href="/" class="hover:text-paper transition-colors">Слот-машина</a>
+      <a href="/feed" class="hover:text-paper transition-colors">Лента</a>
+    </nav>
+  </header>
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 text-xs text-muted">
+    Слова склоняет pymorphy3, частоты — wordfreq. Шрифты PT Serif и PT Sans (OFL).
+  </footer>
+  <div x-data class="toast" x-show="$store.toast.text" x-transition.opacity x-text="$store.toast.text" role="status" aria-live="polite"></div>
+</body>
+</html>

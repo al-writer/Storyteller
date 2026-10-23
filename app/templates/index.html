@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<section x-data='generator({{ presets|tojson }}, {{ start_slug|tojson }})' x-init="init()" class="pt-10 sm:pt-16">
+
+  <div class="flex flex-wrap gap-2 mb-6" role="tablist" aria-label="Пресет">
+    <template x-for="preset in presets" :key="preset.id">
+      <button type="button" role="tab" class="chip" :class="{ 'chip-on': preset.id === presetId }"
+              :aria-selected="preset.id === presetId" @click="choosePreset(preset.id)" x-text="preset.title"></button>
+    </template>
+  </div>
+
+  <div class="phrase font-serif" :class="{ 'opacity-60': busy }" aria-live="polite">
+    <template x-for="(token, i) in tokens" :key="slug + ':' + i">
+      <span><span x-text="token.space ? ' ' : ''"></span><template x-if="token.slot === null"><span
+          x-text="token.text"></span></template><template x-if="token.slot !== null"><span
+          class="word" tabindex="0"
+          :class="{ 'word-locked': isLocked(token.slot), 'word-active': active === token.slot, 'word-roll': token.fresh }"
+          :style="token.fresh ? `animation-delay: ${token.delay}ms` : ''"
+          @click="active = active === token.slot ? null : token.slot"
+          @keydown.enter.prevent="active = active === token.slot ? null : token.slot"><span
+            class="word-text" x-text="token.text"></span><span class="word-tools" @click.stop><button
+              type="button" :title="isLocked(token.slot) ? 'Открепить' : 'Закрепить'"
+              @click="toggleLock(token.slot)" x-text="isLocked(token.slot) ? '🔒' : '🔓'"></button><button
+              type="button" title="Сменить только это слово" @click="reroll(token.slot)">🔄</button></span></span></template></span>
+    </template>
+    <span x-show="!tokens.length" class="text-muted">Нажмите «Крутить», чтобы собрать первый сюжет.</span>
+  </div>
+
+  <div class="mt-10 flex flex-wrap items-center gap-3">
+    <button type="button" class="btn-primary" @click="generate()" :disabled="busy">
+      Крутить <span class="kbd" aria-hidden="true">Пробел</span>
+    </button>
+    <button type="button" class="btn" @click="copyPrompt('story')" :disabled="!slug">Скопировать как промпт</button>
+    <button type="button" class="btn" @click="copyPrompt('art')" :disabled="!slug">Промпт для художника</button>
+    <button type="button" class="btn" @click="save()" :disabled="!slug">В зал славы ❤️</button>
+    <button type="button" class="btn" @click="share()" :disabled="!slug">Поделиться</button>
+    <a class="btn" :class="{ 'pointer-events-none opacity-40': !slug }" :href="slug ? `/api/og-image/${slug}.png?format=square` : '#'"
+       :download="slug ? `syuzhet-${slug}.png` : null">Скачать открытку</a>
+  </div>
+
+  <div class="mt-10 grid gap-6 sm:grid-cols-[1fr_auto] items-start border-t border-line pt-6 text-sm">
+    <div>
+      <div class="text-muted mb-2">Тон</div>
+      <div class="flex flex-wrap gap-2">
+        <template x-for="option in tones" :key="option.id">
+          <button type="button" class="chip" :class="{ 'chip-on': option.id === tone }" @click="tone = option.id; persist()"
+                  x-text="option.title"></button>
+        </template>
+      </div>
+    </div>
+    <label class="flex items-center gap-3 cursor-pointer select-none sm:pt-7">
+      <input type="checkbox" class="accent-[#d6ac56] w-4 h-4" x-model="wild" @change="persist()">
+      <span>Дикий словарь</span>
+    </label>
+  </div>
+  <p class="mt-4 text-xs text-muted">Нажмите на слово, чтобы закрепить его или сменить только его.</p>
+</section>
+{% endblock %}
