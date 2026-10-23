@@ -58,7 +58,10 @@ python tools/build_lexicon.py --dump-candidates var/cand  # кандидаты �
 ## Процесс
 
 - Ветка `main` всегда рабочая; работа идёт в короткоживущих ветках
-  `feat/…`, `fix/…`, `chore/…`, `docs/…`, `test/…`, `build/…`.
+  `feat/…`, `fix/…`, `chore/…`, `docs/…`, `test/…`, `build/…`, `ci/…`.
 - Сообщения коммитов — [Conventional Commits](https://www.conventionalcommits.org/ru/v1.0.0/).
 - Версии — [SemVer](https://semver.org/lang/ru/), единственный источник —
-  `app/__init__.py`; релизы помечаются тегами `vX.Y.Z`, изменения — в `CHANGELOG.md`.
+  `app/__init__.py`; изменения — в `CHANGELOG.md`.
+- Релиз — коммит `chore(release): X.Y.Z` с новой версией и секцией в `CHANGELOG.md`.
+  После зелёного CI workflow `Release` сам ставит аннотированный тег `vX.Y.Z` и
+  создаёт GitHub Release с заметками из CHANGELOG; вручную теги не ставятся.
