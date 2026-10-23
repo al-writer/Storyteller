@@ -8,12 +8,13 @@ import secrets
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from typing import Annotated, Literal
+from urllib.parse import urlsplit
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import FileResponse, PlainTextResponse
 from starlette.concurrency import run_in_threadpool
 
-from app import __version__, db
+from app import __version__, db, og
 from app.config import PROMPT_TEMPLATES, Settings, get_settings
 from app.engine import Engine, GenerationError, Phrase, RenderError, Slot, render, slots_from_key
 from app.lexicon import Lexicon, UsageTracker
@@ -236,3 +237,35 @@ async def feed(
         for row in rows
     ]
     return FeedOut(items=items, next_cursor=next_cursor)
+
+
+@app.get("/api/og-image/{slug}.png")
+async def og_image(
+    slug: str, request: Request, format: Literal["wide", "square"] = "wide"
+) -> FileResponse:
+    """PNG-открытка. Фраза по slug не меняется, поэтому кэш вечный и без инвалидации."""
+    if not slug.isalnum() or len(slug) > 16:
+        raise HTTPException(404, "фраза не найдена")
+    settings = request.app.state.settings
+    path = settings.og_cache_dir / f"{slug}_{format}.png"
+    if not path.exists():
+        row, phrase = await stored_phrase(request, slug)
+        preset = PRESETS.get(row["preset_id"])
+        png = await run_in_threadpool(
+            og.render_card,
+            row["text"],
+            preset.title if preset else "",
+            phrase.card_tone if phrase else None,
+            format,
+            urlsplit(settings.base_url).netloc or settings.base_url,
+            slug,
+        )
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.with_suffix(".tmp")
+        tmp.write_bytes(png)
+        tmp.replace(path)
+    return FileResponse(
+        path,
+        media_type="image/png",
+        headers={"Cache-Control": "public, max-age=31536000, immutable"},
+    )

@@ -1,5 +1,8 @@
+import io
+
 import pytest
 from fastapi.testclient import TestClient
+from PIL import Image
 
 from app.config import Settings
 from app.main import VOTER_COOKIE, app
@@ -143,3 +146,17 @@ def test_rate_limit_on_generate(client):
     codes = [client.post("/api/generate", json={}).status_code for _ in range(12)]
     assert codes.count(429) >= 1
     assert codes[:10] == [200] * 10
+
+
+def test_og_image_is_generated_and_cached(client):
+    data = generate(client, preset_id="plot", seed=30)
+    for fmt, size in (("wide", (1200, 630)), ("square", (1080, 1080))):
+        response = client.get(f"/api/og-image/{data['slug']}.png", params={"format": fmt})
+        assert response.status_code == 200
+        assert response.headers["content-type"] == "image/png"
+        assert "immutable" in response.headers["cache-control"]
+        assert Image.open(io.BytesIO(response.content)).size == size
+        cached = app.state.settings.og_cache_dir / f"{data['slug']}_{fmt}.png"
+        assert cached.read_bytes() == response.content
+    assert client.get("/api/og-image/unknown1.png").status_code == 404
+    assert client.get(f"/api/og-image/{data['slug']}.png?format=huge").status_code == 422
