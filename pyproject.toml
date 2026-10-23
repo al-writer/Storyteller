@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "storyteller"
+dynamic = ["version"]
+description = "Генератор сюжетов: слот-машина грамматически безупречных русских фраз"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{ name = "Andrey Lendel" }]
+
+[tool.setuptools]
+packages = ["app"]
+
+[tool.setuptools.dynamic]
+version = { attr = "app.__version__" }
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["data"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+ignore = [
+  "RUF001", # кириллица в строках — норма для проекта
+  "RUF002",
+  "RUF003",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
+markers = ["slow: длительные проверки (фазз, прогон словаря)"]
