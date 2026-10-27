@@ -29,3 +29,6 @@ cache/
 
 # Local env
 .env
+
+# Node (SDK для .railway/railway.ts)
+node_modules/

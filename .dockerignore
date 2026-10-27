@@ -12,3 +12,7 @@ data/stoplist.txt
 tools
 *.sqlite3*
 .env
+node_modules
+package.json
+package-lock.json
+.railway

@@ -11,6 +11,16 @@
 
 - Workflow `Release`: после зелёного CI ставит тег `vX.Y.Z` и GitHub Release на
   каждый коммит `chore(release): X.Y.Z` без тега.
+- Деплой на Railway: `.railway/railway.ts` описывает сервис из `Dockerfile`, одну
+  реплику, healthcheck и том `/data`.
+
+### Changed
+
+- Docker: стадия `runtime` теперь последняя и собирается без `--target`; порт берётся
+  из `PORT`; инструкция `VOLUME` убрана; контейнер отдаёт том пользователю `app` и
+  запускает сервис от него.
+- `BASE_URL` по умолчанию берётся из `RAILWAY_PUBLIC_DOMAIN`; без `SECRET_SALT` соль
+  генерируется при первом запуске и хранится в `DATA_DIR`.
 
 ## [0.6.0] - 2026-10-23
 
