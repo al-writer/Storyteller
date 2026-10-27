@@ -6,7 +6,7 @@ import hashlib
 import logging
 import secrets
 from contextlib import asynccontextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Annotated, Literal
 from urllib.parse import urlsplit
 
@@ -17,7 +17,13 @@ from fastapi.templating import Jinja2Templates
 from starlette.concurrency import run_in_threadpool
 
 from app import __version__, db, og
-from app.config import PROMPT_TEMPLATES, ROOT_DIR, Settings, get_settings
+from app.config import (
+    PROMPT_TEMPLATES,
+    ROOT_DIR,
+    Settings,
+    get_settings,
+    load_or_create_salt,
+)
 from app.engine import Engine, GenerationError, Phrase, RenderError, Slot, render, slots_from_key
 from app.lexicon import Lexicon, UsageTracker
 from app.presets import PRESETS
@@ -44,6 +50,8 @@ VOTER_COOKIE_AGE = 60 * 60 * 24 * 365 * 2
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     settings: Settings = getattr(app.state, "settings", None) or get_settings()
+    if not settings.secret_salt:
+        settings = replace(settings, secret_salt=load_or_create_salt(settings.data_dir))
     async with db.connect(settings.db_path) as conn:
         await db.create_schema(conn)
         if await db.load_lexicon(conn, settings.lexicon_path):
