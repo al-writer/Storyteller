@@ -2,7 +2,7 @@
 # Ставит аннотированные теги vX.Y.Z и GitHub Releases на коммиты
 # «chore(release): X.Y.Z» в origin/main, у которых ещё нет тега, — то же, что
 # workflow Release, но с правами владельца репозитория. Нужен для релизов, где
-# файлы .github/workflows отличаются от текущих (см. TECH_DEBT.md).
+# файлы .github/workflows отличаются от текущих: их GITHUB_TOKEN не тегирует.
 #
 # Запуск из корня клона (на Windows — через Git Bash, не WSL:
 #   "C:\Program Files\Git\bin\bash.exe" tools/backfill_release_tags.sh):
