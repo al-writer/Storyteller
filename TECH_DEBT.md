@@ -51,29 +51,18 @@ gh secret delete RELEASE_TOKEN -R al-writer/Storyteller
 Скрипт повторяет логику workflow: тег на каждый коммит `chore(release): X.Y.Z`
 без тега, заметки — из секции CHANGELOG этой версии.
 
-*Терминал* (нужны `git` и `gh`, запускать из корня клона):
+*Терминал* (нужны `git` и [GitHub CLI](https://cli.github.com/); на Windows — Git Bash).
+Из корня клона:
 
 ```sh
-git fetch origin main --tags
-git log --reverse --first-parent --format='%H %s' origin/main |
-while read -r sha subject; do
-  case "$subject" in "chore(release): "*) ;; *) continue ;; esac
-  version=${subject#"chore(release): "}; tag="v$version"
-  git rev-parse -q --verify "refs/tags/$tag" >/dev/null && continue
-  notes=$(git show "$sha:CHANGELOG.md" | awk -v v="$version" '
-    index($0, "## [" v "]") == 1 { on = 1; next }
-    on && /^(## )?\[[^]]+\]/ { exit }
-    on')
-  printf '%s\n%s\n' "$tag" "$notes" | git tag -a "$tag" "$sha" -F -
-  git push origin "refs/tags/$tag"
-  gh release create "$tag" -R al-writer/Storyteller --verify-tag --title "$tag" --notes "$notes"
-done
-gh run rerun -R al-writer/Storyteller \
-  "$(gh run list -R al-writer/Storyteller -w release.yml -L 1 --json databaseId -q '.[0].databaseId')"
+gh auth login
+gh auth refresh -s workflow   # без этого push тегов на старые коммиты отклоняется
+gh auth setup-git
+bash tools/backfill_release_tags.sh
 ```
 
-Последняя команда перезапускает `Release`: он не найдёт пропущенных тегов и
-станет зелёным.
+Затем скрипт перезапускает `Release`: тот не найдёт пропущенных тегов и станет зелёным.
+Повторный запуск безопасен.
 
 *Веб:* для каждой версии из таблицы — Releases → Draft a new release → Choose a tag →
 ввести имя тега → Target: нужный коммит (если его нет в списке, сначала поставить
