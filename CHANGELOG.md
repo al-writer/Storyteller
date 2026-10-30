@@ -12,7 +12,7 @@
 - Workflow `Release`: после зелёного CI ставит тег `vX.Y.Z` и GitHub Release на
   каждый коммит `chore(release): X.Y.Z` без тега.
 - Деплой на Railway: `.railway/railway.ts` описывает сервис из `Dockerfile`, одну
-  реплику, healthcheck и том `/data`.
+  реплику, healthcheck и том `/data`; деплой из `main` ждёт зелёного CI.
 
 ### Changed
 

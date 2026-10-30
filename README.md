@@ -58,8 +58,9 @@ railway config apply           # создаст сервис и том
 railway domain -s storyteller  # выдаст публичный домен *.up.railway.app
 ```
 
-Дальше каждый пуш в `main` деплоится сам. Изменения в `.railway/railway.ts` применяются
-повторным `railway config apply` (сначала можно посмотреть `railway config plan`).
+Дальше каждый пуш в `main` деплоится сам, но только после зелёного CI на этом коммите
+(`checkSuites`). Изменения в `.railway/railway.ts` применяются повторным
+`railway config apply` (сначала можно посмотреть `railway config plan`).
 Ресурсы проекта, которых нет в файле, `apply` удалит — добавляйте их в файл.
 
 ## Словарь

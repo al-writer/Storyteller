@@ -6,7 +6,8 @@ export default defineRailway(() => {
   const data = volume("storyteller-data");
 
   const app = service("storyteller", {
-    source: github("al-writer/Storyteller", { branch: "main" }),
+    // checkSuites: деплой только после зелёных проверок GitHub (CI) на коммите.
+    source: github("al-writer/Storyteller", { branch: "main", checkSuites: true }),
     build: { builder: "DOCKERFILE", dockerfilePath: "Dockerfile" },
     healthcheck: "/healthz",
     // Больше одной реплики нельзя: SQLite и лимиты запросов живут в одном процессе,
