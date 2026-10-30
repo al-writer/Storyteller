@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:1
-FROM python:3.12-slim AS runtime
+# Стадия runtime — последняя: её собирают по умолчанию, без --target (так собирает Railway).
+FROM python:3.12-slim AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -20,21 +21,9 @@ COPY app ./app
 COPY data/lexicon.jsonl ./data/lexicon.jsonl
 COPY init_words.py pyproject.toml ./
 
-USER app
-VOLUME ["/data"]
-EXPOSE 8000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-    CMD ["python", "-c", "import urllib.request, sys; sys.exit(urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=4).read() != b'ok')"]
+FROM base AS test
 
-# Один воркер: SQLite и лимиты запросов живут в памяти одного процесса.
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", \
-     "--proxy-headers", "--forwarded-allow-ips", "*"]
-
-
-FROM runtime AS test
-
-USER root
 COPY requirements-test.txt .
 RUN pip install -r requirements-test.txt
 COPY tests ./tests
@@ -42,3 +31,21 @@ RUN chown -R app:app /app/tests
 USER app
 ENV DATA_DIR=/tmp/storyteller-test
 CMD ["python", "-m", "pytest", "-q", "-p", "no:cacheprovider"]
+
+
+FROM base AS runtime
+
+# Стартует от root, чтобы отдать смонтированный том пользователю app, и сразу
+# переключается на него (см. docker-entrypoint.sh).
+COPY --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+ENV PORT=8000
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+    CMD ["sh", "-c", "python -c \"import urllib.request, sys; sys.exit(urllib.request.urlopen('http://127.0.0.1:${PORT}/healthz', timeout=4).read() != b'ok')\""]
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+# Один воркер: SQLite и лимиты запросов живут в памяти одного процесса.
+# Порт берётся из PORT — его задаёт Railway.
+CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port \"$PORT\" --workers 1 --proxy-headers --forwarded-allow-ips '*'"]

@@ -1,0 +1,8 @@
+{
+  "name": "storyteller-railway",
+  "private": true,
+  "description": "SDK для .railway/railway.ts — описания проекта на Railway",
+  "devDependencies": {
+    "railway": "3.16.0"
+  }
+}

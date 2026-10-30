@@ -26,15 +26,42 @@ docker compose run --rm --build tests  # все тесты внутри конт
 
 | Переменная | Назначение | По умолчанию |
 | --- | --- | --- |
-| `BASE_URL` | абсолютные ссылки в `og:`-тегах и шаринге | `http://localhost:8000` |
-| `SECRET_SALT` | соль для хэша голосующих | `change-me` — замените в проде |
-| `DATA_DIR` | SQLite и кэш открыток | `/data` (именованный том) |
+| `BASE_URL` | абсолютные ссылки в `og:`-тегах и шаринге | `https://$RAILWAY_PUBLIC_DOMAIN`, если он задан, иначе `http://localhost:8000` |
+| `SECRET_SALT` | соль для хэша голосующих | генерируется при первом запуске и хранится в `DATA_DIR/secret_salt` |
+| `DATA_DIR` | SQLite, соль и кэш открыток | `/data` (именованный том) |
+| `PORT` | порт uvicorn в контейнере | `8000` |
 
 Один контейнер, один воркер uvicorn: SQLite в WAL-режиме и лимиты запросов живут в
 памяти одного процесса. Словарь загружается в базу при старте и перезагружается,
 только если изменился `data/lexicon.jsonl`; фразы и лайки при этом сохраняются.
 
+Контейнер стартует от root, отдаёт `DATA_DIR` пользователю `app` и запускает сервис
+уже от него (`docker-entrypoint.sh`) — так том работает и на платформах, которые
+монтируют его от root.
+
 Чтобы превью открытки появилось в Telegram, `BASE_URL` должен быть публичным HTTPS-адресом.
+
+## Деплой на Railway
+
+Проект описан в `.railway/railway.ts`: сервис собирается из `Dockerfile` ветки `main`,
+одна реплика, healthcheck `/healthz`, том `storyteller-data` в `/data`. Переменные
+задавать не нужно: адрес берётся из `RAILWAY_PUBLIC_DOMAIN`, соль создаётся на томе.
+
+Один раз, из корня репозитория (нужны Node.js 22+ и
+[Railway CLI](https://docs.railway.com/cli)):
+
+```bash
+npm install                    # SDK для railway.ts
+railway login
+railway init -n storyteller    # новый пустой проект; для существующего — railway link
+railway config apply           # создаст сервис и том
+railway domain -s storyteller  # выдаст публичный домен *.up.railway.app
+```
+
+Дальше каждый пуш в `main` деплоится сам, но только после зелёного CI на этом коммите
+(`checkSuites`). Изменения в `.railway/railway.ts` применяются повторным
+`railway config apply` (сначала можно посмотреть `railway config plan`).
+Ресурсы проекта, которых нет в файле, `apply` удалит — добавляйте их в файл.
 
 ## Словарь
 
