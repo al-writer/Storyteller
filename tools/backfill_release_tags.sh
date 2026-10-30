@@ -4,7 +4,8 @@
 # workflow Release, но с правами владельца репозитория. Нужен для релизов, где
 # файлы .github/workflows отличаются от текущих (см. TECH_DEBT.md).
 #
-# Запуск из корня клона (на Windows — в Git Bash):
+# Запуск из корня клона (на Windows — через Git Bash, не WSL:
+#   "C:\Program Files\Git\bin\bash.exe" tools/backfill_release_tags.sh):
 #   bash tools/backfill_release_tags.sh
 # Нужны git и gh (gh auth login; gh auth refresh -s workflow; gh auth setup-git).
 
