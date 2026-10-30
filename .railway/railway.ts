@@ -16,6 +16,12 @@ export default defineRailway(() => {
     volumeMounts: {
       "/data": data,
     },
+    // Публичный адрес: как и остальные ресурсы проекта, домен описан в этом файле.
+    networking: {
+      serviceDomains: {
+        "plotslot.up.railway.app": {},
+      },
+    },
   });
 
   return project("storyteller", {

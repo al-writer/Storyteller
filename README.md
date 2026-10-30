@@ -58,10 +58,21 @@ railway config apply           # создаст сервис и том
 railway domain -s storyteller  # выдаст публичный домен *.up.railway.app
 ```
 
+Сейчас сервис живёт на `https://plotslot.up.railway.app`. Домен записан в
+`.railway/railway.ts` (`networking.serviceDomains`); при смене адреса поменяйте его и там.
+
 Дальше каждый пуш в `main` деплоится сам, но только после зелёного CI на этом коммите
 (`checkSuites`). Изменения в `.railway/railway.ts` применяются повторным
 `railway config apply` (сначала можно посмотреть `railway config plan`).
 Ресурсы проекта, которых нет в файле, `apply` удалит — добавляйте их в файл.
+
+Нужен Railway CLI 5.42.1 или новее. На Windows с CLI из npm `railway config plan|apply`
+может ошибочно жаловаться на старую версию: SDK не запускает npm-обёртку `railway.cmd`.
+Тогда перед командой укажите ему сам exe (путь — из `npm root -g`):
+
+```bat
+set _=C:\Program Files\nodejs\node_modules\@railway\cli\bin\railway.exe
+```
 
 ## Словарь
 
