@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import re
 import secrets
 from contextlib import asynccontextmanager
 from dataclasses import dataclass, replace
@@ -257,11 +258,16 @@ async def feed(
 async def og_image(
     slug: str, request: Request, format: Literal["wide", "square"] = "wide"
 ) -> FileResponse:
-    """PNG-открытка. Фраза по slug не меняется, поэтому кэш вечный и без инвалидации."""
+    """PNG-открытка. Фраза по slug не меняется, поэтому кэш вечный и без инвалидации.
+
+    На открытке напечатан домен, так что кэш раскладывается по папкам доменов: после
+    смены ``BASE_URL`` открытки рисуются заново.
+    """
     if not slug.isalnum() or len(slug) > 16:
         raise HTTPException(404, "фраза не найдена")
     settings = request.app.state.settings
-    path = settings.og_cache_dir / f"{slug}_{format}.png"
+    host = urlsplit(settings.base_url).netloc or settings.base_url
+    path = settings.og_cache_dir / re.sub(r"[^A-Za-z0-9.-]", "_", host) / f"{slug}_{format}.png"
     if not path.exists():
         row, phrase = await stored_phrase(request, slug)
         preset = PRESETS.get(row["preset_id"])
@@ -271,7 +277,7 @@ async def og_image(
             preset.title if preset else "",
             phrase.card_tone if phrase else None,
             format,
-            urlsplit(settings.base_url).netloc or settings.base_url,
+            host,
             slug,
         )
         path.parent.mkdir(parents=True, exist_ok=True)
