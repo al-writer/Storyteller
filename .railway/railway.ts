@@ -3,7 +3,8 @@
 import { defineRailway, github, project, service, volume } from "railway/iac";
 
 export default defineRailway(() => {
-  const data = volume("storyteller-data");
+  // Регион и размер — как у созданного тома: без них `config apply` сбросит их в null.
+  const data = volume("storyteller-data", { region: "europe-west4-drams3a", sizeMB: 5000 });
 
   const app = service("storyteller", {
     // checkSuites: деплой только после зелёных проверок GitHub (CI) на коммите.
