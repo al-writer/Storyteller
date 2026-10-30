@@ -1,4 +1,5 @@
 import io
+from dataclasses import replace
 
 import pytest
 from fastapi.testclient import TestClient
@@ -130,7 +131,22 @@ def test_og_image_is_generated_and_cached(client):
         assert response.headers["content-type"] == "image/png"
         assert "immutable" in response.headers["cache-control"]
         assert Image.open(io.BytesIO(response.content)).size == size
-        cached = app.state.settings.og_cache_dir / f"{data['slug']}_{fmt}.png"
+        cached = app.state.settings.og_cache_dir / "example.test" / f"{data['slug']}_{fmt}.png"
         assert cached.read_bytes() == response.content
     assert client.get("/api/og-image/unknown1.png").status_code == 404
     assert client.get(f"/api/og-image/{data['slug']}.png?format=huge").status_code == 422
+
+
+def test_og_image_is_redrawn_for_new_domain(client):
+    data = generate(client, preset_id="plot", seed=31)
+    url = f"/api/og-image/{data['slug']}.png"
+    old = client.get(url).content
+    settings = app.state.settings
+    app.state.settings = replace(settings, base_url="http://localhost:8000")
+    try:
+        new = client.get(url).content
+    finally:
+        app.state.settings = settings
+    assert new != old
+    assert (settings.og_cache_dir / "localhost_8000" / f"{data['slug']}_wide.png").exists()
+    assert client.get(url).content == old
