@@ -13,7 +13,7 @@ from typing import Any
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.client.session.base import BaseSession
-from aiogram.types import BotCommand, BotCommandScopeChat, Update
+from aiogram.types import BotCommand, BotCommandScopeChat, MenuButtonWebApp, Update, WebAppInfo
 
 from app.bot.handlers import make_router
 
@@ -56,11 +56,19 @@ class TelegramBot:
         """
         try:
             await self.bot.set_my_commands(COMMANDS)
+            admin_url = webhook_url.removesuffix(WEBHOOK_PATH) + "/admin"
             for admin_id in self.app_state.settings.telegram_admin_ids:
-                # Чат админа может быть ещё не открыт — тогда меню без /stats, не беда.
+                # Чат админа может быть ещё не открыт — тогда без меню админа, не беда.
                 with contextlib.suppress(Exception):
                     await self.bot.set_my_commands(
                         ADMIN_COMMANDS, scope=BotCommandScopeChat(chat_id=admin_id)
+                    )
+                    # Кнопка меню у поля ввода открывает админку — только в чате админа.
+                    await self.bot.set_chat_menu_button(
+                        chat_id=admin_id,
+                        menu_button=MenuButtonWebApp(
+                            text="Админка", web_app=WebAppInfo(url=admin_url)
+                        ),
                     )
             await self.bot.set_webhook(
                 webhook_url, secret_token=self.secret, allowed_updates=ALLOWED_UPDATES

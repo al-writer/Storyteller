@@ -13,7 +13,7 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTex
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from app import __version__, db, service
+from app import __version__, admin, db, service
 from app.bot import SECRET_HEADER, WEBHOOK_PATH, TelegramBot
 from app.config import (
     ROOT_DIR,
@@ -77,6 +77,7 @@ async def start_telegram(state) -> TelegramBot | None:
 
 
 app = FastAPI(title="Генератор сюжетов", version=__version__, lifespan=lifespan)
+app.include_router(admin.router)
 app.mount("/static", StaticFiles(directory=ROOT_DIR / "app" / "static"), name="static")
 templates = Jinja2Templates(directory=ROOT_DIR / "app" / "templates")
 templates.env.globals["version"] = __version__

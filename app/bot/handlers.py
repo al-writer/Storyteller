@@ -23,6 +23,7 @@ from aiogram.types import (
     InputTextMessageContent,
     LinkPreviewOptions,
     Message,
+    ReplyKeyboardMarkup,
     User,
 )
 
@@ -74,6 +75,18 @@ ERROR_TEXT: dict[type[service.ServiceError], str] = {
 
 def is_admin(app_state: Any, user: User) -> bool:
     return user.id in app_state.settings.telegram_admin_ids
+
+
+def admin_url(app_state: Any) -> str | None:
+    """Адрес админки (Mini App): Telegram открывает их только по HTTPS."""
+    base_url = app_state.settings.base_url
+    return f"{base_url}/admin" if base_url.startswith("https://") else None
+
+
+def user_keyboard(app_state: Any, user: User) -> ReplyKeyboardMarkup:
+    if is_admin(app_state, user):
+        return kb.reply_keyboard(admin=True, admin_url=admin_url(app_state))
+    return kb.reply_keyboard()
 
 
 def client_of(app_state: Any, user: User) -> Client:
@@ -166,7 +179,7 @@ async def edit_phrase(
 
 async def context(query: CallbackQuery, app_state: Any) -> tuple[Client, dict, Message]:
     who = client_of(app_state, query.from_user)
-    user = await db.tg_user(app_state.db, who.voter_hash)
+    user = await db.tg_user(app_state.db, who.voter_hash, query.from_user.id)
     if not isinstance(query.message, Message):
         raise service.NotFound  # сообщение недоступно (слишком старое)
     return who, user, query.message
@@ -175,7 +188,7 @@ async def context(query: CallbackQuery, app_state: Any) -> tuple[Client, dict, M
 async def spin_fresh(message: Message, app_state: Any) -> None:
     """Спин из текста: от последней фразы с её закреплениями, иначе с нуля."""
     who = client_of(app_state, message.from_user)
-    user = await db.tg_user(app_state.db, who.voter_hash)
+    user = await db.tg_user(app_state.db, who.voter_hash, message.from_user.id)
     base, mask = None, 0
     if user["last_slug"]:
         try:
@@ -196,8 +209,9 @@ async def spin_fresh(message: Message, app_state: Any) -> None:
 
 async def start(message: Message, command: CommandObject, app_state: Any) -> None:
     who = client_of(app_state, message.from_user)
-    user = await db.tg_user(app_state.db, who.voter_hash)
-    keyboard = kb.reply_keyboard(is_admin(app_state, message.from_user))
+    user = await db.tg_user(app_state.db, who.voter_hash, message.from_user.id)
+    await service.record(app_state, who, "start")
+    keyboard = user_keyboard(app_state, message.from_user)
     await message.answer(GREETING, reply_markup=keyboard)
     phrase, mask = None, 0
     if command.args and service.valid_slug(command.args):
@@ -213,9 +227,7 @@ async def start(message: Message, command: CommandObject, app_state: Any) -> Non
 
 
 async def help_(message: Message, app_state: Any) -> None:
-    await message.answer(
-        HELP, reply_markup=kb.reply_keyboard(is_admin(app_state, message.from_user))
-    )
+    await message.answer(HELP, reply_markup=user_keyboard(app_state, message.from_user))
 
 
 async def stats(message: Message, app_state: Any) -> None:
@@ -236,7 +248,7 @@ async def stats(message: Message, app_state: Any) -> None:
         lines += ["", "<b>Топ зала славы</b>"]
         lines += [f"❤️ {likes} — {html.escape(text)}" for text, likes in data["top"]]
     # Клавиатура — чтобы кнопка статистики появилась у админа, назначенного после /start.
-    await message.answer("\n".join(lines), reply_markup=kb.reply_keyboard(admin=True))
+    await message.answer("\n".join(lines), reply_markup=user_keyboard(app_state, message.from_user))
 
 
 async def any_text(message: Message, app_state: Any) -> None:
@@ -322,11 +334,12 @@ async def on_like(query: CallbackQuery, callback_data: cb.Like, app_state: Any) 
 
 
 async def on_prompt(query: CallbackQuery, callback_data: cb.Prompt, app_state: Any) -> None:
-    _, _, message = await context(query, app_state)
+    who, _, message = await context(query, app_state)
     phrase = await service.get_phrase(app_state, callback_data.slug)
     text = phrase.prompt.get(callback_data.kind)
     if text is None:
         raise service.NotFound
+    await service.record(app_state, who, "prompt", phrase.preset_id)
     await message.answer(
         f"<pre>{html.escape(text, quote=False)}</pre>", reply_markup=kb.copy_prompt(text)
     )
@@ -336,9 +349,10 @@ async def on_prompt(query: CallbackQuery, callback_data: cb.Prompt, app_state: A
 async def on_card(
     query: CallbackQuery, callback_data: cb.Card, app_state: Any, runtime: TelegramBot
 ) -> None:
-    _, _, message = await context(query, app_state)
+    who, _, message = await context(query, app_state)
     phrase = await service.get_phrase(app_state, callback_data.slug)
     await query.answer()  # открытка может рисоваться пару секунд
+    await service.record(app_state, who, "card", phrase.preset_id)
     cached = runtime.card_ids.get(phrase.slug)
     mark = f"@{runtime.username}" if runtime.username else None
     photo = cached or FSInputFile(
@@ -421,6 +435,7 @@ async def on_inline(query: InlineQuery, app_state: Any, bot: Bot) -> None:
     """``@бот`` — свежие фразы; ``@бот slug`` — эта фраза; ``@бот тайна`` — пресет."""
     who = client_of(app_state, query.from_user)
     user = await db.tg_user(app_state.db, who.voter_hash)
+    await service.record(app_state, who, "inline")
     text = query.query.strip()
     phrases: list[PhraseOut] = []
     if text and service.valid_slug(text):

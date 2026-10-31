@@ -268,6 +268,8 @@ def test_stats_only_for_admin(client):
         admin.send("/start")
         greeting = admin.session.of(SendMessage)[-2]
         assert greeting.reply_markup.keyboard[1][0].text == "📊 Статистика"
+        webapp = greeting.reply_markup.keyboard[1][1]
+        assert webapp.web_app.url == "https://example.test/admin"
         admin.send("📊 Статистика")
         assert admin.session.of(SendMessage)[-1].text.startswith("<b>📊 Статистика")
         stranger = Chat_(client, USER_ID + 1)
@@ -414,7 +416,7 @@ def test_feed_at(client):
 
 
 def test_start_sets_admin_menu(client):
-    from aiogram.methods import SetMyCommands, SetWebhook
+    from aiogram.methods import SetChatMenuButton, SetMyCommands, SetWebhook
 
     settings = app.state.settings
     app.state.settings = replace(settings, telegram_admin_ids=frozenset({ADMIN_ID}))
@@ -429,3 +431,26 @@ def test_start_sets_admin_menu(client):
     assert admin.scope.chat_id == ADMIN_ID
     assert "stats" in {c.command for c in admin.commands}
     assert chat.session.of(SetWebhook)[0].secret_token == "s3cret"
+    (menu,) = chat.session.of(SetChatMenuButton)
+    assert menu.chat_id == ADMIN_ID
+    assert menu.menu_button.web_app.url == "https://example.test/admin"
+
+
+def test_bot_records_events_and_tg_id(chat):
+    chat.send("/start")
+    phrase, message_id = chat.last_phrase()
+    chat.press(cb.Prompt(slug=slug_of(phrase), kind="art").pack(), message_id)
+
+    async def scenario():
+        async with app.state.db.execute(
+            "SELECT kind FROM events WHERE channel = 'tg' ORDER BY id DESC LIMIT 3"
+        ) as cur:
+            kinds = [row[0] async for row in cur]
+        async with app.state.db.execute(
+            "SELECT COUNT(*) FROM tg_users WHERE tg_id = ?", (USER_ID,)
+        ) as cur:
+            return kinds, (await cur.fetchone())[0]
+
+    kinds, saved = chat.client.portal.call(scenario)
+    assert kinds == ["prompt", "generate", "start"]
+    assert saved == 1

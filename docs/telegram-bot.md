@@ -57,7 +57,7 @@ app/bot/
 
 ```sql
 CREATE TABLE IF NOT EXISTS tg_users (
-    user_hash  TEXT PRIMARY KEY,   -- тот же voter_hash, сырой user_id не храним
+    user_hash  TEXT PRIMARY KEY,   -- тот же voter_hash; tg_id хранится отдельно — для рассылки
     tone       TEXT NOT NULL DEFAULT 'auto',
     wild       INTEGER NOT NULL DEFAULT 0,
     recent     TEXT NOT NULL DEFAULT '[]',  -- последние 40 ID слов, как в localStorage

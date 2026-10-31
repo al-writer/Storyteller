@@ -9,6 +9,7 @@ from aiogram.types import (
     KeyboardButton,
     ReplyKeyboardMarkup,
     SwitchInlineQueryChosenChat,
+    WebAppInfo,
 )
 
 from app.bot import callbacks as cb
@@ -19,6 +20,7 @@ from app.schemas import FeedItem, PhraseOut
 SPIN_TEXT = "🎰 Крутить"
 FEED_TEXT = "🏆 Зал славы"
 STATS_TEXT = "📊 Статистика"
+ADMIN_TEXT = "🛠 Админка"
 WORD_LABEL_LIMIT = 28
 COPY_TEXT_LIMIT = 256  # больше Telegram в кнопку копирования не принимает
 
@@ -31,11 +33,14 @@ def like_label(likes: int) -> str:
     return f"❤️ {likes}" if likes else "❤️ В зал славы"
 
 
-def reply_keyboard(admin: bool = False) -> ReplyKeyboardMarkup:
-    """Постоянная клавиатура под полем ввода; у админов — ещё строка со статистикой."""
+def reply_keyboard(admin: bool = False, admin_url: str | None = None) -> ReplyKeyboardMarkup:
+    """Постоянная клавиатура под полем ввода; у админов — ещё статистика и админка."""
     rows = [[KeyboardButton(text=SPIN_TEXT), KeyboardButton(text=FEED_TEXT)]]
     if admin:
-        rows.append([KeyboardButton(text=STATS_TEXT)])
+        row = [KeyboardButton(text=STATS_TEXT)]
+        if admin_url:
+            row.append(KeyboardButton(text=ADMIN_TEXT, web_app=WebAppInfo(url=admin_url)))
+        rows.append(row)
     return ReplyKeyboardMarkup(keyboard=rows, resize_keyboard=True)
 
 

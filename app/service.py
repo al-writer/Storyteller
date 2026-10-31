@@ -78,12 +78,19 @@ class Client:
 
     key: str
     voter_hash: str
+    channel: str = "web"  # web / tg — для журнала событий
 
     @classmethod
     def from_source(cls, salt: str, source: str) -> Client:
         """``source`` — стабильный идентификатор клиента: ``cookie:…``, ``ip:…``, ``tg:…``."""
         digest = hashlib.sha256(f"{salt}|{source}".encode()).hexdigest()
-        return cls(key=digest[:32], voter_hash=digest)
+        channel = "tg" if source.startswith("tg:") else "web"
+        return cls(key=digest[:32], voter_hash=digest, channel=channel)
+
+
+async def record(state: Any, who: Client, kind: str, preset_id: str | None = None) -> None:
+    """Событие в журнал админки; actor — ключ лимитов (префикс хэша), не личные данные."""
+    await db.log_event(state.db, kind, who.channel, who.key, preset_id)
 
 
 def valid_slug(slug: str) -> bool:
@@ -160,6 +167,8 @@ async def generate(state: Any, who: Client, params: GenerateIn) -> PhraseOut:
         log.error("генерация не удалась: %s", error)
         raise Failed from error
     await db.remember_phrase(state.db, phrase.slug, phrase.preset.id, phrase.key(), phrase.text)
+    kind = "generate" if params.reroll_index is None else "reroll"
+    await record(state, who, kind, phrase.preset.id)
     return phrase_out(state.settings, phrase)
 
 
@@ -197,6 +206,8 @@ async def like(state: Any, who: Client, slug: str) -> LikeOut:
     if await db.get_phrase(state.db, slug) is None:
         raise NotFound
     likes, counted = await db.like(state.db, slug, who.voter_hash)
+    if counted:
+        await record(state, who, "like")
     return LikeOut(likes=likes, counted=counted)
 
 
