@@ -125,6 +125,7 @@ const SERIES = [
 const BOT_ACTIONS = [
   ["start", "Запуски /start"], ["generate", "Генерации"], ["reroll", "Смена одного слова"],
   ["like", "Лайки"], ["prompt", "Промпты"], ["card", "Открытки"], ["inline", "Inline-запросы"],
+  ["share", "Поделились (отправили в чат)"],
 ];
 const fmt = new Intl.NumberFormat("ru-RU");
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);

@@ -16,6 +16,7 @@ from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import Command, CommandObject, CommandStart, ExceptionTypeFilter
 from aiogram.types import (
     CallbackQuery,
+    ChosenInlineResult,
     ErrorEvent,
     FSInputFile,
     InlineQuery,
@@ -469,6 +470,17 @@ async def on_inline(query: InlineQuery, app_state: Any, bot: Bot) -> None:
     await query.answer(results, cache_time=0 if personal else 300, is_personal=personal)
 
 
+async def on_chosen(result: ChosenInlineResult, app_state: Any) -> None:
+    """Человек отправил фразу из inline-режима в чат — «поделился»."""
+    who = client_of(app_state, result.from_user)
+    row = (
+        await db.get_phrase(app_state.db, result.result_id)
+        if service.valid_slug(result.result_id)
+        else None
+    )
+    await service.record(app_state, who, "share", row["preset_id"] if row else None)
+
+
 # --- ошибки ---------------------------------------------------------------------------------
 
 
@@ -513,5 +525,6 @@ def make_router() -> Router:
     router.callback_query.register(on_feed, cb.Feed.filter())
     router.callback_query.register(on_feed_like, cb.FeedLike.filter())
     router.inline_query.register(on_inline)
+    router.chosen_inline_result.register(on_chosen)
     router.errors.register(on_service_error, ExceptionTypeFilter(service.ServiceError))
     return router
