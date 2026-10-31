@@ -64,12 +64,15 @@ async def start_telegram(state) -> TelegramBot | None:
     settings: Settings = state.settings
     if not settings.telegram_token:
         return None
+    if not settings.base_url.startswith("https://"):
+        # Webhook нужен публичный HTTPS. Локальный запуск с боевым токеном webhook не трогает.
+        log.warning("Telegram-бот выключен: BASE_URL %s не HTTPS", settings.base_url)
+        return None
     secret = settings.telegram_webhook_secret or load_or_create_secret(
         settings.data_dir, "tg_webhook_secret"
     )
     telegram = TelegramBot(state, settings.telegram_token, secret)
-    webhook = f"{settings.base_url}{WEBHOOK_PATH}" if settings.telegram_webhook else None
-    await telegram.start(webhook)
+    await telegram.start(f"{settings.base_url}{WEBHOOK_PATH}")
     return telegram
 
 

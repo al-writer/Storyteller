@@ -16,9 +16,9 @@ HTTP API, а лимиты и SQLite и так рассчитаны на один
   фабрики `CallbackData` с проверкой длины 64 байта.
 - Доставка обновлений — **webhook** `POST /tg/webhook`. Telegram подписывает запрос
   заголовком `X-Telegram-Bot-Api-Secret-Token`, без верного секрета — 403. Webhook
-  ставится в `lifespan`, если задан токен и `BASE_URL` — HTTPS. Локально, без
-  публичного адреса, бот работает в режиме long polling фоновой задачей в том же
-  `lifespan`.
+  ставится в `lifespan`, если задан токен и `BASE_URL` — HTTPS. Бот один, боевой:
+  long polling не используется, локально (без HTTPS) бот выключен и webhook не
+  трогает.
 - Без `TELEGRAM_BOT_TOKEN` бот выключен, веб работает как раньше.
 
 ### Общий сервисный слой
@@ -266,7 +266,6 @@ Inline-режим включается у BotFather (`/setinline`).
 | --- | --- | --- |
 | `TELEGRAM_BOT_TOKEN` | токен от BotFather | не задан — бот выключен |
 | `TELEGRAM_WEBHOOK_SECRET` | секрет заголовка webhook | генерируется и хранится в `DATA_DIR/tg_webhook_secret`, как соль |
-| `TELEGRAM_MODE` | `webhook` / `polling` | `webhook`, если `BASE_URL` — HTTPS, иначе `polling` |
 | `TELEGRAM_ADMIN_IDS` | Telegram ID админов через запятую, им доступна `/stats` | пусто |
 
 Токен на Railway задаётся переменной сервиса (секретом), не в `railway.ts`.
@@ -277,7 +276,7 @@ Inline-режим включается у BotFather (`/setinline`).
 
 1. **refactor:** сервисный слой `app/service.py`, роуты веба переходят на него.
    Поведение не меняется, тесты API проходят без правок.
-2. **feat(bot): каркас** — конфиг, webhook и polling, `/start`, «Крутить», главный
+2. **feat(bot): каркас** — конфиг, webhook, `/start`, «Крутить», главный
    экран, `render.py`, таблица `tg_users`.
 3. **feat(bot): слова, пресет, тон** — экраны и `callback_data` `l`/`r`/`v`/`p`/`t`/`x`.
 4. **feat(bot): лайк, промпты, открытка.**

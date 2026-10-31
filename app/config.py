@@ -71,17 +71,9 @@ class Settings:
     telegram_webhook_secret: str = field(
         default_factory=lambda: os.getenv("TELEGRAM_WEBHOOK_SECRET", "")
     )
-    # webhook / polling; пусто — webhook, если base_url на HTTPS.
-    telegram_mode: str = field(default_factory=lambda: os.getenv("TELEGRAM_MODE", ""))
     telegram_admin_ids: frozenset[int] = field(
         default_factory=lambda: parse_ids(os.getenv("TELEGRAM_ADMIN_IDS", ""))
     )
-
-    @property
-    def telegram_webhook(self) -> bool:
-        if self.telegram_mode in ("webhook", "polling"):
-            return self.telegram_mode == "webhook"
-        return self.base_url.startswith("https://")
 
     @property
     def db_path(self) -> Path:

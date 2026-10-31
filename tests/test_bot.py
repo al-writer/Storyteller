@@ -275,3 +275,14 @@ def test_phrase_html_bolds_locked_and_escapes():
                 TokenOut(text="в доме", slot=2), TokenOut(text=".", slot=None)],
     )  # fmt: skip
     assert phrase_html(phrase, [0, 2]) == "<b>Кот</b> &lt;ест&gt; <b>в доме</b>."
+
+
+def test_bot_needs_https(client):
+    from app.main import start_telegram
+
+    settings = app.state.settings
+    app.state.settings = replace(settings, telegram_token="42:TEST", base_url="http://localhost")
+    try:
+        assert client.portal.call(start_telegram, app.state) is None
+    finally:
+        app.state.settings = settings
