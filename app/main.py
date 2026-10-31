@@ -14,7 +14,14 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from app import __version__, db, service
-from app.config import ROOT_DIR, Settings, get_settings, load_or_create_salt
+from app.bot import SECRET_HEADER, WEBHOOK_PATH, TelegramBot
+from app.config import (
+    ROOT_DIR,
+    Settings,
+    get_settings,
+    load_or_create_salt,
+    load_or_create_secret,
+)
 from app.engine import Engine
 from app.lexicon import Lexicon, UsageTracker
 from app.presets import PRESETS
@@ -45,7 +52,28 @@ async def lifespan(app: FastAPI):
         app.state.engine = Engine(lexicon, UsageTracker())
         app.state.generate_limiter = RateLimiter(limit=10, window=1.0)
         app.state.like_limiter = RateLimiter(limit=30, window=60.0)
-        yield
+        app.state.telegram = await start_telegram(app.state)
+        try:
+            yield
+        finally:
+            if app.state.telegram:
+                await app.state.telegram.stop()
+
+
+async def start_telegram(state) -> TelegramBot | None:
+    settings: Settings = state.settings
+    if not settings.telegram_token:
+        return None
+    if not settings.base_url.startswith("https://"):
+        # Webhook нужен публичный HTTPS. Локальный запуск с боевым токеном webhook не трогает.
+        log.warning("Telegram-бот выключен: BASE_URL %s не HTTPS", settings.base_url)
+        return None
+    secret = settings.telegram_webhook_secret or load_or_create_secret(
+        settings.data_dir, "tg_webhook_secret"
+    )
+    telegram = TelegramBot(state, settings.telegram_token, secret)
+    await telegram.start(f"{settings.base_url}{WEBHOOK_PATH}")
+    return telegram
 
 
 app = FastAPI(title="Генератор сюжетов", version=__version__, lifespan=lifespan)
@@ -145,6 +173,16 @@ async def og_image(
         media_type="image/png",
         headers={"Cache-Control": "public, max-age=31536000, immutable"},
     )
+
+
+@app.post(WEBHOOK_PATH, include_in_schema=False)
+async def telegram_webhook(request: Request) -> Response:
+    telegram: TelegramBot | None = request.app.state.telegram
+    given = request.headers.get(SECRET_HEADER, "")
+    if telegram is None or not secrets.compare_digest(given, telegram.secret):
+        raise HTTPException(403, "нет доступа")
+    await telegram.feed(await request.json())
+    return Response()
 
 
 # --- страницы -------------------------------------------------------------------------------

@@ -30,6 +30,9 @@ docker compose run --rm --build tests  # все тесты внутри конт
 | `SECRET_SALT` | соль для хэша голосующих | генерируется при первом запуске и хранится в `DATA_DIR/secret_salt` |
 | `DATA_DIR` | SQLite, соль и кэш открыток | `/data` (именованный том) |
 | `PORT` | порт uvicorn в контейнере | `8000` |
+| `TELEGRAM_BOT_TOKEN` | токен Telegram-бота от BotFather | не задан — бот выключен |
+| `TELEGRAM_ADMIN_IDS` | Telegram ID админов через запятую: им доступна `/stats` | пусто |
+| `TELEGRAM_WEBHOOK_SECRET` | секрет заголовка webhook | генерируется и хранится в `DATA_DIR/tg_webhook_secret` |
 
 Один контейнер, один воркер uvicorn: SQLite в WAL-режиме и лимиты запросов живут в
 памяти одного процесса. Словарь загружается в базу при старте и перезагружается,
@@ -40,6 +43,14 @@ docker compose run --rm --build tests  # все тесты внутри конт
 монтируют его от root.
 
 Чтобы превью открытки появилось в Telegram, `BASE_URL` должен быть публичным HTTPS-адресом.
+
+## Telegram-бот
+
+Второй клиент, живёт в том же процессе, что и веб (`app/bot/`); проект экранов и кнопок —
+`docs/telegram-bot.md`. Включается переменной `TELEGRAM_BOT_TOKEN` и работает только
+через webhook: при старте ставит его на `BASE_URL/tg/webhook`. Бот один — боевой; без
+HTTPS в `BASE_URL` (локальный запуск) он выключен и webhook не трогает. Обработчики
+проверяются тестами `tests/test_bot.py` без обращения к Telegram.
 
 ## Деплой на Railway
 
