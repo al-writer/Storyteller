@@ -44,6 +44,7 @@ async def lifespan(app: FastAPI):
         settings = replace(settings, secret_salt=load_or_create_salt(settings.data_dir))
     async with db.connect(settings.db_path) as conn:
         await db.create_schema(conn)
+        await db.interrupt_broadcasts(conn)
         if await db.load_lexicon(conn, settings.lexicon_path):
             log.info("словарь загружен в базу из %s", settings.lexicon_path)
         lexicon = Lexicon(await db.read_words(conn))

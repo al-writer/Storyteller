@@ -15,8 +15,10 @@ from typing import Annotated, Literal
 from aiogram.utils.web_app import safe_parse_webapp_init_data
 from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
 from fastapi.responses import HTMLResponse
+from pydantic import BaseModel, Field
 
 from app import __version__, db, service
+from app.bot.broadcast import Busy
 from app.config import Settings
 from app.presets import PRESETS
 
@@ -164,3 +166,53 @@ async def clear_cache(request: Request, _: AdminDep) -> dict:
     freed, files = dir_size(cache_dir)
     shutil.rmtree(cache_dir, ignore_errors=True)
     return {"freed_bytes": freed, "files": files}
+
+
+# --- рассылка -------------------------------------------------------------------------------
+
+
+class BroadcastIn(BaseModel):
+    text: str = Field(min_length=1, max_length=4096)  # предел длины сообщения в Telegram
+
+
+def broadcaster(request: Request):
+    telegram = getattr(request.app.state, "telegram", None)
+    if telegram is None:
+        raise HTTPException(503, "бот не запущен")
+    return telegram.broadcaster
+
+
+@router.get("/api/admin/broadcasts", include_in_schema=False)
+async def broadcasts(request: Request, _: AdminDep) -> dict:
+    telegram = getattr(request.app.state, "telegram", None)
+    return {
+        "recipients": len(await db.broadcast_recipients(request.app.state.db)),
+        "running": bool(telegram and telegram.broadcaster.running),
+        "items": await db.list_broadcasts(request.app.state.db),
+    }
+
+
+@router.post("/api/admin/broadcast/test", include_in_schema=False)
+async def broadcast_test(payload: BroadcastIn, request: Request, admin: AdminDep) -> dict:
+    """Пробное сообщение — только себе, чтобы увидеть его глазами до рассылки."""
+    try:
+        await broadcaster(request).send(admin, payload.text.strip())
+    except Exception as error:
+        raise HTTPException(502, f"Telegram не принял сообщение: {error}") from error
+    return {"ok": True}
+
+
+@router.post("/api/admin/broadcast", include_in_schema=False)
+async def broadcast_start(payload: BroadcastIn, request: Request, _: AdminDep) -> dict:
+    try:
+        broadcast_id = await broadcaster(request).start(payload.text.strip())
+    except Busy as error:
+        raise HTTPException(409, "рассылка уже идёт") from error
+    return {"id": broadcast_id}
+
+
+@router.post("/api/admin/broadcast/{broadcast_id}/cancel", include_in_schema=False)
+async def broadcast_cancel(broadcast_id: int, request: Request, _: AdminDep) -> dict:
+    if not broadcaster(request).cancel(broadcast_id):
+        raise HTTPException(409, "эта рассылка не идёт")
+    return {"ok": True}
