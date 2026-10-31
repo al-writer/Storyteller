@@ -79,6 +79,19 @@ class Card(CallbackData, prefix="o"):
     slug: str
 
 
+class Feed(CallbackData, prefix="f"):
+    """Карусель зала славы: ``t`` — топ, ``n`` — новое."""
+
+    sort: Literal["t", "n"]
+    offset: int
+
+
+class FeedLike(CallbackData, prefix="h"):
+    slug: str
+    sort: Literal["t", "n"]
+    offset: int
+
+
 class Base(CallbackData, prefix="b"):
     """Взять фразу за основу: новое сообщение со всеми закреплёнными словами."""
 

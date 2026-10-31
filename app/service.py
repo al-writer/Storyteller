@@ -202,19 +202,28 @@ async def like(state: Any, who: Client, slug: str) -> LikeOut:
 
 async def feed(state: Any, sort: Literal["top", "new"], cursor: str | None, limit: int) -> FeedOut:
     rows, next_cursor = await db.feed(state.db, sort, cursor, limit)
-    items = [
-        FeedItem(
-            slug=row["slug"],
-            url=phrase_url(state.settings, row["slug"]),
-            text=row["text"],
-            likes=row["likes"],
-            preset_id=row["preset_id"],
-            preset_title=PRESETS[row["preset_id"]].title if row["preset_id"] in PRESETS else "",
-            saved_at=row["saved_at"],
-        )
-        for row in rows
-    ]
+    items = [feed_item(state.settings, row) for row in rows]
     return FeedOut(items=items, next_cursor=next_cursor)
+
+
+async def feed_at(
+    state: Any, sort: Literal["top", "new"], offset: int
+) -> tuple[FeedItem | None, int]:
+    """Одна фраза ленты по смещению и длина ленты."""
+    row, total = await db.feed_at(state.db, sort, offset)
+    return (feed_item(state.settings, row) if row else None), total
+
+
+def feed_item(settings: Settings, row: dict) -> FeedItem:
+    return FeedItem(
+        slug=row["slug"],
+        url=phrase_url(settings, row["slug"]),
+        text=row["text"],
+        likes=row["likes"],
+        preset_id=row["preset_id"],
+        preset_title=PRESETS[row["preset_id"]].title if row["preset_id"] in PRESETS else "",
+        saved_at=row["saved_at"],
+    )
 
 
 async def card_path(state: Any, slug: str, format: CardFormat = "wide") -> Path:

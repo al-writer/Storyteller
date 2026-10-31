@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import html
 
-from app.schemas import PhraseOut
+from app.schemas import FeedItem, PhraseOut
 from app.typo import typograph
 
 ATTACHED = {",", "."}
@@ -46,3 +46,21 @@ def header(phrase: PhraseOut, tone: str, wild: bool) -> str:
 
 def message_html(phrase: PhraseOut, locked: list[int], tone: str, wild: bool) -> str:
     return f"{header(phrase, tone, wild)}\n\n{phrase_html(phrase, locked)}"
+
+
+FEED_TITLES = {"t": "🏆 Зал славы", "n": "📡 Прямой эфир"}
+
+
+def feed_html(item: FeedItem | None, sort: str, offset: int, total: int) -> str:
+    title = FEED_TITLES[sort]
+    if item is None:
+        return f"<b>{title}</b>\n\nПока пусто — крутите фразы и отправляйте удачные сюда ❤️"
+    text = html.escape(typograph(item.text), quote=False)
+    preset = html.escape(item.preset_title)
+    return f"<b>{title}</b> · {offset + 1} из {total}\n\n{text}\n\n<i>{preset}</i>"
+
+
+def shared_html(text: str, url: str) -> str:
+    """Фраза в чужом чате; ссылка даёт превью с открыткой."""
+    link = f'<a href="{html.escape(url)}">Генератор сюжетов</a>'
+    return f"{html.escape(typograph(text), quote=False)}\n\n{link}"
