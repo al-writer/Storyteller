@@ -264,12 +264,14 @@ def test_stats_only_for_admin(client):
     try:
         admin = Chat_(client, ADMIN_ID)
         admin.send("/stats")
-        assert admin.session.of(SendMessage)[-1].text.startswith("<b>📊 Статистика")
+        summary = admin.session.of(SendMessage)[-1]
+        assert summary.text.startswith("<b>📊 Статистика")
+        # Админка — inline-кнопкой: из клавиатуры под полем ввода initData не приходят.
+        (button,) = summary.reply_markup.inline_keyboard[0]
+        assert button.web_app.url == "https://example.test/admin"
         admin.send("/start")
         greeting = admin.session.of(SendMessage)[-2]
-        assert greeting.reply_markup.keyboard[1][0].text == "📊 Статистика"
-        webapp = greeting.reply_markup.keyboard[1][1]
-        assert webapp.web_app.url == "https://example.test/admin"
+        assert [b.text for b in greeting.reply_markup.keyboard[1]] == ["📊 Статистика"]
         admin.send("📊 Статистика")
         assert admin.session.of(SendMessage)[-1].text.startswith("<b>📊 Статистика")
         stranger = Chat_(client, USER_ID + 1)
