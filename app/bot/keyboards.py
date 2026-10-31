@@ -18,6 +18,7 @@ from app.schemas import FeedItem, PhraseOut
 
 SPIN_TEXT = "🎰 Крутить"
 FEED_TEXT = "🏆 Зал славы"
+STATS_TEXT = "📊 Статистика"
 WORD_LABEL_LIMIT = 28
 COPY_TEXT_LIMIT = 256  # больше Telegram в кнопку копирования не принимает
 
@@ -30,11 +31,12 @@ def like_label(likes: int) -> str:
     return f"❤️ {likes}" if likes else "❤️ В зал славы"
 
 
-def reply_keyboard() -> ReplyKeyboardMarkup:
-    return ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text=SPIN_TEXT), KeyboardButton(text=FEED_TEXT)]],
-        resize_keyboard=True,
-    )
+def reply_keyboard(admin: bool = False) -> ReplyKeyboardMarkup:
+    """Постоянная клавиатура под полем ввода; у админов — ещё строка со статистикой."""
+    rows = [[KeyboardButton(text=SPIN_TEXT), KeyboardButton(text=FEED_TEXT)]]
+    if admin:
+        rows.append([KeyboardButton(text=STATS_TEXT)])
+    return ReplyKeyboardMarkup(keyboard=rows, resize_keyboard=True)
 
 
 def share(slug: str) -> InlineKeyboardButton:
