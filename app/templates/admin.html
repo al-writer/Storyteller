@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Админка — Генератор сюжетов</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --surface: #14110f;
+      --surface-2: #1d1916;
+      --line: #2b2622;
+      --text-primary: #efe8dc;
+      --text-secondary: #c3b9ab;
+      --text-muted: #968c80;
+      --accent: #d6ac56;
+      --series-web: #3987e5;
+      --series-tg: #d95926;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--surface); color: var(--text-primary);
+      font: 15px/1.45 "PT Sans", system-ui, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 16px 16px 40px; }
+    h1 { font: 600 20px/1.2 "PT Serif", Georgia, serif; margin: 4px 0 14px; }
+    h2 { font-size: 15px; font-weight: 600; margin: 0 0 8px; }
+    .muted { color: var(--text-muted); }
+    .filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .chip {
+      border: 1px solid var(--line); background: transparent; color: var(--text-secondary);
+      border-radius: 999px; padding: 4px 12px; font: inherit; cursor: pointer;
+    }
+    .chip[aria-pressed="true"] { border-color: var(--accent); color: var(--text-primary); }
+    .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+    .tile { background: var(--surface-2); border-radius: 10px; padding: 10px 12px; }
+    .tile .label { color: var(--text-muted); font-size: 13px; }
+    .tile .value { font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .tile .sub { color: var(--text-secondary); font-size: 12px; }
+    section { margin-top: 22px; }
+    .card { background: var(--surface-2); border-radius: 10px; padding: 12px; }
+    .legend { display: flex; gap: 14px; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
+    .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+    .chart { position: relative; }
+    svg { display: block; width: 100%; overflow: visible; }
+    .axis { fill: var(--text-muted); font-size: 11px; }
+    .grid { stroke: var(--line); stroke-width: 1; }
+    .tooltip {
+      position: absolute; pointer-events: none; background: #000; color: var(--text-primary);
+      border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; font-size: 12px;
+      white-space: nowrap; opacity: 0; transition: opacity .1s; z-index: 2;
+    }
+    .tooltip b { font-variant-numeric: tabular-nums; }
+    details { margin-top: 8px; font-size: 13px; color: var(--text-secondary); }
+    summary { cursor: pointer; color: var(--text-muted); }
+    table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+    th, td { text-align: left; padding: 5px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--text-muted); font-weight: 400; font-size: 12px; }
+    td.num, th.num { text-align: right; white-space: nowrap; }
+    .bars { display: grid; grid-template-columns: max-content 1fr max-content; gap: 6px 10px; align-items: center; font-size: 13px; }
+    .bar-track { height: 14px; }
+    .bar { height: 14px; background: var(--series-web); border-radius: 0 4px 4px 0; min-width: 2px; }
+    .state { padding: 40px 0; text-align: center; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Админка</h1>
+  <div class="filters" role="group" aria-label="Период">
+    <button class="chip" data-days="7" aria-pressed="false">7 дней</button>
+    <button class="chip" data-days="30" aria-pressed="true">30 дней</button>
+    <button class="chip" data-days="90" aria-pressed="false">90 дней</button>
+  </div>
+  <div id="state" class="state">Загрузка…</div>
+  <div id="report" hidden>
+    <div class="tiles" id="tiles"></div>
+
+    <section>
+      <h2>Генерации по дням</h2>
+      <div class="card"><div class="legend" data-legend></div><div class="chart" id="chart-generated"></div>
+        <details><summary>Таблица</summary><div data-table="generated"></div></details></div>
+    </section>
+
+    <section>
+      <h2>Активные по дням</h2>
+      <div class="card"><div class="legend" data-legend></div><div class="chart" id="chart-active"></div>
+        <details><summary>Таблица</summary><div data-table="active"></div></details></div>
+    </section>
+
+    <section>
+      <h2>Лайки по дням</h2>
+      <div class="card"><div class="legend" data-legend></div><div class="chart" id="chart-likes"></div>
+        <details><summary>Таблица</summary><div data-table="likes"></div></details></div>
+    </section>
+
+    <section>
+      <h2>Пресеты</h2>
+      <div class="card"><div class="bars" id="presets"></div></div>
+    </section>
+
+    <section>
+      <h2>Действия в боте</h2>
+      <div class="card" id="bot-actions"></div>
+    </section>
+
+    <section>
+      <h2>Топ зала славы</h2>
+      <div class="card" id="top"></div>
+    </section>
+
+    <p class="muted" style="font-size:12px;margin-top:20px">Дни — по UTC. Активные — уникальные посетители сайта и пользователи бота за день.</p>
+  </div>
+</main>
+<script>
+"use strict";
+const tg = window.Telegram && window.Telegram.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
+
+const SERIES = [
+  { key: "web", name: "Сайт", color: "var(--series-web)" },
+  { key: "tg", name: "Бот", color: "var(--series-tg)" },
+];
+const BOT_ACTIONS = [
+  ["start", "Запуски /start"], ["generate", "Генерации"], ["reroll", "Смена одного слова"],
+  ["like", "Лайки"], ["prompt", "Промпты"], ["card", "Открытки"], ["inline", "Inline-запросы"],
+];
+const fmt = new Intl.NumberFormat("ru-RU");
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const shortDay = (d) => `${d.slice(8, 10)}.${d.slice(5, 7)}`;
+const sum = (xs) => xs.reduce((a, b) => a + b, 0);
+const svgNS = "http://www.w3.org/2000/svg";
+
+function el(tag, attrs = {}, parent) {
+  const node = document.createElementNS(svgNS, tag);
+  for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+  if (parent) parent.appendChild(node);
+  return node;
+}
+
+function niceMax(value) {
+  if (value <= 4) return 4;
+  const step = Math.pow(10, Math.floor(Math.log10(value)));
+  // Множители кратны 4 при step ≥ 10 и дают целые деления сетки из четырёх шагов.
+  for (const m of [1, 2, 4, 8, 10]) if (m * step >= value) return m * step;
+  return value;
+}
+
+function legend(container) {
+  container.innerHTML = SERIES.map((s) =>
+    `<span><span class="swatch" style="background:${s.color}"></span>${s.name}</span>`).join("");
+}
+
+function table(container, days, data) {
+  const rows = days.map((d, i) =>
+    `<tr><td>${shortDay(d)}</td>${SERIES.map((s) => `<td class="num">${fmt.format(data[s.key][i])}</td>`).join("")}</tr>`);
+  container.innerHTML = `<table><tr><th>День</th>${SERIES.map((s) => `<th class="num">${s.name}</th>`).join("")}</tr>${rows.reverse().join("")}</table>`;
+}
+
+function lineChart(container, days, data) {
+  container.innerHTML = "";
+  const width = Math.max(container.clientWidth, 280);
+  const height = 200, left = 34, right = 40, top = 8, bottom = 22;
+  const plotW = width - left - right, plotH = height - top - bottom;
+  const max = niceMax(Math.max(1, ...SERIES.flatMap((s) => data[s.key])));
+  const x = (i) => left + (days.length === 1 ? plotW / 2 : (i * plotW) / (days.length - 1));
+  const y = (v) => top + plotH - (v / max) * plotH;
+  const svg = el("svg", { viewBox: `0 0 ${width} ${height}`, height, role: "img" });
+
+  for (let k = 0; k <= 4; k++) {
+    const value = (max * k) / 4;
+    el("line", { class: "grid", x1: left, x2: left + plotW, y1: y(value), y2: y(value) }, svg);
+    el("text", { class: "axis", x: left - 6, y: y(value) + 4, "text-anchor": "end" }, svg).textContent = fmt.format(value);
+  }
+  for (const i of [0, Math.floor((days.length - 1) / 2), days.length - 1]) {
+    el("text", { class: "axis", x: x(i), y: height - 4, "text-anchor": "middle" }, svg).textContent = shortDay(days[i]);
+  }
+  for (const s of SERIES) {
+    const points = data[s.key].map((v, i) => `${x(i)},${y(v)}`).join(" ");
+    el("polyline", { points, fill: "none", stroke: s.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }, svg);
+  }
+  // Прямые подписи у последней точки: идентичность серии не только цветом.
+  const ends = SERIES.map((s) => ({ s, y: y(data[s.key][days.length - 1]) })).sort((a, b) => a.y - b.y);
+  if (ends.length === 2 && ends[1].y - ends[0].y < 14) ends[1].y = ends[0].y + 14;
+  for (const end of ends) {
+    el("text", { class: "axis", x: left + plotW + 6, y: end.y + 4 }, svg).textContent = end.s.name;
+  }
+
+  const cross = el("line", { x1: 0, x2: 0, y1: top, y2: top + plotH, stroke: "var(--text-muted)", "stroke-width": 1, opacity: 0 }, svg);
+  const dots = SERIES.map((s) => el("circle", { r: 4, fill: s.color, stroke: "var(--surface-2)", "stroke-width": 2, opacity: 0 }, svg));
+  const hit = el("rect", { x: left, y: top, width: plotW, height: plotH, fill: "transparent" }, svg);
+  container.appendChild(svg);
+  const tip = document.createElement("div");
+  tip.className = "tooltip";
+  container.appendChild(tip);
+
+  function show(evt) {
+    const box = svg.getBoundingClientRect();
+    const px = ((evt.clientX - box.left) / box.width) * width;
+    const i = Math.max(0, Math.min(days.length - 1, Math.round(((px - left) / plotW) * (days.length - 1))));
+    cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("opacity", 1);
+    SERIES.forEach((s, k) => {
+      dots[k].setAttribute("cx", x(i)); dots[k].setAttribute("cy", y(data[s.key][i])); dots[k].setAttribute("opacity", 1);
+    });
+    tip.innerHTML = `${shortDay(days[i])}<br>` + SERIES.map((s) =>
+      `<span class="swatch" style="background:${s.color}"></span>${s.name}: <b>${fmt.format(data[s.key][i])}</b>`).join("<br>");
+    tip.style.opacity = 1;
+    const tx = (x(i) / width) * box.width;
+    // Сбоку от перекрестья, чтобы не закрывать точки на нём.
+    const side = tx > box.width / 2 ? tx - tip.offsetWidth - 10 : tx + 10;
+    tip.style.left = `${Math.min(Math.max(side, 0), box.width - tip.offsetWidth)}px`;
+    tip.style.top = `${top}px`;
+  }
+  function hide() {
+    cross.setAttribute("opacity", 0); dots.forEach((d) => d.setAttribute("opacity", 0)); tip.style.opacity = 0;
+  }
+  hit.addEventListener("pointermove", show);
+  hit.addEventListener("pointerdown", show);
+  hit.addEventListener("pointerleave", hide);
+}
+
+function tile(label, value, sub = "") {
+  return `<div class="tile"><div class="label">${label}</div><div class="value">${fmt.format(value)}</div><div class="sub">${sub}</div></div>`;
+}
+
+function render(report) {
+  const t = report.totals, total = (kind, ch) => t[`${kind}:${ch}`] || 0;
+  const generated = (ch) => total("generate", ch) + total("reroll", ch);
+  const s = report.summary;
+  document.getElementById("tiles").innerHTML = [
+    tile("Генераций", generated("web") + generated("tg"), `сайт ${fmt.format(generated("web"))} · бот ${fmt.format(generated("tg"))}`),
+    tile("Лайков", total("like", "web") + total("like", "tg"), `сайт ${fmt.format(total("like", "web"))} · бот ${fmt.format(total("like", "tg"))}`),
+    tile("Активных", (report.actors.web || 0) + (report.actors.tg || 0), `сайт ${fmt.format(report.actors.web || 0)} · бот ${fmt.format(report.actors.tg || 0)}`),
+    tile("Пользователей бота", s.tg_users, `за неделю ${fmt.format(s.tg_week)}`),
+    tile("В зале славы", s.saved, `лайков всего ${fmt.format(s.likes)}`),
+    tile("Фраз в базе", s.phrases, `за сутки ${fmt.format(s.phrases_day)}`),
+  ].join("");
+
+  document.querySelectorAll("[data-legend]").forEach(legend);
+  for (const key of ["generated", "active", "likes"]) {
+    lineChart(document.getElementById(`chart-${key}`), report.days, report[key]);
+    table(document.querySelector(`[data-table="${key}"]`), report.days, report[key]);
+  }
+
+  const maxPreset = Math.max(1, ...report.presets.map((p) => p.n));
+  document.getElementById("presets").innerHTML = report.presets.length
+    ? report.presets.map((p) => `<span>${esc(p.title)}</span><span class="bar-track"><span class="bar" style="display:block;width:${(p.n / maxPreset) * 100}%" title="${esc(p.title)}: ${p.n}"></span></span><span class="num">${fmt.format(p.n)}</span>`).join("")
+    : `<span class="muted">Нет генераций за период</span>`;
+
+  document.getElementById("bot-actions").innerHTML = `<table><tr><th>Действие</th><th class="num">За период</th></tr>${
+    BOT_ACTIONS.map(([kind, title]) => `<tr><td>${title}</td><td class="num">${fmt.format(total(kind, "tg"))}</td></tr>`).join("")}</table>`;
+
+  document.getElementById("top").innerHTML = report.top.length
+    ? `<table><tr><th>Фраза</th><th class="num">❤️</th></tr>${report.top.map((r) =>
+        `<tr><td>${esc(r.text)}<div class="muted" style="font-size:12px">${esc(r.preset_title)} · <a href="/s/${esc(r.slug)}" style="color:var(--accent)">${esc(r.slug)}</a></div></td><td class="num">${fmt.format(r.likes)}</td></tr>`).join("")}</table>`
+    : `<span class="muted">Пока пусто</span>`;
+}
+
+let days = 30;
+let lastReport = null;
+
+async function load() {
+  const state = document.getElementById("state");
+  const initData = tg ? tg.initData : "";
+  if (!initData) {
+    state.textContent = "Откройте админку кнопкой в Telegram-боте.";
+    return;
+  }
+  try {
+    const response = await fetch(`/api/admin/report?days=${days}`, { headers: { "X-Telegram-Init-Data": initData } });
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({}));
+      state.textContent = body.detail || `Ошибка ${response.status}`;
+      state.hidden = false;
+      document.getElementById("report").hidden = true;
+      return;
+    }
+    lastReport = await response.json();
+    state.hidden = true;
+    document.getElementById("report").hidden = false;
+    render(lastReport);
+  } catch (error) {
+    state.textContent = "Не удалось загрузить отчёт";
+  }
+}
+
+document.querySelectorAll(".chip").forEach((chip) => chip.addEventListener("click", () => {
+  days = Number(chip.dataset.days);
+  document.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+  load();
+}));
+window.addEventListener("resize", () => { if (lastReport) render(lastReport); });
+load();
+</script>
+</body>
+</html>

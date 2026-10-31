@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS likes (
 );
 
 -- Пользователи Telegram-бота: настройки и последнее сообщение с живой клавиатурой.
--- Сырой user_id не храним — только тот же хэш, что голосует.
+-- Ключ — тот же хэш, что голосует; tg_id (добавлен позже) — только для рассылки.
 CREATE TABLE IF NOT EXISTS tg_users (
     user_hash TEXT PRIMARY KEY,
     preset_id TEXT,
@@ -74,6 +74,17 @@ CREATE TABLE IF NOT EXISTS tg_users (
     created_at REAL NOT NULL,
     seen_at REAL NOT NULL
 );
+
+-- Журнал действий для админки: без текста и личных данных, actor — префикс хэша голосующего.
+CREATE TABLE IF NOT EXISTS events (
+    id INTEGER PRIMARY KEY,
+    kind TEXT NOT NULL,
+    channel TEXT NOT NULL,
+    actor TEXT NOT NULL,
+    preset_id TEXT,
+    created_at REAL NOT NULL
+);
+CREATE INDEX IF NOT EXISTS events_created_at ON events (created_at);
 
 CREATE TABLE IF NOT EXISTS meta (
     key TEXT PRIMARY KEY,
@@ -105,8 +116,22 @@ async def connect(path: Path) -> AsyncIterator[aiosqlite.Connection]:
         await db.close()
 
 
+# Столбцы, добавленные в существующие таблицы после их появления: CREATE TABLE IF NOT EXISTS
+# их не создаст в старой базе.
+ADDED_COLUMNS: dict[str, dict[str, str]] = {
+    # Telegram ID — для будущей рассылки; ключ строки по-прежнему хэш.
+    "tg_users": {"tg_id": "INTEGER"},
+}
+
+
 async def create_schema(db: aiosqlite.Connection) -> None:
     await db.executescript(SCHEMA)
+    for table, columns in ADDED_COLUMNS.items():
+        async with db.execute(f"PRAGMA table_info({table})") as cur:
+            existing = {row[1] async for row in cur}
+        for name, decl in columns.items():
+            if name not in existing:
+                await db.execute(f"ALTER TABLE {table} ADD COLUMN {name} {decl}")
     await db.commit()
 
 
@@ -288,12 +313,22 @@ async def feed_at(db: aiosqlite.Connection, sort: str, offset: int) -> tuple[dic
 # --- Telegram ---------------------------------------------------------------------------------
 
 TG_USER_FIELDS = (
-    "preset_id", "tone", "wild", "recent", "last_message_id", "last_slug", "last_mask",
+    "preset_id", "tone", "wild", "recent", "last_message_id", "last_slug", "last_mask", "tg_id",
 )  # fmt: skip
 
 
-async def tg_user(db: aiosqlite.Connection, user_hash: str) -> dict:
-    """Настройки пользователя бота; для нового — значения по умолчанию (без записи)."""
+async def tg_user(db: aiosqlite.Connection, user_hash: str, tg_id: int | None = None) -> dict:
+    """Настройки пользователя бота; для нового — значения по умолчанию (без записи).
+
+    ``tg_id`` запоминается при следующем сохранении — для рассылки.
+    """
+    user = await _tg_user(db, user_hash)
+    if tg_id is not None:
+        user["tg_id"] = tg_id
+    return user
+
+
+async def _tg_user(db: aiosqlite.Connection, user_hash: str) -> dict:
     async with db.execute("SELECT * FROM tg_users WHERE user_hash = ?", (user_hash,)) as cur:
         row = await cur.fetchone()
     if row is None:
@@ -306,6 +341,7 @@ async def tg_user(db: aiosqlite.Connection, user_hash: str) -> dict:
             "last_message_id": None,
             "last_slug": None,
             "last_mask": 0,
+            "tg_id": None,
         }
     user = dict(row)
     user["wild"] = bool(user["wild"])
@@ -355,4 +391,89 @@ async def stats(db: aiosqlite.Connection, now: float | None = None) -> dict:
         "tg_day": await one("SELECT COUNT(*) FROM tg_users WHERE seen_at >= ?", day),
         "tg_week": await one("SELECT COUNT(*) FROM tg_users WHERE seen_at >= ?", week),
         "top": top,
+    }
+
+
+# --- события и отчёт для админки -------------------------------------------------------------
+
+DAY = 86400
+
+
+async def log_event(
+    db: aiosqlite.Connection,
+    kind: str,
+    channel: str,
+    actor: str,
+    preset_id: str | None = None,
+    now: float | None = None,
+) -> None:
+    await db.execute(
+        "INSERT INTO events (kind, channel, actor, preset_id, created_at) VALUES (?, ?, ?, ?, ?)",
+        (kind, channel, actor, preset_id, time.time() if now is None else now),
+    )
+    await db.commit()
+
+
+async def admin_report(db: aiosqlite.Connection, days: int, now: float | None = None) -> dict:
+    """Ряды по дням (UTC) за ``days`` дней, включая сегодняшний, и сводки за период."""
+    now = time.time() if now is None else now
+    today = int(now // DAY) * DAY
+    since = today - (days - 1) * DAY
+    dates = [time.strftime("%Y-%m-%d", time.gmtime(since + i * DAY)) for i in range(days)]
+
+    async def rows(sql: str, *params) -> list[dict]:
+        async with db.execute(sql, params) as cur:
+            return [dict(row) async for row in cur]
+
+    daily = await rows(
+        "SELECT date(created_at, 'unixepoch') AS day, kind, channel, COUNT(*) AS n "
+        "FROM events WHERE created_at >= ? GROUP BY day, kind, channel",
+        since,
+    )
+    active = await rows(
+        "SELECT date(created_at, 'unixepoch') AS day, channel, COUNT(DISTINCT actor) AS n "
+        "FROM events WHERE created_at >= ? GROUP BY day, channel",
+        since,
+    )
+    totals = await rows(
+        "SELECT kind, channel, COUNT(*) AS n FROM events WHERE created_at >= ? "
+        "GROUP BY kind, channel",
+        since,
+    )
+    actors = await rows(
+        "SELECT channel, COUNT(DISTINCT actor) AS n FROM events WHERE created_at >= ? "
+        "GROUP BY channel",
+        since,
+    )
+    presets = await rows(
+        "SELECT preset_id, COUNT(*) AS n FROM events WHERE created_at >= ? "
+        "AND kind IN ('generate', 'reroll') AND preset_id IS NOT NULL "
+        "GROUP BY preset_id ORDER BY n DESC",
+        since,
+    )
+    top = await rows(
+        "SELECT p.slug, p.preset_id, p.text, s.likes FROM saved_ideas s "
+        "JOIN phrases p ON p.slug = s.slug WHERE s.likes > 0 "
+        "ORDER BY s.likes DESC, s.saved_at DESC LIMIT 10"
+    )
+
+    def series(source: list[dict], **match) -> list[int]:
+        by_day = {d: 0 for d in dates}
+        for row in source:
+            if row["day"] in by_day and all(row[k] in v for k, v in match.items()):
+                by_day[row["day"]] += row["n"]
+        return list(by_day.values())
+
+    channels = ("web", "tg")
+    generated = ({"generate", "reroll"},)
+    return {
+        "days": dates,
+        "generated": {c: series(daily, kind=generated[0], channel={c}) for c in channels},
+        "likes": {c: series(daily, kind={"like"}, channel={c}) for c in channels},
+        "active": {c: series(active, channel={c}) for c in channels},
+        "totals": {f"{row['kind']}:{row['channel']}": row["n"] for row in totals},
+        "actors": {row["channel"]: row["n"] for row in actors},
+        "presets": [(row["preset_id"], row["n"]) for row in presets],
+        "top": top,
+        "summary": await stats(db, now),
     }
