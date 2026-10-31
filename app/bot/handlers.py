@@ -72,6 +72,10 @@ ERROR_TEXT: dict[type[service.ServiceError], str] = {
 # --- общие шаги -----------------------------------------------------------------------------
 
 
+def is_admin(app_state: Any, user: User) -> bool:
+    return user.id in app_state.settings.telegram_admin_ids
+
+
 def client_of(app_state: Any, user: User) -> Client:
     return Client.from_source(app_state.settings.secret_salt, f"tg:{user.id}")
 
@@ -193,7 +197,8 @@ async def spin_fresh(message: Message, app_state: Any) -> None:
 async def start(message: Message, command: CommandObject, app_state: Any) -> None:
     who = client_of(app_state, message.from_user)
     user = await db.tg_user(app_state.db, who.voter_hash)
-    await message.answer(GREETING, reply_markup=kb.reply_keyboard())
+    keyboard = kb.reply_keyboard(is_admin(app_state, message.from_user))
+    await message.answer(GREETING, reply_markup=keyboard)
     phrase, mask = None, 0
     if command.args and service.valid_slug(command.args):
         try:
@@ -207,12 +212,14 @@ async def start(message: Message, command: CommandObject, app_state: Any) -> Non
     await send_phrase(message.bot, message.chat.id, app_state, user, phrase, mask)
 
 
-async def help_(message: Message) -> None:
-    await message.answer(HELP, reply_markup=kb.reply_keyboard())
+async def help_(message: Message, app_state: Any) -> None:
+    await message.answer(
+        HELP, reply_markup=kb.reply_keyboard(is_admin(app_state, message.from_user))
+    )
 
 
 async def stats(message: Message, app_state: Any) -> None:
-    if message.from_user.id not in app_state.settings.telegram_admin_ids:
+    if not is_admin(app_state, message.from_user):
         await spin_fresh(message, app_state)  # для остальных команды нет: как любой текст
         return
     data = await db.stats(app_state.db)
@@ -228,7 +235,8 @@ async def stats(message: Message, app_state: Any) -> None:
     if data["top"]:
         lines += ["", "<b>Топ зала славы</b>"]
         lines += [f"❤️ {likes} — {html.escape(text)}" for text, likes in data["top"]]
-    await message.answer("\n".join(lines))
+    # Клавиатура — чтобы кнопка статистики появилась у админа, назначенного после /start.
+    await message.answer("\n".join(lines), reply_markup=kb.reply_keyboard(admin=True))
 
 
 async def any_text(message: Message, app_state: Any) -> None:
@@ -470,6 +478,7 @@ def make_router() -> Router:
     router.message.register(start, CommandStart())
     router.message.register(help_, Command("help"))
     router.message.register(stats, Command("stats"))
+    router.message.register(stats, F.text == kb.STATS_TEXT)
     router.message.register(top, Command("top"))
     router.message.register(top, F.text == kb.FEED_TEXT)
     router.message.register(new, Command("new"))

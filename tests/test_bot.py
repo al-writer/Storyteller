@@ -233,9 +233,16 @@ def test_stats_only_for_admin(client):
         admin = Chat_(client, ADMIN_ID)
         admin.send("/stats")
         assert admin.session.of(SendMessage)[-1].text.startswith("<b>📊 Статистика")
+        admin.send("/start")
+        greeting = admin.session.of(SendMessage)[-2]
+        assert greeting.reply_markup.keyboard[1][0].text == "📊 Статистика"
+        admin.send("📊 Статистика")
+        assert admin.session.of(SendMessage)[-1].text.startswith("<b>📊 Статистика")
         stranger = Chat_(client, USER_ID + 1)
         stranger.send("/stats")
         assert _is_phrase(stranger.session.of(SendMessage)[-1])
+        stranger.send("/start")
+        assert len(stranger.session.of(SendMessage)[-2].reply_markup.keyboard) == 1
     finally:
         app.state.settings = settings
 
@@ -372,3 +379,21 @@ def test_feed_at(client):
     assert client.portal.call(db.feed_at, app.state.db, "new", total) == (None, total)
     top_item, top_total = client.portal.call(db.feed_at, app.state.db, "top", 0)
     assert top_item["likes"] > 0 and top_total >= 1
+
+
+def test_start_sets_admin_menu(client):
+    from aiogram.methods import SetMyCommands, SetWebhook
+
+    settings = app.state.settings
+    app.state.settings = replace(settings, telegram_admin_ids=frozenset({ADMIN_ID}))
+    try:
+        chat = Chat_(client)
+        client.portal.call(chat.telegram.start, "https://example.test/tg/webhook")
+    finally:
+        app.state.settings = settings
+    general, admin = chat.session.of(SetMyCommands)
+    assert general.scope is None
+    assert "stats" not in {c.command for c in general.commands}
+    assert admin.scope.chat_id == ADMIN_ID
+    assert "stats" in {c.command for c in admin.commands}
+    assert chat.session.of(SetWebhook)[0].secret_token == "s3cret"

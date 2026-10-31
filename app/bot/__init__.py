@@ -6,13 +6,14 @@
 
 from __future__ import annotations
 
+import contextlib
 import logging
 from typing import Any
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.client.session.base import BaseSession
-from aiogram.types import BotCommand, Update
+from aiogram.types import BotCommand, BotCommandScopeChat, Update
 
 from app.bot.handlers import make_router
 
@@ -27,6 +28,7 @@ COMMANDS = [
     BotCommand(command="new", description="Прямой эфир: только что сохранённые"),
     BotCommand(command="help", description="Что умеют кнопки"),
 ]
+ADMIN_COMMANDS = [*COMMANDS, BotCommand(command="stats", description="Статистика")]
 
 
 class TelegramBot:
@@ -41,6 +43,7 @@ class TelegramBot:
         )
         self.dispatcher = Dispatcher()
         self.dispatcher.include_router(make_router())
+        self.app_state = app_state
         self.dispatcher["app_state"] = app_state
         self.dispatcher["runtime"] = self
         self.card_ids: dict[str, str] = {}  # slug → file_id открытки, уже загруженной в Telegram
@@ -52,6 +55,12 @@ class TelegramBot:
         """
         try:
             await self.bot.set_my_commands(COMMANDS)
+            for admin_id in self.app_state.settings.telegram_admin_ids:
+                # Чат админа может быть ещё не открыт — тогда меню без /stats, не беда.
+                with contextlib.suppress(Exception):
+                    await self.bot.set_my_commands(
+                        ADMIN_COMMANDS, scope=BotCommandScopeChat(chat_id=admin_id)
+                    )
             await self.bot.set_webhook(
                 webhook_url, secret_token=self.secret, allowed_updates=ALLOWED_UPDATES
             )
