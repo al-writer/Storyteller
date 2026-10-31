@@ -1,6 +1,6 @@
 // Проект на Railway: один сервис из Dockerfile и том для SQLite и кэша открыток.
 // Применение — `railway config apply`, подробности в README, раздел «Деплой на Railway».
-import { defineRailway, github, project, service, volume } from "railway/iac";
+import { defineRailway, github, preserve, project, service, volume } from "railway/iac";
 
 export default defineRailway(() => {
   // Регион и размер — как у созданного тома: без них `config apply` сбросит их в null.
@@ -16,6 +16,12 @@ export default defineRailway(() => {
     replicas: 1,
     volumeMounts: {
       "/data": data,
+    },
+    variables: {
+      // Токен бота — секрет: задаётся в панели Railway, файл только сохраняет его значение.
+      TELEGRAM_BOT_TOKEN: preserve(),
+      // Telegram ID через запятую: им доступна команда /stats.
+      TELEGRAM_ADMIN_IDS: "438452289",
     },
     // Публичный адрес: как и остальные ресурсы проекта, домен описан в этом файле.
     networking: {

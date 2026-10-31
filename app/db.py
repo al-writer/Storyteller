@@ -60,6 +60,21 @@ CREATE TABLE IF NOT EXISTS likes (
     PRIMARY KEY (slug, voter_hash)
 );
 
+-- Пользователи Telegram-бота: настройки и последнее сообщение с живой клавиатурой.
+-- Сырой user_id не храним — только тот же хэш, что голосует.
+CREATE TABLE IF NOT EXISTS tg_users (
+    user_hash TEXT PRIMARY KEY,
+    preset_id TEXT,
+    tone TEXT NOT NULL DEFAULT 'auto',
+    wild INTEGER NOT NULL DEFAULT 0,
+    recent TEXT NOT NULL DEFAULT '[]',
+    last_message_id INTEGER,
+    last_slug TEXT,
+    last_mask INTEGER NOT NULL DEFAULT 0,
+    created_at REAL NOT NULL,
+    seen_at REAL NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS meta (
     key TEXT PRIMARY KEY,
     value TEXT NOT NULL
@@ -246,3 +261,76 @@ async def feed(
     page = rows[offset : offset + limit]
     next_cursor = str(offset + limit) if offset + limit < len(rows) else None
     return page, next_cursor
+
+
+# --- Telegram ---------------------------------------------------------------------------------
+
+TG_USER_FIELDS = (
+    "preset_id", "tone", "wild", "recent", "last_message_id", "last_slug", "last_mask",
+)  # fmt: skip
+
+
+async def tg_user(db: aiosqlite.Connection, user_hash: str) -> dict:
+    """Настройки пользователя бота; для нового — значения по умолчанию (без записи)."""
+    async with db.execute("SELECT * FROM tg_users WHERE user_hash = ?", (user_hash,)) as cur:
+        row = await cur.fetchone()
+    if row is None:
+        return {
+            "user_hash": user_hash,
+            "preset_id": None,
+            "tone": "auto",
+            "wild": False,
+            "recent": [],
+            "last_message_id": None,
+            "last_slug": None,
+            "last_mask": 0,
+        }
+    user = dict(row)
+    user["wild"] = bool(user["wild"])
+    user["recent"] = json.loads(user["recent"])
+    return user
+
+
+async def save_tg_user(db: aiosqlite.Connection, user: dict) -> None:
+    now = time.time()
+    values = [user[name] for name in TG_USER_FIELDS]
+    values[TG_USER_FIELDS.index("wild")] = int(user["wild"])
+    values[TG_USER_FIELDS.index("recent")] = json.dumps(user["recent"])
+    columns = ", ".join(TG_USER_FIELDS)
+    updates = ", ".join(f"{name} = excluded.{name}" for name in TG_USER_FIELDS)
+    await db.execute(
+        f"INSERT INTO tg_users (user_hash, {columns}, created_at, seen_at) "
+        f"VALUES (?, {', '.join('?' * len(values))}, ?, ?) "
+        f"ON CONFLICT (user_hash) DO UPDATE SET {updates}, seen_at = excluded.seen_at",
+        (user["user_hash"], *values, now, now),
+    )
+    await db.commit()
+
+
+async def stats(db: aiosqlite.Connection, now: float | None = None) -> dict:
+    """Сводка для админа: фразы, зал славы, лайки, пользователи бота."""
+    now = time.time() if now is None else now
+    day, week = now - 86400, now - 7 * 86400
+
+    async def one(sql: str, *params) -> int:
+        async with db.execute(sql, params) as cur:
+            row = await cur.fetchone()
+        return row[0] or 0
+
+    async with db.execute(
+        "SELECT p.text, s.likes FROM saved_ideas s JOIN phrases p ON p.slug = s.slug "
+        "WHERE s.likes > 0 ORDER BY s.likes DESC, s.saved_at DESC LIMIT 3"
+    ) as cur:
+        top = [(row["text"], row["likes"]) async for row in cur]
+    return {
+        "phrases": await one("SELECT COUNT(*) FROM phrases"),
+        "phrases_day": await one("SELECT COUNT(*) FROM phrases WHERE created_at >= ?", day),
+        "saved": await one("SELECT COUNT(*) FROM saved_ideas"),
+        "likes": await one("SELECT COUNT(*) FROM likes"),
+        "likes_day": await one("SELECT COUNT(*) FROM likes WHERE created_at >= ?", day),
+        "voters": await one("SELECT COUNT(DISTINCT voter_hash) FROM likes"),
+        "tg_users": await one("SELECT COUNT(*) FROM tg_users"),
+        "tg_day": await one("SELECT COUNT(*) FROM tg_users WHERE seen_at >= ?", day),
+        "tg_week": await one("SELECT COUNT(*) FROM tg_users WHERE seen_at >= ?", week),
+        "top": top,
+    }
