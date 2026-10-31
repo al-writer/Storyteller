@@ -456,3 +456,19 @@ def test_bot_records_events_and_tg_id(chat):
     kinds, saved = chat.client.portal.call(scenario)
     assert kinds == ["prompt", "generate", "start"]
     assert saved == 1
+
+
+def test_chosen_inline_result_is_a_share(chat):
+    chat.send("/start")
+    slug = slug_of(chat.last_phrase()[0])
+    chat.feed({"chosen_inline_result": {"result_id": slug, "from": chat._user(), "query": ""}})
+
+    async def last_event():
+        async with app.state.db.execute(
+            "SELECT kind, channel, preset_id FROM events ORDER BY id DESC LIMIT 1"
+        ) as cur:
+            return tuple(await cur.fetchone())
+
+    kind, channel, preset_id = chat.client.portal.call(last_event)
+    assert (kind, channel) == ("share", "tg")
+    assert preset_id

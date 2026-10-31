@@ -21,7 +21,8 @@ log = logging.getLogger(__name__)
 
 WEBHOOK_PATH = "/tg/webhook"
 SECRET_HEADER = "X-Telegram-Bot-Api-Secret-Token"
-ALLOWED_UPDATES = ["message", "callback_query", "inline_query"]
+# chosen_inline_result приходит, только если у BotFather включён Inline Feedback.
+ALLOWED_UPDATES = ["message", "callback_query", "inline_query", "chosen_inline_result"]
 COMMANDS = [
     BotCommand(command="spin", description="Новая фраза"),
     BotCommand(command="top", description="Зал славы"),
