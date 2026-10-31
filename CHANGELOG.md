@@ -7,6 +7,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- `.railway/railway.ts` описывает лимиты контейнера (4 vCPU, 4 ГБ), выставленные в
+  панели: `railway config apply` больше их не сбрасывает.
+
 ### Added
 
 - Админка — Telegram Mini App `/admin` для `TELEGRAM_ADMIN_IDS`: графики генераций,

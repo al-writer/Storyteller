@@ -14,6 +14,10 @@ export default defineRailway(() => {
     // Больше одной реплики нельзя: SQLite и лимиты запросов живут в одном процессе,
     // а Railway не подключает том к нескольким репликам.
     replicas: 1,
+    // Лимиты контейнера — как выставлены в панели: без них `config apply` сбросит их в null.
+    deploy: {
+      limitOverride: { containers: { cpu: 4, memoryBytes: 4_000_000_000 } },
+    },
     volumeMounts: {
       "/data": data,
     },
