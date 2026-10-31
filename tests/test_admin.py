@@ -121,3 +121,50 @@ def test_old_tg_users_table_gets_tg_id(tmp_path):
             return await db.tg_user(conn, "h")
 
     assert asyncio.run(scenario())["tg_id"] == 7
+
+
+def admin_call(client, method: str, path: str, **params):
+    headers = {"X-Telegram-Init-Data": init_data(ADMIN_ID)}
+    return client.request(method, path, params=params, headers=headers)
+
+
+@pytest.mark.usefixtures("admin_settings")
+def test_moderation_hides_and_resets(client):
+    data = generate(client, preset_id="setup", seed=80)
+    slug = data["slug"]
+    client.post("/api/save", json={"slug": slug})
+    client.post(f"/api/like/{slug}")
+
+    found = admin_call(client, "GET", "/api/admin/phrases", q=data["text"][:12].upper()).json()
+    assert slug in [item["slug"] for item in found["items"]]  # поиск без учёта регистра
+
+    assert admin_call(client, "POST", f"/api/admin/phrases/{slug}/hide").status_code == 200
+    new = client.get("/api/feed", params={"sort": "new", "limit": 30}).json()["items"]
+    assert slug not in [item["slug"] for item in new]
+    saved = admin_call(client, "GET", "/api/admin/phrases", scope="saved", limit=50).json()
+    row = next(item for item in saved["items"] if item["slug"] == slug)
+    assert row["hidden"] and row["saved"]
+
+    assert admin_call(client, "POST", f"/api/admin/phrases/{slug}/show").status_code == 200
+    assert admin_call(client, "POST", f"/api/admin/phrases/{slug}/reset-likes").status_code == 200
+    assert client.get(f"/api/phrase/{slug}").json()["likes"] == 0
+    assert client.post(f"/api/like/{slug}").json()["counted"]  # голос снова засчитывается
+
+    other = generate(client, preset_id="setup", seed=81)["slug"]  # не в зале славы
+    assert admin_call(client, "POST", f"/api/admin/phrases/{other}/hide").status_code == 404
+    assert client.post(f"/api/admin/phrases/{slug}/hide").status_code == 403
+
+
+@pytest.mark.usefixtures("admin_settings")
+def test_service_and_cache(client):
+    slug = generate(client, preset_id="plot", seed=82)["slug"]
+    client.get(f"/api/og-image/{slug}.png")
+    info = admin_call(client, "GET", "/api/admin/service").json()
+    assert info["cache_files"] >= 1 and info["db_bytes"] > 0
+    assert info["webhook"] is None  # бот в тестах не запущен
+    assert {"words", "phrases", "hidden", "events", "tg_reachable"} <= set(info["counts"])
+
+    cleared = admin_call(client, "POST", "/api/admin/cache/clear").json()
+    assert cleared["files"] == info["cache_files"]
+    assert admin_call(client, "GET", "/api/admin/service").json()["cache_files"] == 0
+    assert client.get(f"/api/og-image/{slug}.png").status_code == 200  # перерисовалась

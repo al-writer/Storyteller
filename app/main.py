@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import secrets
+import time
 from contextlib import asynccontextmanager
 from dataclasses import replace
 from typing import Annotated, Literal
@@ -52,6 +53,7 @@ async def lifespan(app: FastAPI):
         app.state.engine = Engine(lexicon, UsageTracker())
         app.state.generate_limiter = RateLimiter(limit=10, window=1.0)
         app.state.like_limiter = RateLimiter(limit=30, window=60.0)
+        app.state.started_at = time.time()
         app.state.telegram = await start_telegram(app.state)
         try:
             yield
