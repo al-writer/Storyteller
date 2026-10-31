@@ -211,6 +211,38 @@ def test_prompt_and_card(chat):
     assert second.photo == "photo-1"
 
 
+def test_card_in_bot_carries_bot_handle(chat):
+    chat.telegram.username = "plotslot_bot"
+    chat.send("🎰 Крутить")
+    phrase, message_id = chat.last_phrase()
+    slug = slug_of(phrase)
+    chat.press(cb.Card(slug=slug).pack(), message_id)
+    cache = app.state.settings.og_cache_dir
+    assert (cache / "_plotslot_bot" / f"{slug}_square.png").exists()
+    assert not (cache / "example.test" / f"{slug}_square.png").exists()
+
+
+def test_site_mentions_bot_and_tg_preview(client, chat):
+    chat.send("🎰 Крутить")
+    slug = slug_of(chat.last_phrase()[0])
+    assert "t.me/" not in client.get("/").text
+    chat.telegram.username = "plotslot_bot"
+    app.state.telegram = chat.telegram
+    try:
+        assert 'href="https://t.me/plotslot_bot"' in client.get("/").text
+        page = client.get(f"/s/{slug}").text
+        assert f"https://t.me/plotslot_bot?start={slug}" in page
+        assert f'/api/og-image/{slug}.png"' in page
+        tg_page = client.get(f"/s/{slug}", params={"via": "tg"}).text
+        assert f"/api/og-image/{slug}.png?via=tg" in tg_page
+        image = client.get(f"/api/og-image/{slug}.png", params={"via": "tg"})
+        assert image.status_code == 200
+        cache = app.state.settings.og_cache_dir
+        assert (cache / "_plotslot_bot" / f"{slug}_wide.png").exists()
+    finally:
+        app.state.telegram = None
+
+
 def test_unknown_phrase(chat):
     chat.press(cb.Spin(slug="unknown1", mask=0).pack(), 5)
     assert answers(chat.session) == ["Фраза не найдена"]
@@ -327,7 +359,7 @@ def test_inline_by_slug_and_fresh(chat):
     (result,) = answer.results
     assert result.id == slug
     assert not answer.is_personal
-    assert result.input_message_content.link_preview_options.url.endswith(f"/s/{slug}")
+    assert result.input_message_content.link_preview_options.url.endswith(f"/s/{slug}?via=tg")
     deep_link = result.reply_markup.inline_keyboard[0][0].url
     assert deep_link == f"https://t.me/plotslot_bot?start={slug}"
 

@@ -54,5 +54,13 @@
     </label>
   </div>
   <p class="mt-4 text-xs text-muted">Нажмите на слово, чтобы закрепить его или сменить только его.</p>
+  {% set bot = telegram_bot() %}
+  {% if bot %}
+  <p class="mt-2 text-xs text-muted">
+    Крутить сюжеты можно и в Telegram:
+    <a href="https://t.me/{{ bot }}" class="text-accent hover:underline" rel="noopener">@{{ bot }}</a>
+    — а в любом чате наберите @{{ bot }}, чтобы отправить свежий сюжет.
+  </p>
+  {% endif %}
 </section>
 {% endblock %}

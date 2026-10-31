@@ -28,6 +28,8 @@
     <nav class="text-sm text-muted flex gap-5">
       <a href="/" class="hover:text-paper transition-colors">Слот-машина</a>
       <a href="/feed" class="hover:text-paper transition-colors">Лента</a>
+      {% set bot = telegram_bot() %}
+      {% if bot %}<a href="https://t.me/{{ bot }}" class="hover:text-paper transition-colors" rel="noopener">Telegram-бот</a>{% endif %}
     </nav>
   </header>
   <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6">
