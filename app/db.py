@@ -111,6 +111,8 @@ async def connect(path: Path) -> AsyncIterator[aiosqlite.Connection]:
         await db.execute("PRAGMA journal_mode=WAL")
         await db.execute("PRAGMA busy_timeout=5000")
         await db.execute("PRAGMA foreign_keys=ON")
+        # lower()/LIKE в SQLite не знают кириллицы — для поиска в админке.
+        await db.create_function("casefold", 1, _casefold, deterministic=True)
         yield db
     finally:
         await db.close()
@@ -121,7 +123,13 @@ async def connect(path: Path) -> AsyncIterator[aiosqlite.Connection]:
 ADDED_COLUMNS: dict[str, dict[str, str]] = {
     # Telegram ID — для будущей рассылки; ключ строки по-прежнему хэш.
     "tg_users": {"tg_id": "INTEGER"},
+    # Модерация: скрытая фраза пропадает из зала славы и лент, но не удаляется.
+    "saved_ideas": {"hidden": "INTEGER NOT NULL DEFAULT 0"},
 }
+
+
+def _casefold(value: str | None) -> str | None:
+    return value.casefold() if value is not None else None
 
 
 async def create_schema(db: aiosqlite.Connection) -> None:
@@ -251,7 +259,7 @@ def hot_score(likes: int, saved_at: float, now: float) -> float:
 
 FEED_BASE = (
     "SELECT p.slug, p.preset_id, p.text, s.likes, s.saved_at "
-    "FROM saved_ideas s JOIN phrases p ON p.slug = s.slug "
+    "FROM saved_ideas s JOIN phrases p ON p.slug = s.slug WHERE s.hidden = 0 "
 )
 
 
@@ -267,7 +275,7 @@ async def feed(
         where = ""
         if cursor:
             saved_at, _, slug = cursor.partition(":")
-            where = "WHERE (s.saved_at < ?) OR (s.saved_at = ? AND s.slug > ?) "
+            where = "AND ((s.saved_at < ?) OR (s.saved_at = ? AND s.slug > ?)) "
             params = [float(saved_at), float(saved_at), slug]
         sql = FEED_BASE + where + "ORDER BY s.saved_at DESC, s.slug ASC LIMIT ?"
         async with db.execute(sql, [*params, limit + 1]) as cur:
@@ -288,7 +296,7 @@ async def feed(
 
 async def _top_rows(db: aiosqlite.Connection) -> list[dict]:
     """«Зал славы» целиком: фразы с лайками по убыванию hot_score."""
-    sql = FEED_BASE + "WHERE s.likes > 0 ORDER BY s.last_liked_at DESC LIMIT ?"
+    sql = FEED_BASE + "AND s.likes > 0 ORDER BY s.last_liked_at DESC LIMIT ?"
     async with db.execute(sql, (TOP_CANDIDATES,)) as cur:
         rows = [dict(row) async for row in cur]
     now = time.time()
@@ -300,7 +308,7 @@ async def feed_at(db: aiosqlite.Connection, sort: str, offset: int) -> tuple[dic
     """Одна фраза ленты по смещению и длина ленты — для карусели в боте."""
     offset = max(offset, 0)
     if sort == "new":
-        async with db.execute("SELECT COUNT(*) FROM saved_ideas") as cur:
+        async with db.execute("SELECT COUNT(*) FROM saved_ideas WHERE hidden = 0") as cur:
             total = (await cur.fetchone())[0]
         sql = FEED_BASE + "ORDER BY s.saved_at DESC, s.slug ASC LIMIT 1 OFFSET ?"
         async with db.execute(sql, (offset,)) as cur:
@@ -377,13 +385,13 @@ async def stats(db: aiosqlite.Connection, now: float | None = None) -> dict:
 
     async with db.execute(
         "SELECT p.text, s.likes FROM saved_ideas s JOIN phrases p ON p.slug = s.slug "
-        "WHERE s.likes > 0 ORDER BY s.likes DESC, s.saved_at DESC LIMIT 3"
+        "WHERE s.likes > 0 AND s.hidden = 0 ORDER BY s.likes DESC, s.saved_at DESC LIMIT 3"
     ) as cur:
         top = [(row["text"], row["likes"]) async for row in cur]
     return {
         "phrases": await one("SELECT COUNT(*) FROM phrases"),
         "phrases_day": await one("SELECT COUNT(*) FROM phrases WHERE created_at >= ?", day),
-        "saved": await one("SELECT COUNT(*) FROM saved_ideas"),
+        "saved": await one("SELECT COUNT(*) FROM saved_ideas WHERE hidden = 0"),
         "likes": await one("SELECT COUNT(*) FROM likes"),
         "likes_day": await one("SELECT COUNT(*) FROM likes WHERE created_at >= ?", day),
         "voters": await one("SELECT COUNT(DISTINCT voter_hash) FROM likes"),
@@ -453,7 +461,7 @@ async def admin_report(db: aiosqlite.Connection, days: int, now: float | None = 
     )
     top = await rows(
         "SELECT p.slug, p.preset_id, p.text, s.likes FROM saved_ideas s "
-        "JOIN phrases p ON p.slug = s.slug WHERE s.likes > 0 "
+        "JOIN phrases p ON p.slug = s.slug WHERE s.likes > 0 AND s.hidden = 0 "
         "ORDER BY s.likes DESC, s.saved_at DESC LIMIT 10"
     )
 
@@ -477,3 +485,69 @@ async def admin_report(db: aiosqlite.Connection, days: int, now: float | None = 
         "top": top,
         "summary": await stats(db, now),
     }
+
+
+# --- модерация и сводка для админки ---------------------------------------------------------
+
+
+async def admin_phrases(
+    db: aiosqlite.Connection, scope: str, query: str, limit: int, offset: int
+) -> tuple[list[dict], int]:
+    """Фразы для модерации: ``saved`` — зал славы, включая скрытые; ``all`` — все."""
+    if scope == "saved":
+        base = "FROM saved_ideas s JOIN phrases p ON p.slug = s.slug "
+        order = "ORDER BY s.saved_at DESC, p.slug"
+    else:
+        base = "FROM phrases p LEFT JOIN saved_ideas s ON s.slug = p.slug "
+        order = "ORDER BY p.created_at DESC, p.slug"
+    where, params = "", []
+    if query:
+        escaped = query.casefold().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        where = "WHERE casefold(p.text) LIKE ? ESCAPE '\\' "
+        params.append(f"%{escaped}%")
+    async with db.execute(f"SELECT COUNT(*) {base}{where}", params) as cur:
+        total = (await cur.fetchone())[0]
+    sql = (
+        "SELECT p.slug, p.preset_id, p.text, p.created_at, s.likes, s.saved_at, s.hidden "
+        f"{base}{where}{order} LIMIT ? OFFSET ?"
+    )
+    async with db.execute(sql, [*params, limit, offset]) as cur:
+        rows = [dict(row) async for row in cur]
+    for row in rows:
+        row["saved"] = row["saved_at"] is not None
+        row["likes"] = row["likes"] or 0
+        row["hidden"] = bool(row["hidden"])
+    return rows, total
+
+
+async def set_hidden(db: aiosqlite.Connection, slug: str, hidden: bool) -> bool:
+    cur = await db.execute("UPDATE saved_ideas SET hidden = ? WHERE slug = ?", (int(hidden), slug))
+    await db.commit()
+    return cur.rowcount == 1
+
+
+async def reset_likes(db: aiosqlite.Connection, slug: str) -> bool:
+    await db.execute("DELETE FROM likes WHERE slug = ?", (slug,))
+    cur = await db.execute(
+        "UPDATE saved_ideas SET likes = 0, last_liked_at = NULL WHERE slug = ?", (slug,)
+    )
+    await db.commit()
+    return cur.rowcount == 1
+
+
+async def table_counts(db: aiosqlite.Connection) -> dict:
+    queries = {
+        "words": "SELECT COUNT(*) FROM words",
+        "phrases": "SELECT COUNT(*) FROM phrases",
+        "saved": "SELECT COUNT(*) FROM saved_ideas WHERE hidden = 0",
+        "hidden": "SELECT COUNT(*) FROM saved_ideas WHERE hidden = 1",
+        "likes": "SELECT COUNT(*) FROM likes",
+        "events": "SELECT COUNT(*) FROM events",
+        "tg_users": "SELECT COUNT(*) FROM tg_users",
+        "tg_reachable": "SELECT COUNT(*) FROM tg_users WHERE tg_id IS NOT NULL",
+    }
+    counts = {}
+    for name, sql in queries.items():
+        async with db.execute(sql) as cur:
+            counts[name] = (await cur.fetchone())[0]
+    return counts

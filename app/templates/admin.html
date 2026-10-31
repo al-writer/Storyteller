@@ -63,18 +63,48 @@
     .bar-track { height: 14px; }
     .bar { height: 14px; background: var(--series-web); border-radius: 0 4px 4px 0; min-width: 2px; }
     .state { padding: 40px 0; text-align: center; color: var(--text-secondary); }
+    .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
+    .tab {
+      background: none; border: 0; border-bottom: 2px solid transparent; color: var(--text-muted);
+      font: inherit; padding: 6px 10px 8px; cursor: pointer;
+    }
+    .tab[aria-selected="true"] { color: var(--text-primary); border-bottom-color: var(--accent); }
+    .search { width: 100%; background: var(--surface-2); border: 1px solid var(--line); color: var(--text-primary);
+      border-radius: 8px; padding: 8px 10px; font: inherit; margin-bottom: 10px; }
+    .phrase { padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .phrase:last-child { border-bottom: 0; }
+    .phrase.is-hidden .text { color: var(--text-muted); text-decoration: line-through; }
+    .meta { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
+    .actions { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+    .btn {
+      background: transparent; border: 1px solid var(--line); color: var(--text-secondary);
+      border-radius: 8px; padding: 4px 10px; font: inherit; font-size: 13px; cursor: pointer;
+    }
+    .btn:hover { border-color: var(--text-muted); color: var(--text-primary); }
+    .btn:disabled { opacity: .5; cursor: default; }
+    .more { margin-top: 10px; width: 100%; }
+    .kv { table-layout: fixed; }
+    .kv td { overflow-wrap: anywhere; }
+    .kv td:first-child { color: var(--text-muted); width: 40%; }
   </style>
 </head>
 <body>
 <main>
   <h1>Админка</h1>
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" data-tab="overview" aria-selected="true">Обзор</button>
+    <button class="tab" role="tab" data-tab="phrases" aria-selected="false">Фразы</button>
+    <button class="tab" role="tab" data-tab="service" aria-selected="false">Сервис</button>
+  </nav>
+  <div id="state" class="state">Загрузка…</div>
+
+  <div data-panel="overview" hidden>
   <div class="filters" role="group" aria-label="Период">
     <button class="chip" data-days="7" aria-pressed="false">7 дней</button>
     <button class="chip" data-days="30" aria-pressed="true">30 дней</button>
     <button class="chip" data-days="90" aria-pressed="false">90 дней</button>
   </div>
-  <div id="state" class="state">Загрузка…</div>
-  <div id="report" hidden>
+  <div id="report">
     <div class="tiles" id="tiles"></div>
 
     <section>
@@ -111,6 +141,29 @@
     </section>
 
     <p class="muted" style="font-size:12px;margin-top:20px">Дни — по UTC. Активные — уникальные посетители сайта и пользователи бота за день.</p>
+  </div>
+  </div>
+
+  <div data-panel="phrases" hidden>
+    <div class="filters" role="group" aria-label="Какие фразы">
+      <button class="chip" data-scope="saved" aria-pressed="true">Зал славы</button>
+      <button class="chip" data-scope="all" aria-pressed="false">Все фразы</button>
+    </div>
+    <input class="search" id="search" type="search" placeholder="Поиск по тексту" autocomplete="off">
+    <div class="muted" id="phrases-total" style="font-size:13px;margin-bottom:6px"></div>
+    <div class="card" id="phrases"></div>
+    <button class="btn more" id="phrases-more" hidden>Ещё</button>
+  </div>
+
+  <div data-panel="service" hidden>
+    <div class="card"><table class="kv" id="service"></table></div>
+    <section>
+      <h2>Кэш открыток</h2>
+      <div class="card">
+        <p class="muted" style="margin:0 0 8px;font-size:13px">Открытки перерисуются при следующем запросе. Полезно после смены шрифтов или оформления.</p>
+        <button class="btn" id="clear-cache">Очистить кэш</button>
+      </div>
+    </section>
   </div>
 </main>
 <script>
@@ -260,39 +313,204 @@ function render(report) {
 
 let days = 30;
 let lastReport = null;
+let tab = "overview";
+const initData = tg ? tg.initData : "";
+const stateEl = document.getElementById("state");
 
-async function load() {
-  const state = document.getElementById("state");
-  const initData = tg ? tg.initData : "";
-  if (!initData) {
-    state.textContent = "Откройте админку кнопкой «Админка» слева от поля ввода в боте или под сводкой /stats.";
-    return;
-  }
+class ApiError extends Error {}
+
+// Все запросы админки несут initData: сервер проверяет подпись и ID админа.
+async function api(path, options = {}) {
+  const response = await fetch(path, { ...options, headers: { "X-Telegram-Init-Data": initData } });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new ApiError(body.detail || `Ошибка ${response.status}`);
+  return body;
+}
+
+function showState(text) {
+  stateEl.textContent = text;
+  stateEl.hidden = false;
+  document.querySelectorAll("[data-panel]").forEach((p) => { p.hidden = true; });
+}
+
+function showPanel() {
+  stateEl.hidden = true;
+  document.querySelectorAll("[data-panel]").forEach((p) => { p.hidden = p.dataset.panel !== tab; });
+}
+
+function confirmAction(text) {
+  return new Promise((resolve) => {
+    if (tg && tg.showConfirm) tg.showConfirm(text, resolve);
+    else resolve(window.confirm(text));
+  });
+}
+
+function notify(text) {
+  if (tg && tg.showAlert) tg.showAlert(text);
+  else window.alert(text);
+}
+
+async function guarded(task) {
   try {
-    const response = await fetch(`/api/admin/report?days=${days}`, { headers: { "X-Telegram-Init-Data": initData } });
-    if (!response.ok) {
-      const body = await response.json().catch(() => ({}));
-      state.textContent = body.detail || `Ошибка ${response.status}`;
-      state.hidden = false;
-      document.getElementById("report").hidden = true;
-      return;
-    }
-    lastReport = await response.json();
-    state.hidden = true;
-    document.getElementById("report").hidden = false;
-    render(lastReport);
+    await task();
   } catch (error) {
-    state.textContent = "Не удалось загрузить отчёт";
+    showState(error instanceof ApiError ? error.message : "Не удалось загрузить данные");
   }
 }
 
-document.querySelectorAll(".chip").forEach((chip) => chip.addEventListener("click", () => {
+async function load() {
+  await guarded(async () => {
+    lastReport = await api(`/api/admin/report?days=${days}`);
+    showPanel();
+    render(lastReport);
+  });
+}
+
+// --- фразы ---
+let scope = "saved", query = "", offset = 0;
+const PAGE = 20;
+const dateFmt = new Intl.DateTimeFormat("ru-RU", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+
+function phraseRow(p) {
+  const when = p.saved_at ? `в зале славы с ${dateFmt.format(p.saved_at * 1000)}` : `собрана ${dateFmt.format(p.created_at * 1000)}`;
+  const actions = p.saved
+    ? `<button class="btn" data-action="${p.hidden ? "show" : "hide"}">${p.hidden ? "Вернуть в зал славы" : "Скрыть"}</button>` +
+      (p.likes ? `<button class="btn" data-action="reset-likes">Обнулить ❤️</button>` : "")
+    : "";
+  return `<div class="phrase${p.hidden ? " is-hidden" : ""}" data-slug="${esc(p.slug)}">
+    <div class="text">${esc(p.text)}</div>
+    <div class="meta">${esc(p.preset_title)} · ❤️ ${fmt.format(p.likes)} · ${when}${p.hidden ? " · <b>скрыта</b>" : ""} ·
+      <a href="/s/${esc(p.slug)}" style="color:var(--accent)">${esc(p.slug)}</a></div>
+    ${actions ? `<div class="actions">${actions}</div>` : ""}
+  </div>`;
+}
+
+async function loadPhrases(append = false) {
+  await guarded(async () => {
+    if (!append) offset = 0;
+    const params = new URLSearchParams({ scope, q: query, limit: PAGE, offset });
+    const page = await api(`/api/admin/phrases?${params}`);
+    const list = document.getElementById("phrases");
+    const html = page.items.map(phraseRow).join("");
+    list.innerHTML = append ? list.innerHTML + html : (html || `<span class="muted">Ничего не нашлось</span>`);
+    offset += page.items.length;
+    document.getElementById("phrases-total").textContent = `Найдено: ${fmt.format(page.total)}`;
+    document.getElementById("phrases-more").hidden = offset >= page.total;
+    showPanel();
+  });
+}
+
+const ACTION_TEXT = {
+  hide: "Скрыть фразу из зала славы и лент? Её можно будет вернуть.",
+  show: "Вернуть фразу в зал славы?",
+  "reset-likes": "Обнулить лайки фразы? Голоса удалятся, отменить нельзя.",
+};
+
+document.getElementById("phrases").addEventListener("click", async (event) => {
+  const button = event.target.closest("[data-action]");
+  if (!button) return;
+  const action = button.dataset.action;
+  const slug = button.closest("[data-slug]").dataset.slug;
+  if (!(await confirmAction(ACTION_TEXT[action]))) return;
+  button.disabled = true;
+  try {
+    await api(`/api/admin/phrases/${encodeURIComponent(slug)}/${action}`, { method: "POST" });
+    await loadPhrases();
+  } catch (error) {
+    notify(error.message);
+    button.disabled = false;
+  }
+});
+
+let searchTimer = null;
+document.getElementById("search").addEventListener("input", (event) => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => { query = event.target.value.trim(); loadPhrases(); }, 300);
+});
+document.getElementById("phrases-more").addEventListener("click", () => loadPhrases(true));
+document.querySelectorAll(".chip[data-scope]").forEach((chip) => chip.addEventListener("click", () => {
+  scope = chip.dataset.scope;
+  document.querySelectorAll(".chip[data-scope]").forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+  loadPhrases();
+}));
+
+// --- сервис ---
+function bytes(n) {
+  const units = ["Б", "КБ", "МБ", "ГБ"];
+  let i = 0;
+  while (n >= 1024 && i < units.length - 1) { n /= 1024; i += 1; }
+  return `${n.toFixed(i ? 1 : 0).replace(".", ",")} ${units[i]}`;
+}
+
+function since(seconds) {
+  const h = Math.floor(seconds / 3600), d = Math.floor(h / 24);
+  return d ? `${d} д ${h % 24} ч` : `${h} ч ${Math.floor((seconds % 3600) / 60)} мин`;
+}
+
+async function loadService() {
+  await guarded(async () => {
+    const s = await api("/api/admin/service");
+    const c = s.counts, w = s.webhook;
+    let webhook = "бот не запущен";
+    if (w && w.error) webhook = `ошибка запроса: ${esc(w.error)}`;
+    else if (w) {
+      webhook = `${esc(w.url || "не установлен")}<br><span class="muted">в очереди: ${fmt.format(w.pending)}` +
+        (w.last_error ? ` · последняя ошибка ${dateFmt.format(w.last_error_at * 1000)}: ${esc(w.last_error)}` : " · ошибок нет") + "</span>";
+    }
+    const rows = [
+      ["Версия", esc(s.version)],
+      ["Работает", s.started_at ? since(s.now - s.started_at) : "—"],
+      ["Сайт", esc(s.base_url)],
+      ["Бот", s.bot ? esc(s.bot) : "—"],
+      ["Webhook", webhook],
+      ["База", bytes(s.db_bytes)],
+      ["Кэш открыток", `${bytes(s.cache_bytes)} · ${fmt.format(s.cache_files)} файлов`],
+      ["Слов в словаре", fmt.format(c.words)],
+      ["Фраз", fmt.format(c.phrases)],
+      ["В зале славы", `${fmt.format(c.saved)} · скрыто ${fmt.format(c.hidden)}`],
+      ["Лайков", fmt.format(c.likes)],
+      ["Событий в журнале", fmt.format(c.events)],
+      ["Пользователей бота", `${fmt.format(c.tg_users)} · доступны для рассылки ${fmt.format(c.tg_reachable)}`],
+    ];
+    document.getElementById("service").innerHTML = rows.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("");
+    showPanel();
+  });
+}
+
+document.getElementById("clear-cache").addEventListener("click", async (event) => {
+  if (!(await confirmAction("Удалить все сохранённые открытки? Они перерисуются при следующем запросе."))) return;
+  event.target.disabled = true;
+  try {
+    const result = await api("/api/admin/cache/clear", { method: "POST" });
+    notify(`Удалено файлов: ${fmt.format(result.files)} (${bytes(result.freed_bytes)})`);
+    await loadService();
+  } catch (error) {
+    notify(error.message);
+  } finally {
+    event.target.disabled = false;
+  }
+});
+
+// --- вкладки ---
+const LOADERS = { overview: load, phrases: () => loadPhrases(), service: loadService };
+
+function openTab(name) {
+  tab = name;
+  document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-selected", String(t.dataset.tab === name)));
+  showState("Загрузка…");
+  LOADERS[name]();
+}
+
+document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () => openTab(t.dataset.tab)));
+document.querySelectorAll(".chip[data-days]").forEach((chip) => chip.addEventListener("click", () => {
   days = Number(chip.dataset.days);
-  document.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+  document.querySelectorAll(".chip[data-days]").forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
   load();
 }));
-window.addEventListener("resize", () => { if (lastReport) render(lastReport); });
-load();
+window.addEventListener("resize", () => { if (lastReport && tab === "overview") render(lastReport); });
+
+if (initData) openTab("overview");
+else showState("Откройте админку кнопкой «Админка» слева от поля ввода в боте или под сводкой /stats.");
 </script>
 </body>
 </html>
