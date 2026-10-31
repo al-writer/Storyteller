@@ -20,7 +20,6 @@ from app.schemas import FeedItem, PhraseOut
 SPIN_TEXT = "🎰 Крутить"
 FEED_TEXT = "🏆 Зал славы"
 STATS_TEXT = "📊 Статистика"
-ADMIN_TEXT = "🛠 Админка"
 WORD_LABEL_LIMIT = 28
 COPY_TEXT_LIMIT = 256  # больше Telegram в кнопку копирования не принимает
 
@@ -33,14 +32,11 @@ def like_label(likes: int) -> str:
     return f"❤️ {likes}" if likes else "❤️ В зал славы"
 
 
-def reply_keyboard(admin: bool = False, admin_url: str | None = None) -> ReplyKeyboardMarkup:
-    """Постоянная клавиатура под полем ввода; у админов — ещё статистика и админка."""
+def reply_keyboard(admin: bool = False) -> ReplyKeyboardMarkup:
+    """Постоянная клавиатура под полем ввода; у админов — ещё строка со статистикой."""
     rows = [[KeyboardButton(text=SPIN_TEXT), KeyboardButton(text=FEED_TEXT)]]
     if admin:
-        row = [KeyboardButton(text=STATS_TEXT)]
-        if admin_url:
-            row.append(KeyboardButton(text=ADMIN_TEXT, web_app=WebAppInfo(url=admin_url)))
-        rows.append(row)
+        rows.append([KeyboardButton(text=STATS_TEXT)])
     return ReplyKeyboardMarkup(keyboard=rows, resize_keyboard=True)
 
 
@@ -89,6 +85,14 @@ def main(phrase: PhraseOut, mask: int) -> InlineKeyboardMarkup:
                 share(slug),
             ],
         ]
+    )
+
+
+def admin_app(url: str) -> InlineKeyboardMarkup:
+    """Кнопка админки под сообщением. Не в клавиатуре под полем ввода: оттуда Telegram
+    открывает Mini App без подписанных initData, и админка не пускает."""
+    return InlineKeyboardMarkup(
+        inline_keyboard=[[InlineKeyboardButton(text="🛠 Админка", web_app=WebAppInfo(url=url))]]
     )
 
 

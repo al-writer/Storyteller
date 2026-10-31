@@ -84,9 +84,7 @@ def admin_url(app_state: Any) -> str | None:
 
 
 def user_keyboard(app_state: Any, user: User) -> ReplyKeyboardMarkup:
-    if is_admin(app_state, user):
-        return kb.reply_keyboard(admin=True, admin_url=admin_url(app_state))
-    return kb.reply_keyboard()
+    return kb.reply_keyboard(admin=is_admin(app_state, user))
 
 
 def client_of(app_state: Any, user: User) -> Client:
@@ -247,8 +245,8 @@ async def stats(message: Message, app_state: Any) -> None:
     if data["top"]:
         lines += ["", "<b>Топ зала славы</b>"]
         lines += [f"❤️ {likes} — {html.escape(text)}" for text, likes in data["top"]]
-    # Клавиатура — чтобы кнопка статистики появилась у админа, назначенного после /start.
-    await message.answer("\n".join(lines), reply_markup=user_keyboard(app_state, message.from_user))
+    url = admin_url(app_state)
+    await message.answer("\n".join(lines), reply_markup=kb.admin_app(url) if url else None)
 
 
 async def any_text(message: Message, app_state: Any) -> None:

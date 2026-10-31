@@ -264,7 +264,7 @@ async function load() {
   const state = document.getElementById("state");
   const initData = tg ? tg.initData : "";
   if (!initData) {
-    state.textContent = "Откройте админку кнопкой в Telegram-боте.";
+    state.textContent = "Откройте админку кнопкой «Админка» слева от поля ввода в боте или под сводкой /stats.";
     return;
   }
   try {
