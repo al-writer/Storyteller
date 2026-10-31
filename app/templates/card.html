@@ -29,6 +29,8 @@
     </button>
     <a class="btn-primary" href="/?from={{ slug }}">Сгенерировать свою</a>
     <a class="btn" href="/api/og-image/{{ slug }}.png?format=square" download="syuzhet-{{ slug }}.png">Скачать открытку</a>
+    {% set bot = telegram_bot() %}
+    {% if bot %}<a class="btn" href="https://t.me/{{ bot }}?start={{ slug }}" rel="noopener">Открыть в Telegram</a>{% endif %}
   </div>
 </article>
 {% endblock %}

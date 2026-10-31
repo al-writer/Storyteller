@@ -46,6 +46,7 @@ class TelegramBot:
         self.app_state = app_state
         self.dispatcher["app_state"] = app_state
         self.dispatcher["runtime"] = self
+        self.username: str | None = None  # из getMe при старте; нужен сайту и открыткам
         self.card_ids: dict[str, str] = {}  # slug → file_id открытки, уже загруженной в Telegram
 
     async def start(self, webhook_url: str) -> None:
@@ -64,7 +65,8 @@ class TelegramBot:
             await self.bot.set_webhook(
                 webhook_url, secret_token=self.secret, allowed_updates=ALLOWED_UPDATES
             )
-            log.info("Telegram: webhook %s", webhook_url)
+            self.username = (await self.bot.me()).username
+            log.info("Telegram: webhook %s, бот @%s", webhook_url, self.username)
         except Exception:
             log.exception("Telegram-бот не запустился")
 

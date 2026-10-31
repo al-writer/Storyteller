@@ -80,6 +80,10 @@ app = FastAPI(title="Генератор сюжетов", version=__version__, li
 app.mount("/static", StaticFiles(directory=ROOT_DIR / "app" / "static"), name="static")
 templates = Jinja2Templates(directory=ROOT_DIR / "app" / "templates")
 templates.env.globals["version"] = __version__
+# Имя бота известно только после его старта, поэтому функция, а не значение.
+templates.env.globals["telegram_bot"] = lambda: getattr(
+    getattr(app.state, "telegram", None), "username", None
+)
 
 
 # --- зависимости ----------------------------------------------------------------------------
@@ -164,10 +168,17 @@ async def feed(
 
 @app.get("/api/og-image/{slug}.png")
 async def og_image(
-    slug: str, request: Request, format: Literal["wide", "square"] = "wide"
+    slug: str,
+    request: Request,
+    format: Literal["wide", "square"] = "wide",
+    via: Literal["site", "tg"] = "site",
 ) -> FileResponse:
-    """PNG-открытка. Фраза по slug не меняется, поэтому кэш вечный и без инвалидации."""
-    path = await service.card_path(request.app.state, slug, format)
+    """PNG-открытка. Фраза по slug не меняется, поэтому кэш вечный и без инвалидации.
+
+    ``via=tg`` — открытка для Telegram: в углу ``@handle`` бота вместо домена.
+    """
+    mark = service.bot_handle(request.app.state) if via == "tg" else None
+    path = await service.card_path(request.app.state, slug, format, mark)
     return FileResponse(
         path,
         media_type="image/png",
@@ -203,7 +214,8 @@ async def feed_page(request: Request):
 
 
 @app.get("/s/{slug}", response_class=HTMLResponse)
-async def phrase_page(slug: str, request: Request):
+async def phrase_page(slug: str, request: Request, via: Literal["site", "tg"] = "site"):
+    """Страница фразы. ``via=tg`` — ссылка из Telegram: превью с открыткой бота."""
     if not service.valid_slug(slug):
         raise HTTPException(404, "фраза не найдена")
     row, _ = await service.load(request.app.state, slug)
@@ -216,6 +228,6 @@ async def phrase_page(slug: str, request: Request):
         "likes": row["likes"],
         "preset_title": preset.title if preset else "Сюжет",
         "url": f"{base_url}/s/{slug}",
-        "image_url": f"{base_url}/api/og-image/{slug}.png",
+        "image_url": f"{base_url}/api/og-image/{slug}.png" + ("?via=tg" if via == "tg" else ""),
     }
     return templates.TemplateResponse(request, "card.html", context)
