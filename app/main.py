@@ -2,44 +2,25 @@
 
 from __future__ import annotations
 
-import hashlib
 import logging
-import re
 import secrets
 from contextlib import asynccontextmanager
-from dataclasses import dataclass, replace
+from dataclasses import replace
 from typing import Annotated, Literal
-from urllib.parse import urlsplit
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
-from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from starlette.concurrency import run_in_threadpool
 
-from app import __version__, db, og
-from app.config import (
-    PROMPT_TEMPLATES,
-    ROOT_DIR,
-    Settings,
-    get_settings,
-    load_or_create_salt,
-)
-from app.engine import Engine, GenerationError, Phrase, RenderError, Slot, render, slots_from_key
+from app import __version__, db, service
+from app.config import ROOT_DIR, Settings, get_settings, load_or_create_salt
+from app.engine import Engine
 from app.lexicon import Lexicon, UsageTracker
 from app.presets import PRESETS
 from app.ratelimit import RateLimiter
-from app.schemas import (
-    FeedItem,
-    FeedOut,
-    GenerateIn,
-    LikeOut,
-    PhraseOut,
-    SaveIn,
-    SaveOut,
-    SlotOut,
-    TokenOut,
-)
+from app.schemas import FeedOut, GenerateIn, LikeOut, PhraseOut, SaveIn, SaveOut
+from app.service import Client
 from app.typo import typograph
 
 log = logging.getLogger(__name__)
@@ -76,19 +57,12 @@ templates.env.globals["version"] = __version__
 # --- зависимости ----------------------------------------------------------------------------
 
 
-@dataclass(frozen=True)
-class Client:
-    key: str
-    voter_hash: str
-
-
 def client(request: Request, response: Response) -> Client:
     """Идентификатор клиента для лимитов и голосования.
 
     Голос — хэш cookie с солью; без cookie (первый запрос, отключённые cookie) —
     хэш IP + User-Agent. Cookie выставляется, если его ещё нет.
     """
-    salt = request.app.state.settings.secret_salt
     voter_id = request.cookies.get(VOTER_COOKIE)
     if voter_id and len(voter_id) <= 64:
         source = f"cookie:{voter_id}"
@@ -102,70 +76,23 @@ def client(request: Request, response: Response) -> Client:
             httponly=True,
             samesite="lax",
         )
-    digest = hashlib.sha256(f"{salt}|{source}".encode()).hexdigest()
-    return Client(key=digest[:32], voter_hash=digest)
+    return Client.from_source(request.app.state.settings.secret_salt, source)
 
 
 ClientDep = Annotated[Client, Depends(client)]
 
-
-# --- сериализация ---------------------------------------------------------------------------
-
-
-def phrase_url(request: Request, slug: str) -> str:
-    return f"{request.app.state.settings.base_url}/s/{slug}"
-
-
-def phrase_out(request: Request, phrase: Phrase, likes: int = 0) -> PhraseOut:
-    slot_texts: dict[int, list[str]] = {}
-    for token in phrase.tokens:
-        if token.slot is not None:
-            slot_texts.setdefault(token.slot, []).append(token.text)
-    slots = [
-        SlotOut(
-            index=index,
-            name=spec.name,
-            category=spec.category,
-            id=slot.id,
-            lemma=word.lemma,
-            text=" ".join(slot_texts.get(index, [])),
-            number=slot.number,
-            gender=slot.gender,
-            superlative=slot.superlative,
-        )
-        for index, (spec, slot, word) in enumerate(
-            zip(phrase.preset.slots, phrase.slots, phrase.words, strict=True)
-        )
-    ]
-    return PhraseOut(
-        slug=phrase.slug,
-        url=phrase_url(request, phrase.slug),
-        preset_id=phrase.preset.id,
-        preset_title=phrase.preset.title,
-        text=phrase.text,
-        tone=phrase.tone,
-        card_tone=phrase.card_tone,
-        slots=slots,
-        tokens=[TokenOut(text=t.text, slot=t.slot) for t in phrase.tokens],
-        prompt={
-            name: template.format(phrase=phrase.text) for name, template in PROMPT_TEMPLATES.items()
-        },
-        likes=likes,
-    )
+ERROR_STATUS: dict[type[service.ServiceError], int] = {
+    service.TooFast: 429,
+    service.NotFound: 404,
+    service.Gone: 410,
+    service.Invalid: 422,
+    service.Failed: 500,
+}
 
 
-async def stored_phrase(request: Request, slug: str) -> tuple[dict, Phrase | None]:
-    """Фраза из базы и, если слова ещё есть в словаре, её пересборка из ключа."""
-    row = await db.get_phrase(request.app.state.db, slug)
-    if row is None:
-        raise HTTPException(404, "фраза не найдена")
-    preset_id, slots = slots_from_key(row["key"])
-    preset = PRESETS.get(preset_id)
-    try:
-        phrase = render(request.app.state.lexicon, preset, slots) if preset else None
-    except (RenderError, GenerationError):
-        phrase = None
-    return row, phrase
+@app.exception_handler(service.ServiceError)
+async def service_error(request: Request, error: service.ServiceError) -> JSONResponse:
+    return JSONResponse({"detail": str(error)}, status_code=ERROR_STATUS.get(type(error), 500))
 
 
 # --- API ------------------------------------------------------------------------------------
@@ -179,56 +106,22 @@ async def healthz(response: Response) -> str:
 
 @app.post("/api/generate", response_model=PhraseOut)
 async def generate(payload: GenerateIn, request: Request, who: ClientDep) -> PhraseOut:
-    if not request.app.state.generate_limiter.allow(who.key):
-        raise HTTPException(429, "слишком часто")
-    if payload.preset_id not in PRESETS:
-        raise HTTPException(422, "неизвестный пресет")
-    engine: Engine = request.app.state.engine
-    try:
-        phrase = await run_in_threadpool(
-            engine.generate,
-            payload.preset_id,
-            current=[Slot(**slot.model_dump()) for slot in payload.slots],
-            locked=payload.locked_indices,
-            reroll=payload.reroll_index,
-            recent_ids=payload.recent_ids,
-            tone=None if payload.tone in (None, "auto") else payload.tone,
-            wild=payload.wild,
-            seed=payload.seed,
-        )
-    except GenerationError as error:
-        log.error("генерация не удалась: %s", error)
-        raise HTTPException(500, "не удалось собрать фразу") from error
-    await db.remember_phrase(
-        request.app.state.db, phrase.slug, phrase.preset.id, phrase.key(), phrase.text
-    )
-    return phrase_out(request, phrase)
+    return await service.generate(request.app.state, who, payload)
 
 
 @app.get("/api/phrase/{slug}", response_model=PhraseOut)
 async def get_phrase(slug: str, request: Request) -> PhraseOut:
-    row, phrase = await stored_phrase(request, slug)
-    if phrase is None:
-        raise HTTPException(410, "слова этой фразы больше нет в словаре")
-    return phrase_out(request, phrase, likes=row["likes"])
+    return await service.get_phrase(request.app.state, slug)
 
 
 @app.post("/api/save", response_model=SaveOut)
 async def save(payload: SaveIn, request: Request) -> SaveOut:
-    if await db.get_phrase(request.app.state.db, payload.slug) is None:
-        raise HTTPException(404, "фраза не найдена")
-    likes = await db.save_idea(request.app.state.db, payload.slug)
-    return SaveOut(id=payload.slug, slug=payload.slug, likes=likes)
+    return await service.save(request.app.state, payload.slug)
 
 
 @app.post("/api/like/{slug}", response_model=LikeOut)
 async def like(slug: str, request: Request, who: ClientDep) -> LikeOut:
-    if not request.app.state.like_limiter.allow(who.key):
-        raise HTTPException(429, "слишком часто")
-    if await db.get_phrase(request.app.state.db, slug) is None:
-        raise HTTPException(404, "фраза не найдена")
-    likes, counted = await db.like(request.app.state.db, slug, who.voter_hash)
-    return LikeOut(likes=likes, counted=counted)
+    return await service.like(request.app.state, who, slug)
 
 
 @app.get("/api/feed", response_model=FeedOut)
@@ -238,52 +131,15 @@ async def feed(
     cursor: Annotated[str | None, Query(max_length=64)] = None,
     limit: Annotated[int, Query(ge=1, le=30)] = 20,
 ) -> FeedOut:
-    rows, next_cursor = await db.feed(request.app.state.db, sort, cursor, limit)
-    items = [
-        FeedItem(
-            slug=row["slug"],
-            url=phrase_url(request, row["slug"]),
-            text=row["text"],
-            likes=row["likes"],
-            preset_id=row["preset_id"],
-            preset_title=PRESETS[row["preset_id"]].title if row["preset_id"] in PRESETS else "",
-            saved_at=row["saved_at"],
-        )
-        for row in rows
-    ]
-    return FeedOut(items=items, next_cursor=next_cursor)
+    return await service.feed(request.app.state, sort, cursor, limit)
 
 
 @app.get("/api/og-image/{slug}.png")
 async def og_image(
     slug: str, request: Request, format: Literal["wide", "square"] = "wide"
 ) -> FileResponse:
-    """PNG-открытка. Фраза по slug не меняется, поэтому кэш вечный и без инвалидации.
-
-    На открытке напечатан домен, так что кэш раскладывается по папкам доменов: после
-    смены ``BASE_URL`` открытки рисуются заново.
-    """
-    if not slug.isalnum() or len(slug) > 16:
-        raise HTTPException(404, "фраза не найдена")
-    settings = request.app.state.settings
-    host = urlsplit(settings.base_url).netloc or settings.base_url
-    path = settings.og_cache_dir / re.sub(r"[^A-Za-z0-9.-]", "_", host) / f"{slug}_{format}.png"
-    if not path.exists():
-        row, phrase = await stored_phrase(request, slug)
-        preset = PRESETS.get(row["preset_id"])
-        png = await run_in_threadpool(
-            og.render_card,
-            row["text"],
-            preset.title if preset else "",
-            phrase.card_tone if phrase else None,
-            format,
-            host,
-            slug,
-        )
-        path.parent.mkdir(parents=True, exist_ok=True)
-        tmp = path.with_suffix(".tmp")
-        tmp.write_bytes(png)
-        tmp.replace(path)
+    """PNG-открытка. Фраза по slug не меняется, поэтому кэш вечный и без инвалидации."""
+    path = await service.card_path(request.app.state, slug, format)
     return FileResponse(
         path,
         media_type="image/png",
@@ -297,7 +153,7 @@ async def og_image(
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request, start: Annotated[str | None, Query(alias="from")] = None):
     presets = [{"id": p.id, "title": p.title} for p in PRESETS.values()]
-    start_slug = start if start and start.isalnum() and len(start) <= 16 else None
+    start_slug = start if start and service.valid_slug(start) else None
     return templates.TemplateResponse(
         request, "index.html", {"presets": presets, "start_slug": start_slug}
     )
@@ -310,9 +166,9 @@ async def feed_page(request: Request):
 
 @app.get("/s/{slug}", response_class=HTMLResponse)
 async def phrase_page(slug: str, request: Request):
-    if not slug.isalnum() or len(slug) > 16:
+    if not service.valid_slug(slug):
         raise HTTPException(404, "фраза не найдена")
-    row, _ = await stored_phrase(request, slug)
+    row, _ = await service.load(request.app.state, slug)
     preset = PRESETS.get(row["preset_id"])
     base_url = request.app.state.settings.base_url
     context = {
