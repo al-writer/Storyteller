@@ -86,6 +86,18 @@ CREATE TABLE IF NOT EXISTS events (
 );
 CREATE INDEX IF NOT EXISTS events_created_at ON events (created_at);
 
+CREATE TABLE IF NOT EXISTS broadcasts (
+    id INTEGER PRIMARY KEY,
+    text TEXT NOT NULL,
+    status TEXT NOT NULL,  -- sending / done / cancelled / interrupted
+    total INTEGER NOT NULL DEFAULT 0,
+    sent INTEGER NOT NULL DEFAULT 0,
+    failed INTEGER NOT NULL DEFAULT 0,
+    blocked INTEGER NOT NULL DEFAULT 0,
+    created_at REAL NOT NULL,
+    finished_at REAL
+);
+
 CREATE TABLE IF NOT EXISTS meta (
     key TEXT PRIMARY KEY,
     value TEXT NOT NULL
@@ -122,7 +134,8 @@ async def connect(path: Path) -> AsyncIterator[aiosqlite.Connection]:
 # их не создаст в старой базе.
 ADDED_COLUMNS: dict[str, dict[str, str]] = {
     # Telegram ID — для будущей рассылки; ключ строки по-прежнему хэш.
-    "tg_users": {"tg_id": "INTEGER"},
+    # blocked — бот заблокирован пользователем (узнаём при рассылке), снимается при его действии.
+    "tg_users": {"tg_id": "INTEGER", "blocked": "INTEGER NOT NULL DEFAULT 0"},
     # Модерация: скрытая фраза пропадает из зала славы и лент, но не удаляется.
     "saved_ideas": {"hidden": "INTEGER NOT NULL DEFAULT 0"},
 }
@@ -367,7 +380,7 @@ async def save_tg_user(db: aiosqlite.Connection, user: dict) -> None:
     await db.execute(
         f"INSERT INTO tg_users (user_hash, {columns}, created_at, seen_at) "
         f"VALUES (?, {', '.join('?' * len(values))}, ?, ?) "
-        f"ON CONFLICT (user_hash) DO UPDATE SET {updates}, seen_at = excluded.seen_at",
+        f"ON CONFLICT (user_hash) DO UPDATE SET {updates}, seen_at = excluded.seen_at, blocked = 0",
         (user["user_hash"], *values, now, now),
     )
     await db.commit()
@@ -551,3 +564,53 @@ async def table_counts(db: aiosqlite.Connection) -> dict:
         async with db.execute(sql) as cur:
             counts[name] = (await cur.fetchone())[0]
     return counts
+
+
+# --- рассылка -------------------------------------------------------------------------------
+
+BROADCAST_COLUMNS = (
+    "id", "text", "status", "total", "sent", "failed", "blocked", "created_at", "finished_at",
+)  # fmt: skip
+
+
+async def broadcast_recipients(db: aiosqlite.Connection) -> list[int]:
+    async with db.execute(
+        "SELECT DISTINCT tg_id FROM tg_users WHERE tg_id IS NOT NULL AND blocked = 0 ORDER BY tg_id"
+    ) as cur:
+        return [row[0] async for row in cur]
+
+
+async def mark_blocked(db: aiosqlite.Connection, tg_id: int) -> None:
+    await db.execute("UPDATE tg_users SET blocked = 1 WHERE tg_id = ?", (tg_id,))
+    await db.commit()
+
+
+async def create_broadcast(db: aiosqlite.Connection, text: str, total: int) -> int:
+    cur = await db.execute(
+        "INSERT INTO broadcasts (text, status, total, created_at) VALUES (?, 'sending', ?, ?)",
+        (text, total, time.time()),
+    )
+    await db.commit()
+    return cur.lastrowid
+
+
+async def update_broadcast(db: aiosqlite.Connection, broadcast_id: int, **fields) -> None:
+    sets = ", ".join(f"{name} = ?" for name in fields)
+    await db.execute(f"UPDATE broadcasts SET {sets} WHERE id = ?", (*fields.values(), broadcast_id))
+    await db.commit()
+
+
+async def list_broadcasts(db: aiosqlite.Connection, limit: int = 10) -> list[dict]:
+    async with db.execute(
+        f"SELECT {', '.join(BROADCAST_COLUMNS)} FROM broadcasts ORDER BY id DESC LIMIT ?", (limit,)
+    ) as cur:
+        return [dict(row) async for row in cur]
+
+
+async def interrupt_broadcasts(db: aiosqlite.Connection) -> None:
+    """При старте: рассылки, оборванные рестартом, помечаются прерванными."""
+    await db.execute(
+        "UPDATE broadcasts SET status = 'interrupted', finished_at = ? WHERE status = 'sending'",
+        (time.time(),),
+    )
+    await db.commit()

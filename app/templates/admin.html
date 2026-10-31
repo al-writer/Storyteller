@@ -83,6 +83,10 @@
     .btn:hover { border-color: var(--text-muted); color: var(--text-primary); }
     .btn:disabled { opacity: .5; cursor: default; }
     .more { margin-top: 10px; width: 100%; }
+    textarea.search { min-height: 140px; resize: vertical; line-height: 1.4; }
+    .btn-primary { border-color: var(--accent); color: var(--text-primary); }
+    .progress { height: 6px; background: var(--line); border-radius: 3px; margin-top: 6px; overflow: hidden; }
+    .progress span { display: block; height: 100%; background: var(--accent); }
     .kv { table-layout: fixed; }
     .kv td { overflow-wrap: anywhere; }
     .kv td:first-child { color: var(--text-muted); width: 40%; }
@@ -94,6 +98,7 @@
   <nav class="tabs" role="tablist">
     <button class="tab" role="tab" data-tab="overview" aria-selected="true">Обзор</button>
     <button class="tab" role="tab" data-tab="phrases" aria-selected="false">Фразы</button>
+    <button class="tab" role="tab" data-tab="broadcast" aria-selected="false">Рассылка</button>
     <button class="tab" role="tab" data-tab="service" aria-selected="false">Сервис</button>
   </nav>
   <div id="state" class="state">Загрузка…</div>
@@ -153,6 +158,18 @@
     <div class="muted" id="phrases-total" style="font-size:13px;margin-bottom:6px"></div>
     <div class="card" id="phrases"></div>
     <button class="btn more" id="phrases-more" hidden>Ещё</button>
+  </div>
+
+  <div data-panel="broadcast" hidden>
+    <p class="muted" style="margin:0 0 8px;font-size:13px">Сообщение уйдёт простым текстом всем пользователям бота, кто его не заблокировал. Сначала отправьте себе и посмотрите, как выглядит.</p>
+    <textarea class="search" id="broadcast-text" maxlength="4096" placeholder="Текст рассылки"></textarea>
+    <div class="muted" style="font-size:13px;margin:-4px 0 10px" id="broadcast-meta"></div>
+    <div class="actions" style="margin-bottom:18px">
+      <button class="btn" id="broadcast-test">Отправить себе</button>
+      <button class="btn btn-primary" id="broadcast-send">Разослать всем</button>
+    </div>
+    <h2>История</h2>
+    <div class="card" id="broadcasts"></div>
   </div>
 
   <div data-panel="service" hidden>
@@ -321,9 +338,11 @@ class ApiError extends Error {}
 
 // Все запросы админки несут initData: сервер проверяет подпись и ID админа.
 async function api(path, options = {}) {
-  const response = await fetch(path, { ...options, headers: { "X-Telegram-Init-Data": initData } });
+  const headers = { ...(options.headers || {}), "X-Telegram-Init-Data": initData };
+  const response = await fetch(path, { ...options, headers });
   const body = await response.json().catch(() => ({}));
-  if (!response.ok) throw new ApiError(body.detail || `Ошибка ${response.status}`);
+  // detail — строка от сервиса или список ошибок валидации FastAPI.
+  if (!response.ok) throw new ApiError(typeof body.detail === "string" ? body.detail : `Ошибка ${response.status}`);
   return body;
 }
 
@@ -491,8 +510,83 @@ document.getElementById("clear-cache").addEventListener("click", async (event) =
   }
 });
 
+// --- рассылка ---
+const STATUS = { sending: "идёт", done: "завершена", cancelled: "отменена", interrupted: "прервана рестартом" };
+let recipients = 0, pollTimer = null;
+const textEl = document.getElementById("broadcast-text");
+
+function updateMeta() {
+  document.getElementById("broadcast-meta").textContent =
+    `${fmt.format(textEl.value.length)} / 4096 · получателей: ${fmt.format(recipients)}`;
+}
+
+function broadcastRow(b) {
+  const done = b.sent + b.failed + b.blocked;
+  const pct = b.total ? Math.round((done / b.total) * 100) : 100;
+  const cancel = b.status === "sending" ? `<div class="actions"><button class="btn" data-cancel="${b.id}">Остановить</button></div>` : "";
+  return `<div class="phrase">
+    <div class="text" style="white-space:pre-wrap">${esc(b.text.length > 200 ? b.text.slice(0, 200) + "…" : b.text)}</div>
+    <div class="meta">${dateFmt.format(b.created_at * 1000)} · ${STATUS[b.status] || esc(b.status)} ·
+      доставлено ${fmt.format(b.sent)} из ${fmt.format(b.total)}` +
+      (b.blocked ? ` · заблокировали ${fmt.format(b.blocked)}` : "") + (b.failed ? ` · ошибок ${fmt.format(b.failed)}` : "") + `</div>
+    ${b.status === "sending" ? `<div class="progress"><span style="width:${pct}%"></span></div>` : ""}
+    ${cancel}
+  </div>`;
+}
+
+async function loadBroadcasts() {
+  await guarded(async () => {
+    const data = await api("/api/admin/broadcasts");
+    recipients = data.recipients;
+    updateMeta();
+    document.getElementById("broadcasts").innerHTML = data.items.length
+      ? data.items.map(broadcastRow).join("") : `<span class="muted">Рассылок ещё не было</span>`;
+    document.getElementById("broadcast-send").disabled = data.running;
+    showPanel();
+    clearTimeout(pollTimer);
+    if (data.running && tab === "broadcast") pollTimer = setTimeout(loadBroadcasts, 2000);
+  });
+}
+
+async function sendBroadcast(path, button) {
+  const text = textEl.value.trim();
+  if (!text) { notify("Напишите текст рассылки"); return; }
+  button.disabled = true;
+  try {
+    await api(path, { method: "POST", body: JSON.stringify({ text }), headers: { "Content-Type": "application/json" } });
+    return true;
+  } catch (error) {
+    notify(error.message);
+    return false;
+  } finally {
+    button.disabled = false;
+  }
+}
+
+textEl.addEventListener("input", updateMeta);
+document.getElementById("broadcast-test").addEventListener("click", async (event) => {
+  if (await sendBroadcast("/api/admin/broadcast/test", event.target)) notify("Отправил вам в чат с ботом");
+});
+document.getElementById("broadcast-send").addEventListener("click", async (event) => {
+  if (!(await confirmAction(`Разослать сообщение ${fmt.format(recipients)} пользователям? Отменить отправленное нельзя.`))) return;
+  if (await sendBroadcast("/api/admin/broadcast", event.target)) {
+    textEl.value = "";
+    await loadBroadcasts();
+  }
+});
+document.getElementById("broadcasts").addEventListener("click", async (event) => {
+  const button = event.target.closest("[data-cancel]");
+  if (!button || !(await confirmAction("Остановить рассылку? Уже отправленные сообщения останутся."))) return;
+  try {
+    await api(`/api/admin/broadcast/${button.dataset.cancel}/cancel`, { method: "POST" });
+  } catch (error) {
+    notify(error.message);
+  }
+  await loadBroadcasts();
+});
+
 // --- вкладки ---
-const LOADERS = { overview: load, phrases: () => loadPhrases(), service: loadService };
+const LOADERS = { overview: load, phrases: () => loadPhrases(), broadcast: loadBroadcasts, service: loadService };
 
 function openTab(name) {
   tab = name;

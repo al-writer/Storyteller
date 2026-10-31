@@ -15,6 +15,7 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.client.session.base import BaseSession
 from aiogram.types import BotCommand, BotCommandScopeChat, MenuButtonWebApp, Update, WebAppInfo
 
+from app.bot.broadcast import Broadcaster
 from app.bot.handlers import make_router
 
 log = logging.getLogger(__name__)
@@ -48,6 +49,7 @@ class TelegramBot:
         self.dispatcher["app_state"] = app_state
         self.dispatcher["runtime"] = self
         self.username: str | None = None  # из getMe при старте; нужен сайту и открыткам
+        self.broadcaster = Broadcaster(self.bot, app_state)
         self.card_ids: dict[str, str] = {}  # slug → file_id открытки, уже загруженной в Telegram
 
     async def start(self, webhook_url: str) -> None:
@@ -81,6 +83,7 @@ class TelegramBot:
 
     async def stop(self) -> None:
         # Webhook не снимаем: при деплое новый экземпляр ставит его сам.
+        await self.broadcaster.stop()
         await self.bot.session.close()
 
     async def feed(self, data: dict) -> None:
