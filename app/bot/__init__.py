@@ -20,9 +20,11 @@ log = logging.getLogger(__name__)
 
 WEBHOOK_PATH = "/tg/webhook"
 SECRET_HEADER = "X-Telegram-Bot-Api-Secret-Token"
-ALLOWED_UPDATES = ["message", "callback_query"]
+ALLOWED_UPDATES = ["message", "callback_query", "inline_query"]
 COMMANDS = [
     BotCommand(command="spin", description="Новая фраза"),
+    BotCommand(command="top", description="Зал славы"),
+    BotCommand(command="new", description="Прямой эфир: только что сохранённые"),
     BotCommand(command="help", description="Что умеют кнопки"),
 ]
 

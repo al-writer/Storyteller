@@ -8,14 +8,16 @@ from aiogram.types import (
     InlineKeyboardMarkup,
     KeyboardButton,
     ReplyKeyboardMarkup,
+    SwitchInlineQueryChosenChat,
 )
 
 from app.bot import callbacks as cb
 from app.bot.render import TONE_TITLES
 from app.presets import PRESETS
-from app.schemas import PhraseOut
+from app.schemas import FeedItem, PhraseOut
 
 SPIN_TEXT = "🎰 Крутить"
+FEED_TEXT = "🏆 Зал славы"
 WORD_LABEL_LIMIT = 28
 COPY_TEXT_LIMIT = 256  # больше Telegram в кнопку копирования не принимает
 
@@ -29,7 +31,35 @@ def like_label(likes: int) -> str:
 
 
 def reply_keyboard() -> ReplyKeyboardMarkup:
-    return ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text=SPIN_TEXT)]], resize_keyboard=True)
+    return ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text=SPIN_TEXT), KeyboardButton(text=FEED_TEXT)]],
+        resize_keyboard=True,
+    )
+
+
+def share(slug: str) -> InlineKeyboardButton:
+    """Выбор чата и inline-запрос ``@бот slug`` — бот отвечает карточкой фразы."""
+    return InlineKeyboardButton(
+        text="↗️ Поделиться",
+        switch_inline_query_chosen_chat=SwitchInlineQueryChosenChat(
+            query=slug, allow_user_chats=True, allow_group_chats=True, allow_channel_chats=True
+        ),
+    )
+
+
+def shared(slug: str, url: str, username: str | None) -> InlineKeyboardMarkup:
+    """Кнопки под фразой, отправленной в чужой чат."""
+    rows = []
+    if username:
+        rows.append(
+            [
+                InlineKeyboardButton(
+                    text="🎰 Сгенерировать свою", url=f"https://t.me/{username}?start={slug}"
+                )
+            ]
+        )
+    rows.append([InlineKeyboardButton(text="🌐 На сайте", url=url)])
+    return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
 def main(phrase: PhraseOut, mask: int) -> InlineKeyboardMarkup:
@@ -47,7 +77,10 @@ def main(phrase: PhraseOut, mask: int) -> InlineKeyboardMarkup:
                 button("🎨 Художнику", cb.Prompt(slug=slug, kind="art")),
                 button("🖼 Открытка", cb.Card(slug=slug)),
             ],
-            [button(like_label(phrase.likes), cb.Like(slug=slug, mask=mask, view="m"))],
+            [
+                button(like_label(phrase.likes), cb.Like(slug=slug, mask=mask, view="m")),
+                share(slug),
+            ],
         ]
     )
 
@@ -59,8 +92,35 @@ def collapsed(slug: str, likes: int = 0) -> InlineKeyboardMarkup:
             [
                 button(like_label(likes), cb.Like(slug=slug, mask=0, view="c")),
                 button("♻️ За основу", cb.Base(slug=slug)),
+                share(slug),
             ]
         ]
+    )
+
+
+def feed(item: FeedItem, sort: str, offset: int, total: int) -> InlineKeyboardMarkup:
+    nav = []
+    if offset > 0:
+        nav.append(button("◀", cb.Feed(sort=sort, offset=offset - 1)))
+    nav.append(button(f"❤️ {item.likes}", cb.FeedLike(slug=item.slug, sort=sort, offset=offset)))
+    if offset + 1 < total:
+        nav.append(button("▶", cb.Feed(sort=sort, offset=offset + 1)))
+    other = button("📡 Новое", cb.Feed(sort="n", offset=0))
+    if sort == "n":
+        other = button("🏆 Топ", cb.Feed(sort="t", offset=0))
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            nav,
+            [button("♻️ За основу", cb.Base(slug=item.slug)), share(item.slug)],
+            [other],
+        ]
+    )
+
+
+def feed_empty(sort: str) -> InlineKeyboardMarkup:
+    other = cb.Feed(sort="n", offset=0) if sort == "t" else cb.Feed(sort="t", offset=0)
+    return InlineKeyboardMarkup(
+        inline_keyboard=[[button("📡 Новое" if sort == "t" else "🏆 Топ", other)]]
     )
 
 

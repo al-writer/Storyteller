@@ -224,6 +224,12 @@ def hot_score(likes: int, saved_at: float, now: float) -> float:
     return likes / math.pow(hours + 2, GRAVITY)
 
 
+FEED_BASE = (
+    "SELECT p.slug, p.preset_id, p.text, s.likes, s.saved_at "
+    "FROM saved_ideas s JOIN phrases p ON p.slug = s.slug "
+)
+
+
 async def feed(
     db: aiosqlite.Connection, sort: str, cursor: str | None, limit: int
 ) -> tuple[list[dict], str | None]:
@@ -231,10 +237,6 @@ async def feed(
 
     Курсор непрозрачен для клиента: для «new» это «saved_at:slug», для «top» — смещение.
     """
-    base = (
-        "SELECT p.slug, p.preset_id, p.text, s.likes, s.saved_at "
-        "FROM saved_ideas s JOIN phrases p ON p.slug = s.slug "
-    )
     if sort == "new":
         params: list = []
         where = ""
@@ -242,7 +244,7 @@ async def feed(
             saved_at, _, slug = cursor.partition(":")
             where = "WHERE (s.saved_at < ?) OR (s.saved_at = ? AND s.slug > ?) "
             params = [float(saved_at), float(saved_at), slug]
-        sql = base + where + "ORDER BY s.saved_at DESC, s.slug ASC LIMIT ?"
+        sql = FEED_BASE + where + "ORDER BY s.saved_at DESC, s.slug ASC LIMIT ?"
         async with db.execute(sql, [*params, limit + 1]) as cur:
             rows = [dict(row) async for row in cur]
         next_cursor = None
@@ -253,14 +255,34 @@ async def feed(
         return rows, next_cursor
 
     offset = int(cursor) if cursor and cursor.isdigit() else 0
-    sql = base + "WHERE s.likes > 0 ORDER BY s.last_liked_at DESC LIMIT ?"
+    rows = await _top_rows(db)
+    page = rows[offset : offset + limit]
+    next_cursor = str(offset + limit) if offset + limit < len(rows) else None
+    return page, next_cursor
+
+
+async def _top_rows(db: aiosqlite.Connection) -> list[dict]:
+    """«Зал славы» целиком: фразы с лайками по убыванию hot_score."""
+    sql = FEED_BASE + "WHERE s.likes > 0 ORDER BY s.last_liked_at DESC LIMIT ?"
     async with db.execute(sql, (TOP_CANDIDATES,)) as cur:
         rows = [dict(row) async for row in cur]
     now = time.time()
     rows.sort(key=lambda r: (-hot_score(r["likes"], r["saved_at"], now), r["slug"]))
-    page = rows[offset : offset + limit]
-    next_cursor = str(offset + limit) if offset + limit < len(rows) else None
-    return page, next_cursor
+    return rows
+
+
+async def feed_at(db: aiosqlite.Connection, sort: str, offset: int) -> tuple[dict | None, int]:
+    """Одна фраза ленты по смещению и длина ленты — для карусели в боте."""
+    offset = max(offset, 0)
+    if sort == "new":
+        async with db.execute("SELECT COUNT(*) FROM saved_ideas") as cur:
+            total = (await cur.fetchone())[0]
+        sql = FEED_BASE + "ORDER BY s.saved_at DESC, s.slug ASC LIMIT 1 OFFSET ?"
+        async with db.execute(sql, (offset,)) as cur:
+            row = await cur.fetchone()
+        return (dict(row) if row else None), total
+    rows = await _top_rows(db)
+    return (rows[offset] if offset < len(rows) else None), len(rows)
 
 
 # --- Telegram ---------------------------------------------------------------------------------

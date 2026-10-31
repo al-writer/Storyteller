@@ -14,12 +14,22 @@ from typing import TYPE_CHECKING, Any
 from aiogram import Bot, F, Router
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import Command, CommandObject, CommandStart, ExceptionTypeFilter
-from aiogram.types import CallbackQuery, ErrorEvent, FSInputFile, Message, User
+from aiogram.types import (
+    CallbackQuery,
+    ErrorEvent,
+    FSInputFile,
+    InlineQuery,
+    InlineQueryResultArticle,
+    InputTextMessageContent,
+    LinkPreviewOptions,
+    Message,
+    User,
+)
 
 from app import db, service
 from app.bot import callbacks as cb
 from app.bot import keyboards as kb
-from app.bot.render import TONE_TITLES, message_html
+from app.bot.render import TONE_TITLES, feed_html, message_html, shared_html
 from app.presets import DEFAULT_PRESET, PRESETS
 from app.schemas import GenerateIn, PhraseOut, SlotIn, SlotOut
 from app.service import Client
@@ -31,6 +41,8 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 RECENT_LIMIT = 40
+INLINE_FRESH = 5
+FEED_SORTS = {"t": "top", "n": "new"}
 
 GREETING = (
     "Я собираю сюжеты из случайных слов — грамматически безупречно.\n"
@@ -43,8 +55,11 @@ HELP = (
     "<b>🎭 Тон</b> — настроение слов и «Дикий словарь» с редкими словами.\n"
     "<b>✍️ Промпт</b>, <b>🎨 Художнику</b> — фраза как задание для нейросети.\n"
     "<b>🖼 Открытка</b> — картинка с фразой.\n"
-    "<b>❤️</b> — отправить фразу в зал славы.\n\n"
-    "Любое сообщение тоже крутит новую фразу."
+    "<b>❤️</b> — отправить фразу в зал славы.\n"
+    "<b>↗️ Поделиться</b> — отправить фразу в любой чат.\n\n"
+    "<b>/top</b> — зал славы, <b>/new</b> — прямой эфир.\n"
+    "В любом чате наберите @имя_бота — и выберите сюжет из свежих.\n"
+    "Любое другое сообщение крутит новую фразу."
 )
 ERROR_TEXT: dict[type[service.ServiceError], str] = {
     service.TooFast: "Не так быстро 🙂",
@@ -334,6 +349,102 @@ async def on_base(query: CallbackQuery, callback_data: cb.Base, app_state: Any) 
     await query.answer("Все слова закреплены")
 
 
+# --- зал славы -----------------------------------------------------------------------------
+
+
+async def feed_screen(app_state: Any, sort: str, offset: int):
+    item, total = await service.feed_at(app_state, FEED_SORTS[sort], offset)
+    if item is None and total:  # лента укоротилась, пока её листали
+        offset = total - 1
+        item, total = await service.feed_at(app_state, FEED_SORTS[sort], offset)
+    text = feed_html(item, sort, offset, total)
+    markup = kb.feed(item, sort, offset, total) if item else kb.feed_empty(sort)
+    return text, markup
+
+
+async def top(message: Message, app_state: Any) -> None:
+    text, markup = await feed_screen(app_state, "t", 0)
+    await message.answer(text, reply_markup=markup)
+
+
+async def new(message: Message, app_state: Any) -> None:
+    text, markup = await feed_screen(app_state, "n", 0)
+    await message.answer(text, reply_markup=markup)
+
+
+async def edit_feed(message: Message, app_state: Any, sort: str, offset: int) -> None:
+    text, markup = await feed_screen(app_state, sort, offset)
+    try:
+        await message.edit_text(text, reply_markup=markup)
+    except TelegramBadRequest as error:
+        if "message is not modified" not in str(error):
+            raise
+
+
+async def on_feed(query: CallbackQuery, callback_data: cb.Feed, app_state: Any) -> None:
+    _, _, message = await context(query, app_state)
+    await edit_feed(message, app_state, callback_data.sort, callback_data.offset)
+    await query.answer()
+
+
+async def on_feed_like(query: CallbackQuery, callback_data: cb.FeedLike, app_state: Any) -> None:
+    who, _, message = await context(query, app_state)
+    result = await service.like(app_state, who, callback_data.slug)
+    await edit_feed(message, app_state, callback_data.sort, callback_data.offset)
+    await query.answer("Ваш голос учтён ❤️" if result.counted else "Вы уже голосовали ❤️")
+
+
+# --- inline-режим ---------------------------------------------------------------------------
+
+
+def match_preset(text: str) -> str | None:
+    text = text.casefold()
+    if not text:
+        return None
+    for preset in PRESETS.values():
+        if preset.title.casefold().startswith(text):
+            return preset.id
+    return None
+
+
+async def on_inline(query: InlineQuery, app_state: Any, bot: Bot) -> None:
+    """``@бот`` — свежие фразы; ``@бот slug`` — эта фраза; ``@бот тайна`` — пресет."""
+    who = client_of(app_state, query.from_user)
+    user = await db.tg_user(app_state.db, who.voter_hash)
+    text = query.query.strip()
+    phrases: list[PhraseOut] = []
+    if text and service.valid_slug(text):
+        with contextlib.suppress(service.NotFound, service.Gone):
+            phrases = [await service.get_phrase(app_state, text)]
+    personal = not phrases
+    if personal:
+        preset_id = match_preset(text) or (
+            user["preset_id"] if user["preset_id"] in PRESETS else DEFAULT_PRESET
+        )
+        # Inline-запрос приходит на каждую букву: упёрлись в лимит — отдаём, что успели.
+        with contextlib.suppress(service.TooFast):
+            for _ in range(INLINE_FRESH):
+                phrases.append(await make(app_state, who, user, preset_id, [], 0))
+    me = await bot.me()
+    unique = {phrase.slug: phrase for phrase in phrases}
+    results = [
+        InlineQueryResultArticle(
+            id=phrase.slug,
+            title=phrase.preset_title,
+            description=phrase.text,
+            input_message_content=InputTextMessageContent(
+                message_text=shared_html(phrase.text, phrase.url),
+                link_preview_options=LinkPreviewOptions(
+                    url=phrase.url, prefer_large_media=True, show_above_text=True
+                ),
+            ),
+            reply_markup=kb.shared(phrase.slug, phrase.url, me.username),
+        )
+        for phrase in unique.values()
+    ]
+    await query.answer(results, cache_time=0 if personal else 300, is_personal=personal)
+
+
 # --- ошибки ---------------------------------------------------------------------------------
 
 
@@ -345,6 +456,8 @@ async def on_service_error(event: ErrorEvent) -> None:
             await update.callback_query.answer(text)
         elif update.message:
             await update.message.answer(text)
+        elif update.inline_query:
+            await update.inline_query.answer([], cache_time=0, is_personal=True)
     except TelegramBadRequest:
         pass  # на нажатие уже ответили
 
@@ -357,6 +470,9 @@ def make_router() -> Router:
     router.message.register(start, CommandStart())
     router.message.register(help_, Command("help"))
     router.message.register(stats, Command("stats"))
+    router.message.register(top, Command("top"))
+    router.message.register(top, F.text == kb.FEED_TEXT)
+    router.message.register(new, Command("new"))
     router.message.register(any_text, F.text)
     router.callback_query.register(on_spin, cb.Spin.filter())
     router.callback_query.register(on_reroll, cb.Reroll.filter())
@@ -369,5 +485,8 @@ def make_router() -> Router:
     router.callback_query.register(on_prompt, cb.Prompt.filter())
     router.callback_query.register(on_card, cb.Card.filter())
     router.callback_query.register(on_base, cb.Base.filter())
+    router.callback_query.register(on_feed, cb.Feed.filter())
+    router.callback_query.register(on_feed_like, cb.FeedLike.filter())
+    router.inline_query.register(on_inline)
     router.errors.register(on_service_error, ExceptionTypeFilter(service.ServiceError))
     return router
