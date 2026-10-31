@@ -242,6 +242,109 @@ window.generator = function generator(presets, startSlug) {
   };
 };
 
+// Панель админа на главной: рассказ и картинка к текущей фразе. Вход — ссылкой из бота;
+// заголовок X-Admin-Request обязателен для изменений (защита от CSRF).
+async function adminFetch(path, options = {}) {
+  const response = await fetch(path, {
+    credentials: "same-origin",
+    ...options,
+    headers: { "X-Admin-Request": "1", ...(options.headers || {}) },
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(typeof body.detail === "string" ? body.detail : `HTTP ${response.status}`);
+  }
+  return body;
+}
+
+window.storyEditor = function storyEditor() {
+  return {
+    loadedFor: "",
+    story: "",
+    imageUrl: null,
+    file: null,
+    preview: null,
+    removed: false,
+    saving: false,
+    savedUrl: "",
+
+    async load(slug) {
+      if (!slug || slug === this.loadedFor) return;
+      this.loadedFor = slug;
+      this.story = "";
+      this.imageUrl = null;
+      this.clearFile();
+      this.removed = false;
+      this.savedUrl = "";
+      try {
+        const extra = await adminFetch(`/api/admin/phrases/${encodeURIComponent(slug)}/extra`);
+        if (this.loadedFor !== slug) return;
+        this.story = extra.story;
+        this.imageUrl = extra.image_url;
+        if (extra.story || extra.image_url) this.savedUrl = `/s/${slug}`;
+      } catch (error) {
+        toast(`Админ: ${error.message}`);
+      }
+    },
+
+    clearFile() {
+      if (this.preview) URL.revokeObjectURL(this.preview);
+      this.file = null;
+      this.preview = null;
+    },
+
+    pick(event) {
+      const file = event.target.files && event.target.files[0];
+      event.target.value = "";
+      if (!file) return;
+      this.clearFile();
+      this.file = file;
+      this.preview = URL.createObjectURL(file);
+      this.removed = false;
+    },
+
+    removeImage() {
+      this.clearFile();
+      this.removed = Boolean(this.imageUrl);
+      this.imageUrl = null;
+    },
+
+    async save() {
+      const slug = this.loadedFor;
+      if (!slug || this.saving) return;
+      this.saving = true;
+      const base = `/api/admin/phrases/${encodeURIComponent(slug)}`;
+      try {
+        let extra = await adminFetch(`${base}/story`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ story: this.story }),
+        });
+        if (this.file) {
+          extra = await adminFetch(`${base}/image`, {
+            method: "PUT",
+            headers: { "Content-Type": this.file.type || "application/octet-stream" },
+            body: this.file,
+          });
+        } else if (this.removed) {
+          extra = await adminFetch(`${base}/image`, { method: "DELETE" });
+        }
+        if (this.loadedFor !== slug) return;
+        this.clearFile();
+        this.removed = false;
+        this.story = extra.story;
+        this.imageUrl = extra.image_url;
+        this.savedUrl = extra.story || extra.image_url ? `/s/${slug}` : "";
+        toast(this.savedUrl ? "Сохранено — фраза в зале славы" : "Рассказ и картинка убраны");
+      } catch (error) {
+        toast(`Не сохранилось: ${error.message}`);
+      } finally {
+        this.saving = false;
+      }
+    },
+  };
+};
+
 window.likeButton = function likeButton(slug, likes) {
   return {
     likes,

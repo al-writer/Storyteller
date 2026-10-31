@@ -10,6 +10,8 @@ from __future__ import annotations
 import hashlib
 import logging
 import re
+import secrets
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal
@@ -275,3 +277,25 @@ async def card_path(
         tmp.write_bytes(png)
         tmp.replace(path)
     return path
+
+
+# --- вход админа на сайт ----------------------------------------------------------------------
+
+LOGIN_TTL = 600  # ссылка входа из бота живёт 10 минут и срабатывает один раз
+
+
+def issue_login_token(state: Any, user_id: int) -> str:
+    """Одноразовый токен входа на сайт; хранится в памяти процесса (воркер один)."""
+    tokens: dict[str, tuple[int, float]] = state.__dict__.setdefault("admin_logins", {})
+    now = time.time()
+    for token, (_, expires) in list(tokens.items()):
+        if expires < now:
+            del tokens[token]
+    token = secrets.token_urlsafe(24)
+    tokens[token] = (user_id, now + LOGIN_TTL)
+    return token
+
+
+def take_login_token(state: Any, token: str) -> tuple[int | None, float]:
+    """Telegram ID и срок токена; токен при этом гасится."""
+    return state.__dict__.get("admin_logins", {}).pop(token, (None, 0.0))

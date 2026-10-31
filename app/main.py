@@ -14,7 +14,7 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTex
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from app import __version__, admin, db, service
+from app import __version__, admin, db, media, service
 from app.bot import SECRET_HEADER, WEBHOOK_PATH, TelegramBot
 from app.config import (
     ROOT_DIR,
@@ -207,14 +207,30 @@ async def telegram_webhook(request: Request) -> Response:
 async def index(request: Request, start: Annotated[str | None, Query(alias="from")] = None):
     presets = [{"id": p.id, "title": p.title} for p in PRESETS.values()]
     start_slug = start if start and service.valid_slug(start) else None
-    return templates.TemplateResponse(
-        request, "index.html", {"presets": presets, "start_slug": start_slug}
-    )
+    context = {
+        "presets": presets,
+        "start_slug": start_slug,
+        "site_admin": admin.site_admin_id(request) is not None,
+    }
+    return templates.TemplateResponse(request, "index.html", context)
 
 
 @app.get("/feed", response_class=HTMLResponse)
 async def feed_page(request: Request):
     return templates.TemplateResponse(request, "feed.html", {})
+
+
+@app.get("/media/{name}")
+async def media_file(name: str, request: Request) -> FileResponse:
+    """Картинки к фразам. Имя содержит хэш содержимого, поэтому кэш вечный."""
+    path = request.app.state.settings.media_dir / name
+    if not media.NAME.match(name) or not path.exists():
+        raise HTTPException(404, "нет такой картинки")
+    return FileResponse(
+        path,
+        media_type="image/jpeg",
+        headers={"Cache-Control": "public, max-age=31536000, immutable"},
+    )
 
 
 @app.get("/s/{slug}", response_class=HTMLResponse)
@@ -225,7 +241,11 @@ async def phrase_page(slug: str, request: Request, via: Literal["site", "tg"] = 
     row, _ = await service.load(request.app.state, slug)
     preset = PRESETS.get(row["preset_id"])
     base_url = request.app.state.settings.base_url
+    extra = await db.get_extra(request.app.state.db, slug)
+    paragraphs = [p.strip() for p in extra["story"].replace("\r", "").split("\n\n") if p.strip()]
     context = {
+        "story": [typograph(" ".join(p.split())) for p in paragraphs],
+        "story_image": f"/media/{extra['image']}" if extra["image"] else None,
         "slug": slug,
         "text": row["text"],
         "typo_text": typograph(row["text"]),

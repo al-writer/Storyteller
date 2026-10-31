@@ -86,6 +86,14 @@ CREATE TABLE IF NOT EXISTS events (
 );
 CREATE INDEX IF NOT EXISTS events_created_at ON events (created_at);
 
+-- Рассказ и картинка к фразе, их добавляет админ; показываются на странице фразы.
+CREATE TABLE IF NOT EXISTS phrase_extras (
+    slug TEXT PRIMARY KEY REFERENCES phrases (slug),
+    story TEXT NOT NULL DEFAULT '',
+    image TEXT,  -- имя файла в DATA_DIR/media
+    updated_at REAL NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS broadcasts (
     id INTEGER PRIMARY KEY,
     text TEXT NOT NULL,
@@ -521,8 +529,9 @@ async def admin_phrases(
     async with db.execute(f"SELECT COUNT(*) {base}{where}", params) as cur:
         total = (await cur.fetchone())[0]
     sql = (
-        "SELECT p.slug, p.preset_id, p.text, p.created_at, s.likes, s.saved_at, s.hidden "
-        f"{base}{where}{order} LIMIT ? OFFSET ?"
+        "SELECT p.slug, p.preset_id, p.text, p.created_at, s.likes, s.saved_at, s.hidden, "
+        "x.story != '' AS has_story, x.image IS NOT NULL AS has_image "
+        f"{base}LEFT JOIN phrase_extras x ON x.slug = p.slug {where}{order} LIMIT ? OFFSET ?"
     )
     async with db.execute(sql, [*params, limit, offset]) as cur:
         rows = [dict(row) async for row in cur]
@@ -530,6 +539,8 @@ async def admin_phrases(
         row["saved"] = row["saved_at"] is not None
         row["likes"] = row["likes"] or 0
         row["hidden"] = bool(row["hidden"])
+        row["has_story"] = bool(row["has_story"])
+        row["has_image"] = bool(row["has_image"])
     return rows, total
 
 
@@ -614,3 +625,31 @@ async def interrupt_broadcasts(db: aiosqlite.Connection) -> None:
         (time.time(),),
     )
     await db.commit()
+
+
+# --- рассказ и картинка к фразе -------------------------------------------------------------
+
+
+async def get_extra(db: aiosqlite.Connection, slug: str) -> dict:
+    async with db.execute(
+        "SELECT story, image, updated_at FROM phrase_extras WHERE slug = ?", (slug,)
+    ) as cur:
+        row = await cur.fetchone()
+    return dict(row) if row else {"story": "", "image": None, "updated_at": None}
+
+
+async def save_extra(db: aiosqlite.Connection, slug: str, **fields) -> dict:
+    """Обновляет рассказ и/или картинку и отправляет фразу в зал славы (снимая скрытие)."""
+    extra = await get_extra(db, slug)
+    extra.update(fields)
+    await db.execute(
+        "INSERT INTO phrase_extras (slug, story, image, updated_at) VALUES (?, ?, ?, ?) "
+        "ON CONFLICT (slug) DO UPDATE SET story = excluded.story, image = excluded.image, "
+        "updated_at = excluded.updated_at",
+        (slug, extra["story"], extra["image"], time.time()),
+    )
+    await db.commit()
+    if extra["story"] or extra["image"]:
+        await save_idea(db, slug)
+        await set_hidden(db, slug, False)
+    return await get_extra(db, slug)
