@@ -83,6 +83,11 @@ class Settings:
     def og_cache_dir(self) -> Path:
         return self.data_dir / "cache" / "og"
 
+    @property
+    def media_dir(self) -> Path:
+        """Картинки к фразам, загруженные админом."""
+        return self.data_dir / "media"
+
 
 def get_settings() -> Settings:
     return Settings()

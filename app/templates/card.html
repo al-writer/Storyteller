@@ -32,5 +32,16 @@
     {% set bot = telegram_bot() %}
     {% if bot %}<a class="btn" href="https://t.me/{{ bot }}?start={{ slug }}" rel="noopener">Открыть в Telegram</a>{% endif %}
   </div>
+  {% if story or story_image %}
+  <section class="mt-14 border-t border-line pt-10" aria-label="История по этому сюжету">
+    <div class="text-xs tracking-[0.3em] uppercase text-accent mb-6">История</div>
+    {% if story_image %}
+    <img class="w-full rounded-lg border border-line mb-8" src="{{ story_image }}" alt="Иллюстрация к сюжету: {{ text }}" loading="lazy">
+    {% endif %}
+    {% for paragraph in story %}
+    <p class="font-serif text-lg leading-relaxed mb-5 text-paper/90">{{ paragraph }}</p>
+    {% endfor %}
+  </section>
+  {% endif %}
 </article>
 {% endblock %}

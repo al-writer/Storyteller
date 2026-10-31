@@ -88,11 +88,17 @@ def main(phrase: PhraseOut, mask: int) -> InlineKeyboardMarkup:
     )
 
 
-def admin_app(url: str) -> InlineKeyboardMarkup:
-    """Кнопка админки под сообщением. Не в клавиатуре под полем ввода: оттуда Telegram
-    открывает Mini App без подписанных initData, и админка не пускает."""
+def admin_app(url: str, login_url: str) -> InlineKeyboardMarkup:
+    """Кнопки под сводкой /stats: админка (Mini App) и вход на сайт.
+
+    Админка — не в клавиатуре под полем ввода: оттуда Telegram открывает Mini App без
+    подписанных initData, и админка не пускает.
+    """
     return InlineKeyboardMarkup(
-        inline_keyboard=[[InlineKeyboardButton(text="🛠 Админка", web_app=WebAppInfo(url=url))]]
+        inline_keyboard=[
+            [InlineKeyboardButton(text="🛠 Админка", web_app=WebAppInfo(url=url))],
+            [InlineKeyboardButton(text="🔑 Войти на сайт как админ", url=login_url)],
+        ]
     )
 
 

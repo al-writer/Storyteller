@@ -247,7 +247,13 @@ async def stats(message: Message, app_state: Any) -> None:
         lines += ["", "<b>Топ зала славы</b>"]
         lines += [f"❤️ {likes} — {html.escape(text)}" for text, likes in data["top"]]
     url = admin_url(app_state)
-    await message.answer("\n".join(lines), reply_markup=kb.admin_app(url) if url else None)
+    markup = None
+    if url:
+        token = service.issue_login_token(app_state, message.from_user.id)
+        login = f"{app_state.settings.base_url}/admin/login?token={token}"
+        markup = kb.admin_app(url, login)
+        lines += ["", "<i>Ссылка входа на сайт действует 10 минут.</i>"]
+    await message.answer("\n".join(lines), reply_markup=markup)
 
 
 async def any_text(message: Message, app_state: Any) -> None:
