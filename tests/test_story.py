@@ -57,7 +57,10 @@ def test_tampered_or_foreign_cookie_is_not_admin(client):
     app.state.settings = replace(settings, telegram_admin_ids=frozenset({ADMIN_ID}))
     try:
         good = admin.session_value(settings.secret_salt, ADMIN_ID)
-        for value in (good[:-1] + "0", good.replace(str(ADMIN_ID), str(ADMIN_ID + 1)), "junk"):
+        # Последний символ подписи меняем на заведомо другой: замена на фиксированный
+        # символ иногда давала ту же подпись, и тест падал примерно раз в 16 запусков.
+        tampered = good[:-1] + ("1" if good.endswith("0") else "0")
+        for value in (tampered, good.replace(str(ADMIN_ID), str(ADMIN_ID + 1)), "junk"):
             client.cookies.set(admin.SESSION_COOKIE, value)
             assert "storyEditor()" not in client.get("/").text
         expired = admin.session_value(settings.secret_salt, ADMIN_ID, now=0)
