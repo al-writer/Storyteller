@@ -354,8 +354,10 @@ async def on_card(
     await query.answer()  # открытка может рисоваться пару секунд
     await service.record(app_state, who, "card", phrase.preset_id)
     cached = runtime.card_ids.get(phrase.slug)
+    mark = f"@{runtime.username}" if runtime.username else None
     photo = cached or FSInputFile(
-        await service.card_path(app_state, phrase.slug, "square"), filename=f"{phrase.slug}.png"
+        await service.card_path(app_state, phrase.slug, "square", mark),
+        filename=f"{phrase.slug}.png",
     )
     sent = await message.answer_photo(
         photo, caption=html.escape(typograph(phrase.text), quote=False)
@@ -450,15 +452,16 @@ async def on_inline(query: InlineQuery, app_state: Any, bot: Bot) -> None:
                 phrases.append(await make(app_state, who, user, preset_id, [], 0))
     me = await bot.me()
     unique = {phrase.slug: phrase for phrase in phrases}
+    # ?via=tg — превью ссылки с открыткой, где вместо домена @handle бота.
     results = [
         InlineQueryResultArticle(
             id=phrase.slug,
             title=phrase.preset_title,
             description=phrase.text,
             input_message_content=InputTextMessageContent(
-                message_text=shared_html(phrase.text, phrase.url),
+                message_text=shared_html(phrase.text, f"{phrase.url}?via=tg"),
                 link_preview_options=LinkPreviewOptions(
-                    url=phrase.url, prefer_large_media=True, show_above_text=True
+                    url=f"{phrase.url}?via=tg", prefer_large_media=True, show_above_text=True
                 ),
             ),
             reply_markup=kb.shared(phrase.slug, phrase.url, me.username),

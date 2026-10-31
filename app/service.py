@@ -237,16 +237,26 @@ def feed_item(settings: Settings, row: dict) -> FeedItem:
     )
 
 
-async def card_path(state: Any, slug: str, format: CardFormat = "wide") -> Path:
+def bot_handle(state: Any) -> str | None:
+    """``@username`` Telegram-бота, если он запущен."""
+    telegram = getattr(state, "telegram", None)
+    username = getattr(telegram, "username", None)
+    return f"@{username}" if username else None
+
+
+async def card_path(
+    state: Any, slug: str, format: CardFormat = "wide", mark: str | None = None
+) -> Path:
     """PNG-открытка в кэше; рисуется при первом запросе.
 
-    На открытке напечатан домен, так что кэш раскладывается по папкам доменов: после
-    смены ``BASE_URL`` открытки рисуются заново.
+    В углу открытки — ``mark``, по умолчанию домен сайта (для бота — его ``@handle``).
+    Кэш раскладывается по папкам меток: после смены ``BASE_URL`` или имени бота
+    открытки рисуются заново.
     """
     if not valid_slug(slug):
         raise NotFound
     settings: Settings = state.settings
-    host = urlsplit(settings.base_url).netloc or settings.base_url
+    host = mark or urlsplit(settings.base_url).netloc or settings.base_url
     path = settings.og_cache_dir / re.sub(r"[^A-Za-z0-9.-]", "_", host) / f"{slug}_{format}.png"
     if not path.exists():
         row, phrase = await load(state, slug)
