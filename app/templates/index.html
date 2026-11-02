@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<section x-data='generator({{ presets|tojson }}, {{ start_slug|tojson }})' x-init="init()" class="pt-10 sm:pt-16">
+<section x-data='generator({{ presets|tojson }}, {{ start_slug|tojson }})' class="pt-10 sm:pt-16">
 
   <div class="flex flex-wrap gap-2 mb-6" role="tablist" aria-label="Пресет">
     <template x-for="preset in presets" :key="preset.id">
