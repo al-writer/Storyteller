@@ -77,6 +77,14 @@ function toast(text) {
   window.Alpine.store("toast").show(text);
 }
 
+// Перед сменой фразы генератор спрашивает, можно ли уйти: панель админа ставит сюда
+// проверку несохранённого рассказа. Без панели уйти можно всегда.
+let leaveGuard = null;
+
+function canLeavePhrase() {
+  return !leaveGuard || leaveGuard();
+}
+
 window.generator = function generator(presets, startSlug) {
   const saved = readState();
   return {
@@ -142,15 +150,15 @@ window.generator = function generator(presets, startSlug) {
     },
 
     choosePreset(id) {
-      if (id === this.presetId) return;
+      if (id === this.presetId || this.busy || !canLeavePhrase()) return;
       this.presetId = id;
       this.slots = [];
       this.locked = [];
-      this.generate();
+      this.generate(null, { confirmed: true });
     },
 
-    async generate(rerollIndex = null) {
-      if (this.busy) return;
+    async generate(rerollIndex = null, { confirmed = false } = {}) {
+      if (this.busy || (!confirmed && !canLeavePhrase())) return;
       this.busy = true;
       try {
         const phrase = await api("/api/generate", {
@@ -261,6 +269,7 @@ window.storyEditor = function storyEditor() {
   return {
     loadedFor: "",
     story: "",
+    savedStory: "",
     imageUrl: null,
     file: null,
     preview: null,
@@ -268,10 +277,27 @@ window.storyEditor = function storyEditor() {
     saving: false,
     savedUrl: "",
 
+    init() {
+      leaveGuard = () =>
+        !this.dirty() || window.confirm("Рассказ или картинка не сохранены — уйти к другой фразе?");
+      window.addEventListener("beforeunload", (event) => {
+        if (!this.dirty()) return;
+        event.preventDefault();
+        event.returnValue = "";
+      });
+    },
+
+    // Есть правки, которых нет на сервере: текст отличается от сохранённого, выбран
+    // новый файл или картинка помечена к удалению.
+    dirty() {
+      return this.story.trim() !== this.savedStory.trim() || Boolean(this.file) || this.removed;
+    },
+
     async load(slug) {
       if (!slug || slug === this.loadedFor) return;
       this.loadedFor = slug;
       this.story = "";
+      this.savedStory = "";
       this.imageUrl = null;
       this.clearFile();
       this.removed = false;
@@ -280,6 +306,7 @@ window.storyEditor = function storyEditor() {
         const extra = await adminFetch(`/api/admin/phrases/${encodeURIComponent(slug)}/extra`);
         if (this.loadedFor !== slug) return;
         this.story = extra.story;
+        this.savedStory = extra.story;
         this.imageUrl = extra.image_url;
         if (extra.story || extra.image_url) this.savedUrl = `/s/${slug}`;
       } catch (error) {
@@ -333,6 +360,7 @@ window.storyEditor = function storyEditor() {
         this.clearFile();
         this.removed = false;
         this.story = extra.story;
+        this.savedStory = extra.story;
         this.imageUrl = extra.image_url;
         this.savedUrl = extra.story || extra.image_url ? `/s/${slug}` : "";
         toast(this.savedUrl ? "Сохранено — фраза в зале славы" : "Рассказ и картинка убраны");
